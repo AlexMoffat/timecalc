@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:TextViewTests.xcodeproj">
+      location = "self:/Users/amoffat/Projects/TextViewTests/TimeCalc.xcodeproj">
    </FileRef>
 </Workspace>

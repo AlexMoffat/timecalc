@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>TextViewTests.xcscheme</key>
+		<key>TimeCalc.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,6 +12,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>AF361D2A1F0DB72800FAAA1C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>AF6852B21EF8A56700F9DACF</key>
 		<dict>
 			<key>primary</key>

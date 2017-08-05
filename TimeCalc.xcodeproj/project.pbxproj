@@ -1,0 +1,453 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AF361D361F0DB76200FAAA1C /* LexerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF361D351F0DB76200FAAA1C /* LexerTests.swift */; };
+		AF3AEC1D1F16E485008D7311 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3AEC1C1F16E485008D7311 /* Parser.swift */; };
+		AF473F241F1EF1B300F6F856 /* ExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF473F231F1EF1B300F6F856 /* ExecutorTests.swift */; };
+		AF6852B71EF8A56700F9DACF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6852B61EF8A56700F9DACF /* AppDelegate.swift */; };
+		AF6852B91EF8A56700F9DACF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6852B81EF8A56700F9DACF /* ViewController.swift */; };
+		AF6852BB1EF8A56700F9DACF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF6852BA1EF8A56700F9DACF /* Assets.xcassets */; };
+		AF6852BE1EF8A56700F9DACF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF6852BC1EF8A56700F9DACF /* Main.storyboard */; };
+		AF75CE641F19736D006E851D /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF75CE631F19736D006E851D /* ParserTests.swift */; };
+		AF75CE661F1AEE26006E851D /* Executor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF75CE651F1AEE26006E851D /* Executor.swift */; };
+		AFA0C53E1F07188700C1B923 /* LineNumberRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA0C53D1F07188700C1B923 /* LineNumberRulerView.swift */; };
+		AFA0C5401F09B54E00C1B923 /* ResultsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA0C53F1F09B54E00C1B923 /* ResultsCalculator.swift */; };
+		AFA0C5421F0ADAB800C1B923 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA0C5411F0ADAB800C1B923 /* Lexer.swift */; };
+		AFDD49B61F2D0BC000A9DB4B /* SynchroScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AF361D301F0DB72800FAAA1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF6852AB1EF8A56700F9DACF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AF6852B21EF8A56700F9DACF;
+			remoteInfo = TextViewTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AF361D2B1F0DB72800FAAA1C /* TimeCalcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimeCalcTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF361D2F1F0DB72800FAAA1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AF361D351F0DB76200FAAA1C /* LexerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LexerTests.swift; sourceTree = "<group>"; };
+		AF3AEC1C1F16E485008D7311 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		AF473F231F1EF1B300F6F856 /* ExecutorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutorTests.swift; sourceTree = "<group>"; };
+		AF6852B31EF8A56700F9DACF /* TimeCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TimeCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF6852B61EF8A56700F9DACF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AF6852B81EF8A56700F9DACF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AF6852BA1EF8A56700F9DACF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AF6852BD1EF8A56700F9DACF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AF6852BF1EF8A56700F9DACF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AF75CE631F19736D006E851D /* ParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
+		AF75CE651F1AEE26006E851D /* Executor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Executor.swift; sourceTree = "<group>"; };
+		AFA0C53D1F07188700C1B923 /* LineNumberRulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineNumberRulerView.swift; sourceTree = "<group>"; };
+		AFA0C53F1F09B54E00C1B923 /* ResultsCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsCalculator.swift; sourceTree = "<group>"; };
+		AFA0C5411F0ADAB800C1B923 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
+		AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroScrollView.swift; sourceTree = "<group>"; };
+		AFE9BC521F008CD400470C53 /* TextViewTests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TextViewTests.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AF361D281F0DB72800FAAA1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF6852B01EF8A56700F9DACF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AF361D2C1F0DB72800FAAA1C /* TimeCalcTests */ = {
+			isa = PBXGroup;
+			children = (
+				AF473F231F1EF1B300F6F856 /* ExecutorTests.swift */,
+				AF75CE631F19736D006E851D /* ParserTests.swift */,
+				AF361D351F0DB76200FAAA1C /* LexerTests.swift */,
+				AF361D2F1F0DB72800FAAA1C /* Info.plist */,
+			);
+			path = TimeCalcTests;
+			sourceTree = "<group>";
+		};
+		AF6852AA1EF8A56700F9DACF = {
+			isa = PBXGroup;
+			children = (
+				AF6852B51EF8A56700F9DACF /* TimeCalc */,
+				AF361D2C1F0DB72800FAAA1C /* TimeCalcTests */,
+				AF6852B41EF8A56700F9DACF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AF6852B41EF8A56700F9DACF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AF6852B31EF8A56700F9DACF /* TimeCalc.app */,
+				AF361D2B1F0DB72800FAAA1C /* TimeCalcTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AF6852B51EF8A56700F9DACF /* TimeCalc */ = {
+			isa = PBXGroup;
+			children = (
+				AFE9BC521F008CD400470C53 /* TextViewTests.entitlements */,
+				AF6852B61EF8A56700F9DACF /* AppDelegate.swift */,
+				AF6852B81EF8A56700F9DACF /* ViewController.swift */,
+				AF6852BA1EF8A56700F9DACF /* Assets.xcassets */,
+				AF6852BC1EF8A56700F9DACF /* Main.storyboard */,
+				AF6852BF1EF8A56700F9DACF /* Info.plist */,
+				AFA0C53D1F07188700C1B923 /* LineNumberRulerView.swift */,
+				AFA0C53F1F09B54E00C1B923 /* ResultsCalculator.swift */,
+				AFA0C5411F0ADAB800C1B923 /* Lexer.swift */,
+				AF3AEC1C1F16E485008D7311 /* Parser.swift */,
+				AF75CE651F1AEE26006E851D /* Executor.swift */,
+				AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */,
+			);
+			path = TimeCalc;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AF361D2A1F0DB72800FAAA1C /* TimeCalcTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF361D341F0DB72800FAAA1C /* Build configuration list for PBXNativeTarget "TimeCalcTests" */;
+			buildPhases = (
+				AF361D271F0DB72800FAAA1C /* Sources */,
+				AF361D281F0DB72800FAAA1C /* Frameworks */,
+				AF361D291F0DB72800FAAA1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AF361D311F0DB72800FAAA1C /* PBXTargetDependency */,
+			);
+			name = TimeCalcTests;
+			productName = TextViewTestsTests;
+			productReference = AF361D2B1F0DB72800FAAA1C /* TimeCalcTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AF6852B21EF8A56700F9DACF /* TimeCalc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF6852C21EF8A56700F9DACF /* Build configuration list for PBXNativeTarget "TimeCalc" */;
+			buildPhases = (
+				AF6852AF1EF8A56700F9DACF /* Sources */,
+				AF6852B01EF8A56700F9DACF /* Frameworks */,
+				AF6852B11EF8A56700F9DACF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TimeCalc;
+			productName = TextViewTests;
+			productReference = AF6852B31EF8A56700F9DACF /* TimeCalc.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AF6852AB1EF8A56700F9DACF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = Zanthan;
+				TargetAttributes = {
+					AF361D2A1F0DB72800FAAA1C = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+						TestTargetID = AF6852B21EF8A56700F9DACF;
+					};
+					AF6852B21EF8A56700F9DACF = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = AF6852AE1EF8A56700F9DACF /* Build configuration list for PBXProject "TimeCalc" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AF6852AA1EF8A56700F9DACF;
+			productRefGroup = AF6852B41EF8A56700F9DACF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AF6852B21EF8A56700F9DACF /* TimeCalc */,
+				AF361D2A1F0DB72800FAAA1C /* TimeCalcTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AF361D291F0DB72800FAAA1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF6852B11EF8A56700F9DACF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF6852BB1EF8A56700F9DACF /* Assets.xcassets in Resources */,
+				AF6852BE1EF8A56700F9DACF /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AF361D271F0DB72800FAAA1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF75CE641F19736D006E851D /* ParserTests.swift in Sources */,
+				AF473F241F1EF1B300F6F856 /* ExecutorTests.swift in Sources */,
+				AF361D361F0DB76200FAAA1C /* LexerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF6852AF1EF8A56700F9DACF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AFA0C53E1F07188700C1B923 /* LineNumberRulerView.swift in Sources */,
+				AFA0C5401F09B54E00C1B923 /* ResultsCalculator.swift in Sources */,
+				AFDD49B61F2D0BC000A9DB4B /* SynchroScrollView.swift in Sources */,
+				AF3AEC1D1F16E485008D7311 /* Parser.swift in Sources */,
+				AF6852B91EF8A56700F9DACF /* ViewController.swift in Sources */,
+				AF6852B71EF8A56700F9DACF /* AppDelegate.swift in Sources */,
+				AFA0C5421F0ADAB800C1B923 /* Lexer.swift in Sources */,
+				AF75CE661F1AEE26006E851D /* Executor.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AF361D311F0DB72800FAAA1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AF6852B21EF8A56700F9DACF /* TimeCalc */;
+			targetProxy = AF361D301F0DB72800FAAA1C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		AF6852BC1EF8A56700F9DACF /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AF6852BD1EF8A56700F9DACF /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AF361D321F0DB72800FAAA1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = TextViewTestsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TextViewTestsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TimeCalc.app/Contents/MacOS/TimeCalc";
+			};
+			name = Debug;
+		};
+		AF361D331F0DB72800FAAA1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = TextViewTestsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TextViewTestsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TimeCalc.app/Contents/MacOS/TimeCalc";
+			};
+			name = Release;
+		};
+		AF6852C01EF8A56700F9DACF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AF6852C11EF8A56700F9DACF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+			};
+			name = Release;
+		};
+		AF6852C31EF8A56700F9DACF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TextViewTests/TextViewTests.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = TimeCalc/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalc;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		AF6852C41EF8A56700F9DACF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TextViewTests/TextViewTests.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = TimeCalc/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalc;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AF361D341F0DB72800FAAA1C /* Build configuration list for PBXNativeTarget "TimeCalcTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF361D321F0DB72800FAAA1C /* Debug */,
+				AF361D331F0DB72800FAAA1C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF6852AE1EF8A56700F9DACF /* Build configuration list for PBXProject "TimeCalc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF6852C01EF8A56700F9DACF /* Debug */,
+				AF6852C11EF8A56700F9DACF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF6852C21EF8A56700F9DACF /* Build configuration list for PBXNativeTarget "TimeCalc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF6852C31EF8A56700F9DACF /* Debug */,
+				AF6852C41EF8A56700F9DACF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AF6852AB1EF8A56700F9DACF /* Project object */;
+}
