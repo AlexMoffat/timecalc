@@ -50,7 +50,7 @@
 		AFA0C53F1F09B54E00C1B923 /* ResultsCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsCalculator.swift; sourceTree = "<group>"; };
 		AFA0C5411F0ADAB800C1B923 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
 		AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroScrollView.swift; sourceTree = "<group>"; };
-		AFE9BC521F008CD400470C53 /* TextViewTests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TextViewTests.entitlements; sourceTree = "<group>"; };
+		AFE9BC521F008CD400470C53 /* TimeCalc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeCalc.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +103,7 @@
 		AF6852B51EF8A56700F9DACF /* TimeCalc */ = {
 			isa = PBXGroup;
 			children = (
-				AFE9BC521F008CD400470C53 /* TextViewTests.entitlements */,
+				AFE9BC521F008CD400470C53 /* TimeCalc.entitlements */,
 				AF6852B61EF8A56700F9DACF /* AppDelegate.swift */,
 				AF6852B81EF8A56700F9DACF /* ViewController.swift */,
 				AF6852BA1EF8A56700F9DACF /* Assets.xcassets */,
@@ -393,7 +393,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = TextViewTests/TextViewTests.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TimeCalc/TimeCalc.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = TimeCalc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -407,7 +407,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = TextViewTests/TextViewTests.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TimeCalc/TimeCalc.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = TimeCalc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

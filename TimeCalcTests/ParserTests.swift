@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import TextViewTests
+@testable import TimeCalcTests
 
 class ParserTests: XCTestCase {
 

@@ -60,7 +60,7 @@ class ViewController: NSViewController {
         textScrollView.paused = true
         resultsScrollView.paused = true
         if let validResults = results {
-            let result = calculator.calculateText(textView: text, results: validResults).joined(separator: "\n")
+            let result = calculator.calculateText(textView: text, results: validResults).joined()
             resultsView.textStorage!.mutableString.setString(result)
         }
         textScrollView.paused = false

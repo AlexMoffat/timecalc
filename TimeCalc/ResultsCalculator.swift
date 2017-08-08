@@ -61,6 +61,7 @@ class ResultsCalculator {
                     } else {
                         text.append("")
                     }
+                    text.append("\n")
                     
                     
                     glyphLineCount += 1
