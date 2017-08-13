@@ -38,13 +38,14 @@ extension Token: Equatable {
         case let (.DateTime(l), .DateTime(r)) : return l == r
         case let (.Identifier(l), .Identifier(r)) : return l == r
         case let (.Int(l), .Int(r)) : return l == r
-        case let (.Unknown(l), .Unknown(r)) : return l == r
         case let (.String(l), .String(r)) : return l == r
+        case let (.Unknown(l), .Unknown(r)) : return l == r
         default : return false
         }
     }
 }
 
+// Take a regular expression match and the complete string the match was found in and return a token if one can be built.
 typealias TokenGenerator = (NSTextCheckingResult, String) -> Token?
 
 let POSIX_LOCALE = Locale(identifier: "en_US_POSIX")
@@ -57,6 +58,8 @@ let formatterForTimeZone = {(zone: TimeZone?, format: String) -> DateFormatter i
     return fmt
 }
 
+// Map from a regular expression to the generator to try if the expression matches. The first matching expression
+// with a generator that returns a token is used.
 let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegularExpression, TokenGenerator)] in
     
     let match = {(r: NSTextCheckingResult, s: String) -> String in (s as NSString).substring(with: r.range)}
@@ -83,12 +86,13 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         }
     }
     
+    // Standard iso format.
     let isoDateFormat = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ssZZZZZ")
-    
     let toDateFromISO: TokenGenerator = {r, s in
         isoDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
     }
     
+    // Date format kibana uses.
     let kibanaDateFormat = formatterForTimeZone(TimeZone.current, "MMM dd yyyy',' HH:mm:ss.SSS")
     let removeOrdinalsLeadingMonth = try! NSRegularExpression(pattern: "([yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d)", options: [])
     let toDateFromKibana: TokenGenerator = {r, s in
@@ -100,6 +104,7 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         }
     }
     
+    // Date format that bamboo uses.
     let bambooDateFormat = formatterForTimeZone(TimeZone.current, "d-MMM-yyyy HH:mm:ss")
     let toDateFromBamboo: TokenGenerator = {r, s in
         bambooDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})

@@ -11,10 +11,18 @@ import Foundation
 
 class ResultsCalculator {
     
+    let resultStyle = [
+        NSFontAttributeName: NSFont.systemFont(ofSize: 16),
+        NSForegroundColorAttributeName: NSColor.gray
+    ]
+    let errorStyle = [
+        NSFontAttributeName: NSFont.systemFont(ofSize: 16),
+        NSForegroundColorAttributeName: NSColor.magenta
+    ]
     let newLineRegex = try! NSRegularExpression(pattern: "\r?\n", options: [])
     
-    func calculateText(textView: NSTextView, results: [Result]) -> [String] {
-        var text: [String] = [String]()
+    func calculateText(textView: NSTextView, results: [Result]) -> NSAttributedString {
+        let text = NSMutableAttributedString()
         
         if let layoutManager = textView.layoutManager {
             
@@ -49,19 +57,19 @@ class ResultsCalculator {
                     if glyphLineCount == 0 && lineNumber < results.count {
                         switch results[lineNumber].value {
                         case let .Left(e):
-                            text.append(e)
+                            text.append(NSAttributedString(string: e, attributes: errorStyle))
                         case let .Right(s):
                             switch s {
                             case let .StringValue(v):
-                                text.append(v)
+                                text.append(NSAttributedString(string: v, attributes: resultStyle))
                             default:
-                                text.append("")
+                                text.append(NSAttributedString(string: "", attributes: resultStyle))
                             }
                         }
                     } else {
-                        text.append("")
+                        text.append(NSAttributedString(string: "", attributes: resultStyle))
                     }
-                    text.append("\n")
+                    text.append(NSAttributedString(string: "\n", attributes: resultStyle))
                     
                     
                     glyphLineCount += 1

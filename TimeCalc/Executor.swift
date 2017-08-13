@@ -46,25 +46,33 @@ struct Result {
 }
 
 class Environment {
+    var reservedValues = [String: Value]()
     var values = [String: Value]()
     
     init() {
-        values["now"] = .DateValue(value: Date(), timezone: TimeZone.current)
+        reservedValues["now"] = .DateValue(value: Date(), timezone: TimeZone.current)
+        reservedValues["day"] = .IdentifierValue(value: "day")
+        reservedValues["ms"] = .IdentifierValue(value: "ms")
+        reservedValues["seconds"] = .IdentifierValue(value: "seconds")
     }
     
     subscript(index: String) -> Value? {
         get {
-            return values[index]
+            return reservedValues[index] ?? values[index]
         }
         set(newValue) {
             values[index] = newValue
         }
     }
     
+    func isReserved(_ index: String) -> Bool {
+        return reservedValues[index] != nil
+    }
+    
     func valueFromEnvironment(_ resultValue: ResultValue) -> ResultValue {
         if case let .Right(value) = resultValue {
             if case let .IdentifierValue(i) = value {
-                if let v = values[i] {
+                if let v = self[i] {
                     return .Right(v)
                 } else {
                     return .Left("\(String(describing: value)) is an undefined identifier. It has no value.")
@@ -79,7 +87,7 @@ class Environment {
     
     func valueFromEnvironment(_ value: Value) -> ResultValue {
         if case let .IdentifierValue(i) = value {
-            if let v = values[i] {
+            if let v = self[i] {
                 return .Right(v)
             } else {
                 return .Left("\(String(describing: value)) is an undefined identifier. It has no value.")
@@ -90,7 +98,7 @@ class Environment {
     }
     
     func valueFromEnvironment(_ stringValue: String) -> ResultValue {
-        if let v = values[stringValue] {
+        if let v = self[stringValue] {
             return .Right(v)
         } else {
             return .Left("\(stringValue) is an undefined identifier. It has no value.")
@@ -178,6 +186,9 @@ class Executor {
         let value = environment.valueFromEnvironment(evaluateExpression(expr: expr.value))
         switch value {
         case let .Right(v):
+            if environment.isReserved(expr.variable.value) {
+                return .Left("\(expr.variable.value) is a reserved identifier. You can not change its value.")
+            }
             environment[expr.variable.value] = v
             return value
         case .Left(_):
@@ -227,6 +238,10 @@ class Executor {
         switch ident {
         case "day":
             return .Right(.StringValue(value: formatterForTimeZone(zone, "EEEE").string(from: date)))
+        case "ms":
+            return .Right(.StringValue(value: String(Int((date.timeIntervalSince1970 * 1000)))))
+        case "seconds":
+            return .Right(.StringValue(value: String(Int(date.timeIntervalSince1970))))
         default:
             return .Left("Can not extract component \(ident) from a date.")
         }
