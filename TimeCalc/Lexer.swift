@@ -142,7 +142,7 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         ("\"([^\"\r\n]+)\"", toString),
         ("'([^'\r\n]+)'", toString),
         ("[a-zA-Z][0-9a-zA-Z]*", {r, s in .Identifier(match(r, s))}),
-        ("[1-9]\\d{0,3}", {r, s in Int(match(r, s)).map({i in .Int(i)})}),
+        ("[1-9]\\d{0,8}", {r, s in Int(match(r, s)).map({i in .Int(i)})}),
         ("\\S+", {r, s in .Unknown(match(r, s))})
         
     ]
