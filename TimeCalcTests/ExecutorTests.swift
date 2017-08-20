@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import TimeCalcTests
+@testable import TimeCalc
 
 class ExecutorTests: XCTestCase {
 

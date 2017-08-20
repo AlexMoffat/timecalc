@@ -92,6 +92,24 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         isoDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
     }
     
+    // Standard iso format with milliseconds.
+    let isoDateFormatWithMillis = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ")
+    let toDateFromISOWithMillis: TokenGenerator = {r, s in
+        isoDateFormatWithMillis.date(from: match(r, s)).map({d in .DateTime(d)})
+    }
+    
+    // ISO format but with spaces between date, time and timezone.
+    let isoDateFormatWithSpaces = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss ZZZ")
+    let toDateFromISOWithSpaces: TokenGenerator = {r, s in
+        isoDateFormatWithSpaces.date(from: match(r, s)).map({d in .DateTime(d)})
+    }
+    
+    // ISO format with milliseconds but with spaces between date, time and timezone 
+    let isoDateFormatWithSpacesAndMillis = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss.SSS ZZZ")
+    let toDateFromISOWithSpacesAndMillis: TokenGenerator = {r, s in
+        isoDateFormatWithSpacesAndMillis.date(from: match(r, s)).map({d in .DateTime(d)})
+    }
+    
     // Date format kibana uses.
     let kibanaDateFormat = formatterForTimeZone(TimeZone.current, "MMM dd yyyy',' HH:mm:ss.SSS")
     let removeOrdinalsLeadingMonth = try! NSRegularExpression(pattern: "([yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d)", options: [])
@@ -131,6 +149,12 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         ("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2}", toDateFromISO),
         // 2017-06-17T19:00:03Z
         ("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z", toDateFromISO),
+        // 2017-08-15T12:28:34.395-05:00
+        ("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2}", toDateFromISOWithMillis),
+        // 2017-08-15 17:28:34 +0000
+        ("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4}", toDateFromISOWithSpaces),
+        // 2017-08-15 17:28:34 +0000
+        ("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} [+-]\\d{4}", toDateFromISOWithSpacesAndMillis),
         // June 17th 2017, 12:00:03.000
         ("(\\S+[yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d{4}), \\d{2}:\\d{2}:\\d{2}\\.\\d{3}", toDateFromKibana),
         // 20-Jul-2017 22:02:26

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import TimeCalcTests
+@testable import TimeCalc
 
 class LexerTests: XCTestCase {
 
@@ -40,6 +40,9 @@ class LexerTests: XCTestCase {
         compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803))], "1497718803")
         compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803.876))], "1497718803876")
         compare([Token.DateTime(Date(timeIntervalSince1970: 1500606146))], "20-Jul-2017 22:02:26")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395))], "2017-08-15T12:28:34.395-05:00")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114))], "2017-08-15 17:28:34 +0000")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395))], "2017-08-15 12:28:34.395 -0500")
         compare([Token.Identifier("abc"), Token.Int(456)], "abc 456")
     }
 

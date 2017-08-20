@@ -12,7 +12,7 @@ import Foundation
 class ResultsCalculator {
     
     let resultStyle = [
-        NSFontAttributeName: NSFont.systemFont(ofSize: 16),
+        NSFontAttributeName: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFontWeightRegular),
         NSForegroundColorAttributeName: NSColor.gray
     ]
     let errorStyle = [

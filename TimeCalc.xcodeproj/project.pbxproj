@@ -274,9 +274,9 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = TextViewTestsTests/Info.plist;
+				INFOPLIST_FILE = TimeCalcTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TextViewTestsTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalcTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TimeCalc.app/Contents/MacOS/TimeCalc";
@@ -288,9 +288,9 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = TextViewTestsTests/Info.plist;
+				INFOPLIST_FILE = TimeCalcTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TextViewTestsTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalcTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TimeCalc.app/Contents/MacOS/TimeCalc";

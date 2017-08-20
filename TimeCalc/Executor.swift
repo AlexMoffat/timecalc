@@ -53,7 +53,7 @@ class Environment {
         reservedValues["now"] = .DateValue(value: Date(), timezone: TimeZone.current)
         reservedValues["day"] = .IdentifierValue(value: "day")
         reservedValues["ms"] = .IdentifierValue(value: "ms")
-        reservedValues["seconds"] = .IdentifierValue(value: "seconds")
+        reservedValues["s"] = .IdentifierValue(value: "s")
     }
     
     subscript(index: String) -> Value? {
@@ -146,7 +146,7 @@ class Executor {
         case let .Right(v):
             switch v {
             case let .DateValue(d):
-                return .Right(.StringValue(value: formatterForTimeZone(d.timezone, "yyyy-MM-dd'T'HH:mm:ssZZZZZ").string(from: d.value)))
+                return .Right(.StringValue(value: formatterForTimeZone(d.timezone, "yyyy-MM-dd HH:mm:ss.SSS ZZZZZ").string(from: d.value)))
             case let .DurationValue(ms):
                 return .Right(.StringValue(value: intervalFormatter.string(from: Double(ms) / 1000) ?? "Could not format duration."))
             case let .IntValue(i):
@@ -240,7 +240,7 @@ class Executor {
             return .Right(.StringValue(value: formatterForTimeZone(zone, "EEEE").string(from: date)))
         case "ms":
             return .Right(.StringValue(value: String(Int((date.timeIntervalSince1970 * 1000)))))
-        case "seconds":
+        case "s":
             return .Right(.StringValue(value: String(Int(date.timeIntervalSince1970))))
         default:
             return .Left("Can not extract component \(ident) from a date.")
