@@ -137,8 +137,9 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
 
     let tokenDefinitions: [(String, TokenGenerator)] = [
         
-        ("[ \t]+",        {_ in .Whitespace}),
-        ("\r?\n",     {_ in .Newline}),
+        ("[ \t]+",      {_ in .Whitespace}),
+        ("#[^\r\n]*",   {_ in .Whitespace}),
+        ("\r?\n",       {_ in .Newline}),
         ("let",         {_ in .Let}),
         ("=",           {_ in .Assign}),
         ("\\(",         {_ in .OpenParen}),
@@ -153,7 +154,7 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         ("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2}", toDateFromISOWithMillis),
         // 2017-08-15 17:28:34 +0000
         ("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4}", toDateFromISOWithSpaces),
-        // 2017-08-15 17:28:34 +0000
+        // 2017-08-15 17:28:34.456 +0000
         ("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} [+-]\\d{4}", toDateFromISOWithSpacesAndMillis),
         // June 17th 2017, 12:00:03.000
         ("(\\S+[yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d{4}), \\d{2}:\\d{2}:\\d{2}\\.\\d{3}", toDateFromKibana),

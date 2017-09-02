@@ -23,6 +23,7 @@ class LexerTests: XCTestCase {
 
     func testExample() {
         compare([Token.Newline], "  \n");
+        compare([Token.Newline], "# a comment  \n");
         compare([Token.Let], "let ");
         compare([Token.Assign], "= ")
         compare([Token.Int(12)], "12")
