@@ -35,6 +35,10 @@ class ViewController: NSViewController {
         
         textScrollView.setSynchronziedScrollView(view: resultsScrollView)
         resultsScrollView.setSynchronziedScrollView(view: textScrollView)
+        
+        text.typingAttributes = [
+            NSFontAttributeName: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFontWeightRegular)
+        ]
     }
 
     override var representedObject: Any? {

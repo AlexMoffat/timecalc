@@ -23,12 +23,14 @@ class ExecutorTests: XCTestCase {
 
     func testExample() {
         checkSuccess(toParse: "2 + 3", expected: "5")
+        checkSuccess(toParse: "2 + -3", expected: "-1")
         checkSuccess(toParse: "let x = 2d", expected: "2d")
-        checkSuccess(toParse: "1497718803 + 2h @ 'UTC'", expected: "2017-06-17T19:00:03Z")
-        checkSuccess(toParse: "2017-06-17T19:00:03Z - 1d 1h @ 'UTC'", expected: "2017-06-16T18:00:03Z")
+        checkSuccess(toParse: "1497718803 + 2h @ 'UTC'", expected: "2017-06-17 19:00:03 Z")
+        checkSuccess(toParse: "1497718803765 + 2h @ 'UTC'", expected: "2017-06-17 19:00:03.765 Z")
+        checkSuccess(toParse: "2017-06-17T19:00:03Z - 1d 1h @ 'UTC'", expected: "2017-06-16 18:00:03 Z")
         checkSuccess(toParse: "2017-06-17T19:00:03Z - 2017-06-16T18:00:03Z", expected: "1d 1h")
-        checkSuccess(toParse: "2d + 1497718803", expected: "2017-06-19T12:00:03-05:00")
-        checkFailure(toParse: "2 +", expected: "Parser Expected to find a token.")
+        checkSuccess(toParse: "2d + 1497718803", expected: "2017-06-19 12:00:03 -05:00")
+        checkFailure(toParse: "2 +", expected: "Parser Expected a newline.")
     }
 
     func checkSuccess(toParse: String, expected: String) {

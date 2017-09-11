@@ -47,7 +47,7 @@ class ParserTests: XCTestCase {
         
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(BinaryOpNode(op: *, lhs: DurationNode(10800000), rhs: BinaryOpNode(op: +, lhs: NumberNode(2), rhs: NumberNode(1)))), error: nil)]", toParse: "3h * (2 + 1)")
         
-        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: nil, error: Optional(Parser Expected to find a token.))]", toParse: "2 +")
+        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: nil, error: Optional(Parser Expected a newline.))]", toParse: "2 +")
     }
 
     func parseAndCompare(expected: String, toParse: String) {

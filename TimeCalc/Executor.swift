@@ -146,7 +146,7 @@ class Executor {
         case let .Right(v):
             switch v {
             case let .DateValue(d):
-                return .Right(.StringValue(value: formatterForTimeZone(d.timezone, "yyyy-MM-dd HH:mm:ss.SSS ZZZZZ").string(from: d.value)))
+                return toValue(d.value, d.timezone)
             case let .DurationValue(ms):
                 return .Right(.StringValue(value: intervalFormatter.string(from: Double(ms) / 1000) ?? "Could not format duration."))
             case let .IntValue(i):
@@ -158,6 +158,22 @@ class Executor {
             }
         case .Left(_):
             return value
+        }
+    }
+    
+    func toValue(_ d: Date, _ ts: TimeZone) -> ResultValue {
+        let ns = NSCalendar.current.component(.nanosecond, from: d)
+        if ns == 0 {
+            return .Right(.StringValue(value: formatterForTimeZone(ts, "yyyy-MM-dd HH:mm:ss ZZZZZ").string(from: d)))
+        } else {
+            let micros: Int = Int(floor(Double(ns / 1000)))
+            let millis: Int = Int(floor(Double(micros / 1000)))
+            let microsRemainder = micros - (millis * 1000)
+            if microsRemainder == 0 {
+                return .Right(.StringValue(value: formatterForTimeZone(ts, "yyyy-MM-dd HH:mm:ss.SSS ZZZZZ").string(from: d)))
+            } else {
+                return .Right(.StringValue(value: formatterForTimeZone(ts, "yyyy-MM-dd HH:mm:ss.SSSSSS ZZZZZ").string(from: d)))
+            }
         }
     }
     

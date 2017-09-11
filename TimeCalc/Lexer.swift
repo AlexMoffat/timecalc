@@ -62,11 +62,11 @@ let formatterForTimeZone = {(zone: TimeZone?, format: String) -> DateFormatter i
 // with a generator that returns a token is used.
 let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegularExpression, TokenGenerator)] in
     
-    let match = {(r: NSTextCheckingResult, s: String) -> String in (s as NSString).substring(with: r.range)}
+    let match = {(r: NSTextCheckingResult, s: String) -> String in (s as NSString).substring(with: r.rangeAt(1))}
     
     let toDuration: TokenGenerator = {r, s in
-        if let value = Int((s as NSString).substring(with: r.rangeAt(1))) {
-            let units = (s as NSString).substring(with: r.rangeAt(2))
+        if let value = Int((s as NSString).substring(with: r.rangeAt(2))) {
+            let units = (s as NSString).substring(with: r.rangeAt(3))
             switch units {
             case "d":
                 return .MillisDuration(value*24*60*60*1000)
@@ -137,38 +137,42 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
 
     let tokenDefinitions: [(String, TokenGenerator)] = [
         
-        ("[ \t]+",      {_ in .Whitespace}),
-        ("#[^\r\n]*",   {_ in .Whitespace}),
-        ("\r?\n",       {_ in .Newline}),
-        ("let",         {_ in .Let}),
-        ("=",           {_ in .Assign}),
-        ("\\(",         {_ in .OpenParen}),
-        ("\\)",         {_ in .CloseParen}),
-        ("[+*/@.-]",      {r, s in .Operator(match(r, s))}),
-        ("([1-9][0-9]{0,3})(d|h|m(?!s)|s|ms)", toDuration),
+        ("([ \t]+)",      {_ in .Whitespace}),
+        ("(#[^\r\n]*)",   {_ in .Whitespace}),
+        ("(\r?\n)",       {_ in .Newline}),
+        ("(let)",         {_ in .Let}),
+        ("(=)",           {_ in .Assign}),
+        ("(\\()",         {_ in .OpenParen}),
+        ("(\\))",         {_ in .CloseParen}),
+        ("([+*/@.-])[^0-9]",      {r, s in .Operator(match(r, s))}),
+        ("(([1-9][0-9]{0,3})(d|h|m(?!s)|s|ms))", toDuration),
         // 2017-06-17T17:00:03+00:00
-        ("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2}", toDateFromISO),
+        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2})", toDateFromISO),
         // 2017-06-17T19:00:03Z
-        ("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z", toDateFromISO),
+        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z)", toDateFromISO),
+        // 2017-09-06T20:05:54.000Z git timestamp from version string.
+        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z)", toDateFromISOWithMillis),
         // 2017-08-15T12:28:34.395-05:00
-        ("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2}", toDateFromISOWithMillis),
+        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2})", toDateFromISOWithMillis),
         // 2017-08-15 17:28:34 +0000
-        ("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4}", toDateFromISOWithSpaces),
+        ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4})", toDateFromISOWithSpaces),
         // 2017-08-15 17:28:34.456 +0000
-        ("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} [+-]\\d{4}", toDateFromISOWithSpacesAndMillis),
+        ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} [+-](\\d{4}|(\\d{2}:\\d{2})))", toDateFromISOWithSpacesAndMillis),
         // June 17th 2017, 12:00:03.000
-        ("(\\S+[yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d{4}), \\d{2}:\\d{2}:\\d{2}\\.\\d{3}", toDateFromKibana),
+        ("((\\S+[yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d{4}), \\d{2}:\\d{2}:\\d{2}\\.\\d{3})", toDateFromKibana),
         // 20-Jul-2017 22:02:26
-        ("\\d{1,2}-[JFMASOND][aepuco][nbrynlgptvc][a-z]?-\\d{4} \\d{1,2}:\\d{2}:\\d{2}", toDateFromBamboo),
+        ("(\\d{1,2}-[JFMASOND][aepuco][nbrynlgptvc][a-z]?-\\d{4} \\d{1,2}:\\d{2}:\\d{2})", toDateFromBamboo),
+        // 1504742693764001 (cassandra cli timestamp) microseconds
+        ("(\\d{16})", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: (d / 1000000)))})}),
         // 1499212382123 (date in milliseconds)
-        ("\\d{13}", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: (d / 1000)))})}),
+        ("(\\d{13})", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: (d / 1000)))})}),
         // 1499212382 (date in seconds)
-        ("\\d{10}", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: d))})}),
-        ("\"([^\"\r\n]+)\"", toString),
-        ("'([^'\r\n]+)'", toString),
-        ("[a-zA-Z][0-9a-zA-Z]*", {r, s in .Identifier(match(r, s))}),
-        ("[1-9]\\d{0,8}", {r, s in Int(match(r, s)).map({i in .Int(i)})}),
-        ("\\S+", {r, s in .Unknown(match(r, s))})
+        ("(\\d{10})", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: d))})}),
+        ("(\"([^\"\r\n]+)\")", toString),
+        ("('([^'\r\n]+)')", toString),
+        ("([a-zA-Z][0-9a-zA-Z]*)", {r, s in .Identifier(match(r, s))}),
+        ("(-?[1-9]\\d{0,8})", {r, s in Int(match(r, s)).map({i in .Int(i)})}),
+        ("(\\S+)", {r, s in .Unknown(match(r, s))})
         
     ]
     
@@ -200,7 +204,7 @@ class Lexer {
                         if t != .Whitespace {
                             tokens.append(t)
                         }
-                        content = content.substring(from: content.index(content.startIndex, offsetBy:match.range.length))
+                        content = content.substring(from: content.index(content.startIndex, offsetBy:match.rangeAt(1).length))
                         matched = true
                         break
                     }

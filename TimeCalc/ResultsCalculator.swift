@@ -16,7 +16,7 @@ class ResultsCalculator {
         NSForegroundColorAttributeName: NSColor.gray
     ]
     let errorStyle = [
-        NSFontAttributeName: NSFont.systemFont(ofSize: 16),
+        NSFontAttributeName: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFontWeightRegular),
         NSForegroundColorAttributeName: NSColor.magenta
     ]
     let newLineRegex = try! NSRegularExpression(pattern: "\r?\n", options: [])
