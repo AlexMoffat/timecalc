@@ -32,6 +32,8 @@ Some examples. First of all, parsing dates.  All of the formats below are unders
     1499212382123
     # And seconds since epoch
     1499212382
+    # Just a date is treated as midnight current timezone
+    2017-09-03
 
 Durations are written as a combination of days, hours, minutes, seconds and milliseconds.
 
@@ -62,4 +64,15 @@ Results can be shown in different timezone using abbreviations or names.
     2017-06-17 12:00:03.340 -07:00 @ "CDT"
     # Use the timezone name
     2017-06-17 12:00:03.340 -07:00 @ "America/Chicago"
+
+Various pieces can be extracted from a date. Done by ending the expression with a period and
+the unit to extract
+
+    # Day of the week
+    2017-09-03 . day
+    2017-08-15T12:28:34.395-05:00 .day
+    # Seconds since epoc
+    (2017-06-17T19:00:03 + 33m) . s
+    # Milliseconds since epoc
+    2017-08-15T12:28:34.395-05:00 . ms
 

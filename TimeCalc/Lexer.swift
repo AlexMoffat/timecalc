@@ -88,14 +88,18 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
     
     // Standard iso format.
     let isoDateFormat = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ssZZZZZ")
+    let isoDateFormatNoZone = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ss")
     let toDateFromISO: TokenGenerator = {r, s in
-        isoDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
+        let v = match(r, s)
+        return isoDateFormat.date(from: v).map({d in .DateTime(d)}) ?? isoDateFormatNoZone.date(from: v).map({d in .DateTime(d)})
     }
     
     // Standard iso format with milliseconds.
     let isoDateFormatWithMillis = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ")
+    let isoDateFormatWithMillisNoZone = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ss.SSS")
     let toDateFromISOWithMillis: TokenGenerator = {r, s in
-        isoDateFormatWithMillis.date(from: match(r, s)).map({d in .DateTime(d)})
+        let v = match(r, s)
+        return isoDateFormatWithMillis.date(from: v).map({d in .DateTime(d)}) ?? isoDateFormatWithMillisNoZone.date(from: v).map({d in .DateTime(d)})
     }
     
     // ISO format but with spaces between date, time and timezone.
@@ -108,6 +112,12 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
     let isoDateFormatWithSpacesAndMillis = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss.SSS ZZZ")
     let toDateFromISOWithSpacesAndMillis: TokenGenerator = {r, s in
         isoDateFormatWithSpacesAndMillis.date(from: match(r, s)).map({d in .DateTime(d)})
+    }
+    
+    // Just a date
+    let justADateFormat = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd")
+    let justADate: TokenGenerator = {r, s in
+        justADateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
     }
     
     // Date format kibana uses.
@@ -146,18 +156,20 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         ("(\\))",         {_ in .CloseParen}),
         ("([+*/@.-])[^0-9]",      {r, s in .Operator(match(r, s))}),
         ("(([1-9][0-9]{0,3})(d|h|m(?!s)|s|ms))", toDuration),
+        // 2017-08-15T12:28:34.395-05:00
+        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2})", toDateFromISOWithMillis),
+        // 2017-09-06T20:05:54.000Z git timestamp from version string.
+        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z?)", toDateFromISOWithMillis),
         // 2017-06-17T17:00:03+00:00
         ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2})", toDateFromISO),
         // 2017-06-17T19:00:03Z
-        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z)", toDateFromISO),
-        // 2017-09-06T20:05:54.000Z git timestamp from version string.
-        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z)", toDateFromISOWithMillis),
-        // 2017-08-15T12:28:34.395-05:00
-        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2})", toDateFromISOWithMillis),
-        // 2017-08-15 17:28:34 +0000
-        ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4})", toDateFromISOWithSpaces),
+        ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z?)", toDateFromISO),
         // 2017-08-15 17:28:34.456 +0000
         ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} [+-](\\d{4}|(\\d{2}:\\d{2})))", toDateFromISOWithSpacesAndMillis),
+        // 2017-08-15 17:28:34 +0000
+        ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4})", toDateFromISOWithSpaces),
+        // 2017-08-15
+        ("(\\d{4}-\\d{2}-\\d{2})", justADate),
         // June 17th 2017, 12:00:03.000
         ("((\\S+[yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d{4}), \\d{2}:\\d{2}:\\d{2}\\.\\d{3})", toDateFromKibana),
         // 20-Jul-2017 22:02:26
