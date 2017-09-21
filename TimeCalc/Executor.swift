@@ -115,6 +115,14 @@ class Executor {
         return formatter
     }()
     
+    
+    static let SHORT_FORMAT =  "yyyy-MM-dd HH:mm:ss ZZZZZ"
+    static let MEDIUM_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS ZZZZZ"
+    static let LONG_FORMAT =   "yyyy-MM-dd HH:mm:ss.SSSSSS ZZZZZ"
+    var shortFormat =  SHORT_FORMAT
+    var mediumFormat = MEDIUM_FORMAT
+    var longFormat =   LONG_FORMAT
+    
     var environment = Environment()
     var lines: [LineNode]
     
@@ -164,15 +172,15 @@ class Executor {
     func toValue(_ d: Date, _ ts: TimeZone) -> ResultValue {
         let ns = NSCalendar.current.component(.nanosecond, from: d)
         if ns == 0 {
-            return .Right(.StringValue(value: formatterForTimeZone(ts, "yyyy-MM-dd HH:mm:ss ZZZZZ").string(from: d)))
+            return .Right(.StringValue(value: formatterForTimeZone(ts, shortFormat).string(from: d)))
         } else {
             let micros: Int = Int(floor(Double(ns / 1000)))
             let millis: Int = Int(floor(Double(micros / 1000)))
             let microsRemainder = micros - (millis * 1000)
             if microsRemainder == 0 {
-                return .Right(.StringValue(value: formatterForTimeZone(ts, "yyyy-MM-dd HH:mm:ss.SSS ZZZZZ").string(from: d)))
+                return .Right(.StringValue(value: formatterForTimeZone(ts, mediumFormat).string(from: d)))
             } else {
-                return .Right(.StringValue(value: formatterForTimeZone(ts, "yyyy-MM-dd HH:mm:ss.SSSSSS ZZZZZ").string(from: d)))
+                return .Right(.StringValue(value: formatterForTimeZone(ts, longFormat).string(from: d)))
             }
         }
     }
@@ -204,6 +212,18 @@ class Executor {
         case let .Right(v):
             if environment.isReserved(expr.variable.value) {
                 return .Left("\(expr.variable.value) is a reserved identifier. You can not change its value.")
+            }
+            if case .StringValue(let s) = v, expr.variable.value == "fmt" {
+                if s == "" {
+                    shortFormat = Executor.SHORT_FORMAT
+                    mediumFormat = Executor.MEDIUM_FORMAT
+                    longFormat = Executor.LONG_FORMAT
+                } else {
+                    // TODO - Check that the format is valid.
+                    shortFormat = s
+                    mediumFormat = s
+                    longFormat = s
+                }
             }
             environment[expr.variable.value] = v
             return value

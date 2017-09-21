@@ -12,12 +12,12 @@ import Foundation
 class ResultsCalculator {
     
     let resultStyle = [
-        NSFontAttributeName: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFontWeightRegular),
-        NSForegroundColorAttributeName: NSColor.gray
+        NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFont.Weight.regular),
+        NSAttributedStringKey.foregroundColor: NSColor.gray
     ]
     let errorStyle = [
-        NSFontAttributeName: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFontWeightRegular),
-        NSForegroundColorAttributeName: NSColor.magenta
+        NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFont.Weight.regular),
+        NSAttributedStringKey.foregroundColor: NSColor.magenta
     ]
     let newLineRegex = try! NSRegularExpression(pattern: "\r?\n", options: [])
     
@@ -37,7 +37,7 @@ class ResultsCalculator {
             while glyphIndexAtStartOfStringLine < NSMaxRange(glyphRange) {
                 
                 // Range of characters for the line that includes the character that is used for the glyph at the start of the current line.
-                let rangeOfCharactersForStringLine = (textView.string! as NSString).lineRange(for: NSMakeRange(layoutManager.characterIndexForGlyph(at: glyphIndexAtStartOfStringLine), 0))
+                let rangeOfCharactersForStringLine = (textView.string as NSString).lineRange(for: NSMakeRange(layoutManager.characterIndexForGlyph(at: glyphIndexAtStartOfStringLine), 0))
                 
                 // Range of glyphs used to display characters in the current line.
                 let rangeOfGlyphsForStringLine = layoutManager.glyphRange(forCharacterRange: rangeOfCharactersForStringLine, actualCharacterRange: nil)

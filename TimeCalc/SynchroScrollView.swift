@@ -25,13 +25,13 @@ class SynchroScrollView: NSScrollView {
         
         contentView.postsBoundsChangedNotifications = true
         
-        NotificationCenter.default.addObserver(forName: Notification.Name.NSViewBoundsDidChange, object: contentView, queue: nil, using: synchroViewContentBoundsDidChange)
+        NotificationCenter.default.addObserver(forName: NSView.boundsDidChangeNotification, object: contentView, queue: nil, using: synchroViewContentBoundsDidChange)
     }
     
     func stopSynchronizing() {
         
         if let contentView = synchronizedView?.contentView {
-            NotificationCenter.default.removeObserver(self, name: Notification.Name.NSViewBoundsDidChange, object: contentView)
+            NotificationCenter.default.removeObserver(self, name: NSView.boundsDidChangeNotification, object: contentView)
             synchronizedView = nil
         }
     }

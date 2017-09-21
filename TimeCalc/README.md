@@ -76,3 +76,23 @@ the unit to extract
     # Milliseconds since epoc
     2017-08-15T12:28:34.395-05:00 . ms
 
+Variables can be defined. The right hand side after the = can be any expression.
+
+    # define x
+    let x = 2017-09-03
+    # use it
+    x . day
+
+Reserved variables. There are four variables whose values you can't change `now`, `day`, `s`, and `ms`.
+There's also one special variable `fmt` whose value you can modify but which has special effects.
+
+The `fmt` variable controls the output format for dates.
+
+    # Format to show just the date
+    let fmt = "yyyy-MM-dd"
+    # Go back to the default formats
+    let fmt = ""
+    # or use singe quotes. Single and double quotes work the same way.
+    let fmt = ''
+
+

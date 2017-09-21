@@ -37,7 +37,7 @@ class ViewController: NSViewController {
         resultsScrollView.setSynchronziedScrollView(view: textScrollView)
         
         text.typingAttributes = [
-            NSFontAttributeName: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFontWeightRegular)
+            NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFont.Weight.regular)
         ]
     }
 
@@ -47,7 +47,7 @@ class ViewController: NSViewController {
         }
     }
     
-    dynamic func timerAction() {
+    @objc dynamic func timerAction() {
         if textHasChanged {
             textHasChanged = false
         } else {

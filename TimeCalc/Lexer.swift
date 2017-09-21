@@ -62,11 +62,11 @@ let formatterForTimeZone = {(zone: TimeZone?, format: String) -> DateFormatter i
 // with a generator that returns a token is used.
 let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegularExpression, TokenGenerator)] in
     
-    let match = {(r: NSTextCheckingResult, s: String) -> String in (s as NSString).substring(with: r.rangeAt(1))}
+    let match = {(r: NSTextCheckingResult, s: String) -> String in (s as NSString).substring(with: r.range(at: 1))}
     
     let toDuration: TokenGenerator = {r, s in
-        if let value = Int((s as NSString).substring(with: r.rangeAt(2))) {
-            let units = (s as NSString).substring(with: r.rangeAt(3))
+        if let value = Int((s as NSString).substring(with: r.range(at: 2))) {
+            let units = (s as NSString).substring(with: r.range(at: 3))
             switch units {
             case "d":
                 return .MillisDuration(value*24*60*60*1000)
@@ -138,22 +138,27 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         bambooDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
     }
     
+    let twitterDateFormat = formatterForTimeZone(TimeZone.current, "EEE MMM dd HH:mm:ss ZZZ yyyy")
+    let toDateFromTwitter: TokenGenerator = {r, s in
+        twitterDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
+    }
+    
     let toString: TokenGenerator = {r, s in
         let theMatch = match(r, s)
         let start = theMatch.index(theMatch.startIndex, offsetBy: 1)
         let end = theMatch.index(theMatch.endIndex, offsetBy: -1)
-        return .String(theMatch.substring(with: start ..< end))
+        return .String(String(theMatch[start ..< end]))
     }
 
     let tokenDefinitions: [(String, TokenGenerator)] = [
         
-        ("([ \t]+)",      {_ in .Whitespace}),
-        ("(#[^\r\n]*)",   {_ in .Whitespace}),
-        ("(\r?\n)",       {_ in .Newline}),
-        ("(let)",         {_ in .Let}),
-        ("(=)",           {_ in .Assign}),
-        ("(\\()",         {_ in .OpenParen}),
-        ("(\\))",         {_ in .CloseParen}),
+        ("([ \t]+)",      {_,_  in .Whitespace}),
+        ("(#[^\r\n]*)",   {_,_  in .Whitespace}),
+        ("(\r?\n)",       {_,_  in .Newline}),
+        ("(let)",         {_,_  in .Let}),
+        ("(=)",           {_,_  in .Assign}),
+        ("(\\()",         {_,_  in .OpenParen}),
+        ("(\\))",         {_,_  in .CloseParen}),
         ("([+*/@.-])[^0-9]",      {r, s in .Operator(match(r, s))}),
         ("(([1-9][0-9]{0,3})(d|h|m(?!s)|s|ms))", toDuration),
         // 2017-08-15T12:28:34.395-05:00
@@ -167,9 +172,13 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         // 2017-08-15 17:28:34.456 +0000
         ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} [+-](\\d{4}|(\\d{2}:\\d{2})))", toDateFromISOWithSpacesAndMillis),
         // 2017-08-15 17:28:34 +0000
+        // TODO - above without zone offset
         ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4})", toDateFromISOWithSpaces),
         // 2017-08-15
         ("(\\d{4}-\\d{2}-\\d{2})", justADate),
+        // TODO - "Tue Sep 19 15:04:28 +0000 2017" twitter api format
+        // "EEE MMM dd HH:mm:ss ZZZ yyyy"
+        ("([MTWFS]\\S{2} [JFMASOND]\\S{2} \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4})", toDateFromTwitter),
         // June 17th 2017, 12:00:03.000
         ("((\\S+[yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d{4}), \\d{2}:\\d{2}:\\d{2}\\.\\d{3})", toDateFromKibana),
         // 20-Jul-2017 22:02:26
@@ -180,8 +189,8 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         ("(\\d{13})", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: (d / 1000)))})}),
         // 1499212382 (date in seconds)
         ("(\\d{10})", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: d))})}),
-        ("(\"([^\"\r\n]+)\")", toString),
-        ("('([^'\r\n]+)')", toString),
+        ("(\"([^\"\r\n]*)\")", toString),
+        ("('([^'\r\n]*)')", toString),
         ("([a-zA-Z][0-9a-zA-Z]*)", {r, s in .Identifier(match(r, s))}),
         ("(-?[1-9]\\d{0,8})", {r, s in Int(match(r, s)).map({i in .Int(i)})}),
         ("(\\S+)", {r, s in .Unknown(match(r, s))})
@@ -216,7 +225,7 @@ class Lexer {
                         if t != .Whitespace {
                             tokens.append(t)
                         }
-                        content = content.substring(from: content.index(content.startIndex, offsetBy:match.rangeAt(1).length))
+                        content = String(content[content.index(content.startIndex, offsetBy:match.range(at: 1).length)...])
                         matched = true
                         break
                     }
@@ -225,8 +234,8 @@ class Lexer {
             
             if !matched {
                 let index = content.index(content.startIndex, offsetBy: 1)
-                tokens.append(.Unknown(content.substring(to: index)))
-                content = content.substring(from: index)
+                tokens.append(.Unknown(String(content[..<index])))
+                content = String(content[index...])
             }
         }
         return tokens
