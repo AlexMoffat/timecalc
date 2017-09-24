@@ -104,8 +104,9 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
     
     // ISO format but with spaces between date, time and timezone.
     let isoDateFormatWithSpaces = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss ZZZ")
+    let isoDateFormatWithSpacesNoZone = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss")
     let toDateFromISOWithSpaces: TokenGenerator = {r, s in
-        isoDateFormatWithSpaces.date(from: match(r, s)).map({d in .DateTime(d)})
+        isoDateFormatWithSpaces.date(from: match(r, s)).map({d in .DateTime(d)}) ?? isoDateFormatWithSpacesNoZone.date(from: match(r, s)).map({d in .DateTime(d)})
     }
     
     // ISO format with milliseconds but with spaces between date, time and timezone 
@@ -150,6 +151,7 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         return .String(String(theMatch[start ..< end]))
     }
 
+    // Order matters here. You want longer matches for dates etc to come first.
     let tokenDefinitions: [(String, TokenGenerator)] = [
         
         ("([ \t]+)",      {_,_  in .Whitespace}),
@@ -171,12 +173,11 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z?)", toDateFromISO),
         // 2017-08-15 17:28:34.456 +0000
         ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} [+-](\\d{4}|(\\d{2}:\\d{2})))", toDateFromISOWithSpacesAndMillis),
-        // 2017-08-15 17:28:34 +0000
-        // TODO - above without zone offset
-        ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4})", toDateFromISOWithSpaces),
+        // 2017-08-15 17:28:34 +0000 (zone is optional)
+        ("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(\\s+[+-]\\d{4})?)", toDateFromISOWithSpaces),
         // 2017-08-15
         ("(\\d{4}-\\d{2}-\\d{2})", justADate),
-        // TODO - "Tue Sep 19 15:04:28 +0000 2017" twitter api format
+        // "Tue Sep 19 15:04:28 +0000 2017" twitter api format
         // "EEE MMM dd HH:mm:ss ZZZ yyyy"
         ("([MTWFS]\\S{2} [JFMASOND]\\S{2} \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4})", toDateFromTwitter),
         // June 17th 2017, 12:00:03.000

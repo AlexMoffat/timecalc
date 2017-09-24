@@ -57,6 +57,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AF0135EA1F773563003AE71B /* update_build_number.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = update_build_number.sh; sourceTree = "<group>"; };
+		AF0135EC1F773643003AE71B /* nth_commit.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = nth_commit.sh; sourceTree = "<group>"; };
 		AF361D2B1F0DB72800FAAA1C /* TimeCalcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimeCalcTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF361D2F1F0DB72800FAAA1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AF361D351F0DB76200FAAA1C /* LexerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LexerTests.swift; sourceTree = "<group>"; };
@@ -96,6 +98,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AF0135E91F773516003AE71B /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				AF0135EA1F773563003AE71B /* update_build_number.sh */,
+				AF0135EC1F773643003AE71B /* nth_commit.sh */,
+			);
+			path = scripts;
+			sourceTree = "<group>";
+		};
 		AF361D2C1F0DB72800FAAA1C /* TimeCalcTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +121,7 @@
 		AF6852AA1EF8A56700F9DACF = {
 			isa = PBXGroup;
 			children = (
+				AF0135E91F773516003AE71B /* scripts */,
 				AF6852B51EF8A56700F9DACF /* TimeCalc */,
 				AF361D2C1F0DB72800FAAA1C /* TimeCalcTests */,
 				AF6852B41EF8A56700F9DACF /* Products */,
@@ -174,6 +186,7 @@
 				AF6852AF1EF8A56700F9DACF /* Sources */,
 				AF6852B01EF8A56700F9DACF /* Frameworks */,
 				AF6852B11EF8A56700F9DACF /* Resources */,
+				AF0135EB1F7735A6003AE71B /* ShellScript */,
 			);
 			buildRules = (
 				AF9B3DA61F7342000059E792 /* PBXBuildRule */,
@@ -250,6 +263,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AF0135EB1F7735A6003AE71B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PROJECT_DIR}/scripts/update_build_number.sh";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AF361D271F0DB72800FAAA1C /* Sources */ = {
@@ -358,7 +387,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -415,7 +444,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
