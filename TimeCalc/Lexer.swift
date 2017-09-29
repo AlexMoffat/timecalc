@@ -5,6 +5,7 @@
 //  Created by Alex Moffat on 7/3/17.
 //  Copyright © 2017 Zanthan. All rights reserved.
 //
+// Format patterns defined http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
 
 import Foundation
 
@@ -144,6 +145,12 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         twitterDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
     }
     
+    // Sentry date format "Sep 29, 2017 2:00:23 PM UTC"
+    let sentryDateFormat = formatterForTimeZone(TimeZone.current, "MMM dd, yyyy hh:mm:ss a zzz")
+    let toDateFromSentry: TokenGenerator = {r, s in
+        sentryDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
+    }
+    
     let toString: TokenGenerator = {r, s in
         let theMatch = match(r, s)
         let start = theMatch.index(theMatch.startIndex, offsetBy: 1)
@@ -180,6 +187,8 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         // "Tue Sep 19 15:04:28 +0000 2017" twitter api format
         // "EEE MMM dd HH:mm:ss ZZZ yyyy"
         ("([MTWFS]\\S{2} [JFMASOND]\\S{2} \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4})", toDateFromTwitter),
+        // Sentry date format "Sep 29, 2017 2:00:23 PM UTC"
+        ("([JFMASOND]\\S{2} \\d{1,2}, \\d{4} \\d{1,2}:\\d{2}:\\d{2} ((AM)|(PM)) \\S{3})", toDateFromSentry),
         // June 17th 2017, 12:00:03.000
         ("((\\S+[yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d{4}), \\d{2}:\\d{2}:\\d{2}\\.\\d{3})", toDateFromKibana),
         // 20-Jul-2017 22:02:26

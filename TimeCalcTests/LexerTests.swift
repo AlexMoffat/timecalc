@@ -47,6 +47,7 @@ class LexerTests: XCTestCase {
         compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803))], "2017-06-17T17:00:03+00:00")
         compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803))], "June 17th 2017, 12:00:03.000")
         compare([Token.DateTime(Date(timeIntervalSince1970: 1505833468))], "Tue Sep 19 15:04:28 +0000 2017")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1506693623))], "Sep 29, 2017 2:00:23 PM UTC")
         compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803))], "1497718803")
         compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803.876))], "1497718803876")
         compare([Token.DateTime(Date(timeIntervalSince1970: 1504742693.764001))], "1504742693764001")

@@ -28,6 +28,8 @@ Some examples. First of all, parsing dates.  All of the formats below are unders
     June 17th 2017, 12:00:03.000
     # Bamboo's date format (assumed current timezone)
     20-Jul-2017 22:02:26
+    # Format from Sentry
+    Sep 29, 2017 2:00:23 PM UTC
     # Milliseconds since epoch
     1499212382123
     # And seconds since epoch
