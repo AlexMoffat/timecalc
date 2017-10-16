@@ -63,6 +63,7 @@
 		AF361D2F1F0DB72800FAAA1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AF361D351F0DB76200FAAA1C /* LexerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LexerTests.swift; sourceTree = "<group>"; };
 		AF3AEC1C1F16E485008D7311 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		AF42475D1F8AEF9900408CA0 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		AF473F231F1EF1B300F6F856 /* ExecutorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutorTests.swift; sourceTree = "<group>"; };
 		AF6852B31EF8A56700F9DACF /* TimeCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TimeCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF6852B61EF8A56700F9DACF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -75,7 +76,7 @@
 		AFA0C53D1F07188700C1B923 /* LineNumberRulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineNumberRulerView.swift; sourceTree = "<group>"; };
 		AFA0C53F1F09B54E00C1B923 /* ResultsCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsCalculator.swift; sourceTree = "<group>"; };
 		AFA0C5411F0ADAB800C1B923 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
-		AFDA1FCC1F6F495200E525E8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = TimeCalc/README.md; sourceTree = SOURCE_ROOT; };
+		AFDA1FCC1F6F495200E525E8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroScrollView.swift; sourceTree = "<group>"; };
 		AFE9BC521F008CD400470C53 /* TimeCalc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeCalc.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -121,6 +122,8 @@
 		AF6852AA1EF8A56700F9DACF = {
 			isa = PBXGroup;
 			children = (
+				AF42475D1F8AEF9900408CA0 /* LICENSE.md */,
+				AFDA1FCC1F6F495200E525E8 /* README.md */,
 				AF0135E91F773516003AE71B /* scripts */,
 				AF6852B51EF8A56700F9DACF /* TimeCalc */,
 				AF361D2C1F0DB72800FAAA1C /* TimeCalcTests */,
@@ -140,7 +143,6 @@
 		AF6852B51EF8A56700F9DACF /* TimeCalc */ = {
 			isa = PBXGroup;
 			children = (
-				AFDA1FCC1F6F495200E525E8 /* README.md */,
 				AFE9BC521F008CD400470C53 /* TimeCalc.entitlements */,
 				AF6852B61EF8A56700F9DACF /* AppDelegate.swift */,
 				AF6852B81EF8A56700F9DACF /* ViewController.swift */,
