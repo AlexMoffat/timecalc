@@ -76,6 +76,8 @@ class Environment {
         reservedValues["day"] = .IdentifierValue(value: "day")
         reservedValues["ms"] = .IdentifierValue(value: "ms")
         reservedValues["s"] = .IdentifierValue(value: "s")
+        reservedValues["m"] = .IdentifierValue(value: "m")
+        reservedValues["h"] = .IdentifierValue(value: "h")
     }
     
     subscript(index: String) -> Value? {
@@ -128,12 +130,37 @@ class Environment {
     }
 }
 
+func baseIntervalFormatter() -> DateComponentsFormatter {
+    let formatter = DateComponentsFormatter()
+    formatter.unitsStyle = .abbreviated
+    formatter.zeroFormattingBehavior = .dropAll
+    return formatter;
+}
+
 class Executor {
     
-    let intervalFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .abbreviated
-        formatter.zeroFormattingBehavior = .dropAll
+    static let DURATION_FORMAT_FAILED = "Could not format duration.";
+    
+    let intervalFormatter: DateComponentsFormatter = baseIntervalFormatter()
+    
+    let secondsIntervalFormatter: DateComponentsFormatter = {
+        let formatter = baseIntervalFormatter()
+        formatter.allowsFractionalUnits = true
+        formatter.allowedUnits = NSCalendar.Unit.second
+        return formatter
+    }()
+    
+    let minutesIntervalFormatter: DateComponentsFormatter = {
+        let formatter = baseIntervalFormatter()
+        formatter.allowsFractionalUnits = true
+        formatter.allowedUnits = [NSCalendar.Unit.second , NSCalendar.Unit.minute]
+        return formatter
+    }()
+    
+    let hoursIntervalFormatter: DateComponentsFormatter = {
+        let formatter = baseIntervalFormatter()
+        formatter.allowsFractionalUnits = true
+        formatter.allowedUnits = [NSCalendar.Unit.second, NSCalendar.Unit.minute, NSCalendar.Unit.hour]
         return formatter
     }()
     
@@ -178,7 +205,7 @@ class Executor {
             case let .DateValue(d):
                 return toValue(d.value, d.timezone)
             case let .DurationValue(ms):
-                return .Right(.StringValue(value: intervalFormatter.string(from: Double(ms) / 1000) ?? "Could not format duration."))
+                return .Right(.StringValue(value: intervalFormatter.string(from: (Double(ms) / 1000)) ?? Executor.DURATION_FORMAT_FAILED))
             case let .IntValue(i):
                 return .Right(.StringValue(value: String(i)))
             case .IdentifierValue(_):
@@ -287,12 +314,20 @@ class Executor {
         guard case let .Right(v) = lhsValue else {
             return lhsValue
         }
-        guard case let .DateValue(date, zone) = v else {
-            return .Left("LHS of extract component is not a date. It is \(String(describing: v))")
-        }
         guard case let .IdentifierValue(ident) = rhs else {
             return .Left("RHS of extract component is not an identifier. It is \(String(describing: rhs))")
         }
+        switch v {
+        case let .DateValue(date, zone):
+            return extractComponent(date: date, zone: zone, ident: ident)
+        case let .DurationValue(ms):
+            return extractComponent(ms: ms, ident: ident)
+        default:
+            return .Left("LHS of extract component is not a date. It is \(String(describing: v))")
+        }
+    }
+    
+    func extractComponent(date: Date, zone: TimeZone, ident: String) -> ResultValue {
         switch ident {
         case "day":
             return .Right(.StringValue(value: formatterForTimeZone(zone, "EEEE").string(from: date)))
@@ -302,6 +337,31 @@ class Executor {
             return .Right(.StringValue(value: String(Int(date.timeIntervalSince1970))))
         default:
             return .Left("Can not extract component \(ident) from a date.")
+        }
+    }
+    
+    func extractComponent(ms: Int, ident: String) -> ResultValue {
+        switch ident {
+        case "ms":
+            return .Right(.StringValue(value: String(format: "%d ms", ms)))
+        case "s":
+            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000, unit: "s")))
+        case "m":
+            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000 * 60, unit: "m")))
+        case "h":
+            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000 * 60 * 60, unit: "h")))
+        default:
+            return .Left("Can not extract component \(ident) from a duration.")
+        }
+    }
+    
+    func formatDuration(ms: Int, divisor: Int, unit: String) -> String {
+        let units = ms / divisor
+        let remainder = Int(ms % divisor)
+        if (remainder == 0) {
+            return String(format: "%d %@", units, unit)
+        } else {
+            return String(format: "%d %@ %d ms", units, unit, remainder)
         }
     }
     

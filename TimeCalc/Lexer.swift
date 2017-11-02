@@ -248,11 +248,11 @@ class Lexer {
         var tokens = [Token]()
         var content = input
         
-        while (content.characters.count > 0) {
+        while (content.count > 0) {
             var matched = false
             
             for (pattern, generator) in tokenGenerators {
-                if let match = pattern.firstMatch(in: content, options: [], range: NSMakeRange(0, content.characters.count)) {
+                if let match = pattern.firstMatch(in: content, options: [], range: NSMakeRange(0, content.count)) {
                     if let t = generator(match, content) {
                         if t != .Whitespace {
                             tokens.append(t)
