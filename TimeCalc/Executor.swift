@@ -78,6 +78,7 @@ class Environment {
         reservedValues["s"] = .IdentifierValue(value: "s")
         reservedValues["m"] = .IdentifierValue(value: "m")
         reservedValues["h"] = .IdentifierValue(value: "h")
+        reservedValues["d"] = .IdentifierValue(value: "d")
     }
     
     subscript(index: String) -> Value? {
@@ -142,7 +143,7 @@ class Executor {
     static let DURATION_FORMAT_FAILED = "Could not format duration.";
     
     let intervalFormatter: DateComponentsFormatter = baseIntervalFormatter()
-    
+    /*
     let secondsIntervalFormatter: DateComponentsFormatter = {
         let formatter = baseIntervalFormatter()
         formatter.allowsFractionalUnits = true
@@ -163,7 +164,7 @@ class Executor {
         formatter.allowedUnits = [NSCalendar.Unit.second, NSCalendar.Unit.minute, NSCalendar.Unit.hour]
         return formatter
     }()
-    
+    */
     
     static let SHORT_FORMAT =  "yyyy-MM-dd HH:mm:ss ZZZZZ"
     static let MEDIUM_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS ZZZZZ"
@@ -343,13 +344,15 @@ class Executor {
     func extractComponent(ms: Int, ident: String) -> ResultValue {
         switch ident {
         case "ms":
-            return .Right(.StringValue(value: String(format: "%d ms", ms)))
+            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1, unit: "ms")))
         case "s":
             return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000, unit: "s")))
         case "m":
             return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000 * 60, unit: "m")))
         case "h":
             return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000 * 60 * 60, unit: "h")))
+        case "d":
+            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000 * 60 * 60 * 24, unit: "d")))
         default:
             return .Left("Can not extract component \(ident) from a duration.")
         }
@@ -359,9 +362,9 @@ class Executor {
         let units = ms / divisor
         let remainder = Int(ms % divisor)
         if (remainder == 0) {
-            return String(format: "%d %@", units, unit)
+            return String(format: "%d%@", units, unit)
         } else {
-            return String(format: "%d %@ %d ms", units, unit, remainder)
+            return String(format: "%d%@ %dms", units, unit, remainder)
         }
     }
     

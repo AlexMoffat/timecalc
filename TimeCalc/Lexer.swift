@@ -191,7 +191,9 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         ("(\\()",         {_,_  in .OpenParen}),
         ("(\\))",         {_,_  in .CloseParen}),
         ("([+*/@.-])[^0-9]",      {r, s in .Operator(match(r, s))}),
-        ("(([1-9][0-9]{0,3})(d|h|m(?!s)|s|ms))", toDuration),
+        // Allow up to eight digits so that you can have a complete day in milliseconds. This means that the
+        // output of any <duration> . d can be parsed.
+        ("(([1-9][0-9]{0,7})(d|h|m(?!s)|s|ms))", toDuration),
         // 2017-08-15T12:28:34.395-05:00
         ("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2})", toDateFromISOWithMillis),
         // 2017-09-06T20:05:54.000Z git timestamp from version string.
