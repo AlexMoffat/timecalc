@@ -1,16 +1,22 @@
 # TimeCalc
 
-A simple calculator for working with datetime values in different formats.
+A scratch pad for time and date calculations.
+
+See the bottom of this page for information on building.
 
 Type expressions on the left, see the results on the right.
+
+![](TimeCalcOverview.png)
 
 ## Syntax
 
 One expression per line.
 
-Comments start with #.
+Comments start with # and run to the end of the line.
 
 Datetimes, durations and arithmetic operations on them are supported.
+
+### Parsed Formats
 
 Some examples. First of all, parsing dates.  All of the formats below are understood.
 
@@ -38,7 +44,11 @@ Some examples. First of all, parsing dates.  All of the formats below are unders
     # Just a date is treated as midnight current timezone -> 2017-09-03 00:00:00 -05:00
     2017-09-03
 
-Durations are written as a combination of days, hours, minutes, seconds and milliseconds. Durations must have a unit.
+### Durations
+
+Durations are written as a combination of days, hours, minutes, seconds and milliseconds.
+Each piece of a duration must have a unit. The suffixes for units are d (dayss), h (hour), m (minutes),
+s (seconds) and ms (milliseconds)
 
     # Two days -> 2d
     2d
@@ -48,6 +58,8 @@ Durations are written as a combination of days, hours, minutes, seconds and mill
     1d 3m
     # All of the possible units -> 2d 1h 15m 23s 245ms
     2d 1h 15m 23s 245ms
+
+### Arithmetic
 
 You can add durations to dates, subtract durations from dates and subtract dates from dates.
 You can divide and multiply durations. Parentheses work.
@@ -61,6 +73,8 @@ You can divide and multiply durations. Parentheses work.
     # Twice the difference between two dates added to a third date -> 2017-07-08 17:56:00 -05:00
     ((2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) * 2) + 1499212382
     
+### Timezone display
+
 Results can be shown in different timezone using abbreviations or names.
 
     # Convert to central daylight time -> 2017-06-17 14:00:03.340000 -05:00
@@ -68,22 +82,30 @@ Results can be shown in different timezone using abbreviations or names.
     # Use the timezone name -> 2017-06-17 14:00:03.340000 -05:00
     2017-06-17 12:00:03.340 -07:00 @ "America/Chicago"
 
-Various pieces can be extracted from a date or a duration. Done by ending the expression with a period and
-the unit to extract or convert to. From dates you can get the day of the week or convert to the seconds/milliseconds
-since the epoc. Dates converted to seconds/milliseconds don't have a following unit because they represent dates,
+### Elapsed since epoc
+
+You can convert a date to the seconds/milliseconds since the epoc by using `. s` or `. ms` after the date.
+Dates converted to seconds/milliseconds don't have a following unit because they represent dates,
 with a unit they would be interpreted as durations.
 
-    # Day of the week -> Sunday
-    2017-09-03 . day
-    # -> Tuesday
-    2017-08-15T12:28:34.395-05:00 .day
     # Seconds since epoc -> 1497745983
     (2017-06-17T19:00:03 + 33m) . s
     # Milliseconds since epoc -> 1502818114395
     2017-08-15T12:28:34.395-05:00 . ms
 
-You can convert a duration into day, hours, minutes, seconds or milliseconds. If the duration can't be wholly expressed
-in the chosen unit then the remaining milliseconds are also shown.
+### Day of the week
+
+You can find the day of the week for a date using  `. day`.
+
+    # Day of the week -> Sunday
+    2017-09-03 . day
+    # -> Tuesday
+    2017-08-15T12:28:34.395-05:00 . day
+
+### Duration conversion
+
+You can convert a duration into day, hours, minutes, seconds or milliseconds. If the duration can't be completely
+expressed in the chosen unit then the remaining milliseconds are also shown.
 
     # How many seconds in 14 hours -> 50400s
     14h . s
@@ -96,6 +118,8 @@ in the chosen unit then the remaining milliseconds are also shown.
     # And -> 23h 31m 29s
     84689000ms
     
+### Variables
+
 Variables can be defined. The right hand side after the = can be any expression.
 
     # define x -> 2017-09-03 00:00:00 -05:00
@@ -103,13 +127,15 @@ Variables can be defined. The right hand side after the = can be any expression.
     # use it -> Sunday
     x . day
 
-Reserved variables. There are seven reserved variables whose values you can't change `now`, `day`, `d`, `h`, `m`, `s`, and `ms`.
+There are seven reserved variables whose values you can't change `now`, `day`, `d`, `h`, `m`, `s`, and `ms`.
 There's also one special variable `fmt` whose value you can modify but which has special effects.
 
     # now shows the current date and time. Maybe -> 2017-11-12 19:21:52.185000 -06:00
     now
     # It can be used in expressions like any variable. Maybe -> 2017-11-12 22:34:57.161000 -06:00
     now + 3h 2m
+
+### Output formats
 
 The `fmt` variable controls the output format for dates.
 
@@ -124,4 +150,6 @@ The `fmt` variable controls the output format for dates.
     # or use singe quotes. Single and double quotes work the same way.
     let fmt = ''
 
+## Building
 
+The only requirement beyond Xcode is [jekyll](https://jekyllrb.com) which is used together with the [Jekyll Apple Help](https://github.com/chuckhoupt/jekyll-apple-help) templates to  generate the OS X help docs. You can just follow the [jekyll installation instructions](https://jekyllrb.com/docs/installation/) to install jekyll.

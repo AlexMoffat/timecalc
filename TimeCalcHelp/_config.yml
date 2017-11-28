@@ -1,0 +1,32 @@
+# Site settings
+apple_help: true  # Flag for conditional markup, if needed.
+
+# Build settings
+markdown: kramdown
+
+# Localization collections for Help topics. Add more languages as needed.
+collections:
+  English.lproj:
+    output: true
+  Japanese.lproj:
+    output: false
+  Dutch.lproj:
+    output: false
+  French.lproj:
+    output: false
+  Italian.lproj:
+    output: false
+  German.lproj:
+    output: false
+  Spanish.lproj:
+    output: false
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "help-page"
+      order: 0
+
+exclude: ['Makefile', 'jekyll-server.command', 'Info.plist']

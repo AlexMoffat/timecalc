@@ -19,6 +19,7 @@
 		AFA0C53E1F07188700C1B923 /* LineNumberRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA0C53D1F07188700C1B923 /* LineNumberRulerView.swift */; };
 		AFA0C5401F09B54E00C1B923 /* ResultsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA0C53F1F09B54E00C1B923 /* ResultsCalculator.swift */; };
 		AFA0C5421F0ADAB800C1B923 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA0C5411F0ADAB800C1B923 /* Lexer.swift */; };
+		AFB796F61FC25E3300B8383A /* TimeCalcHelp.help in Resources */ = {isa = PBXBuildFile; fileRef = AFB796EB1FC2563500B8383A /* TimeCalcHelp.help */; };
 		AFDA1FCD1F6F495200E525E8 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = AFDA1FCC1F6F495200E525E8 /* README.md */; };
 		AFDD49B61F2D0BC000A9DB4B /* SynchroScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */; };
 /* End PBXBuildFile section */
@@ -54,6 +55,13 @@
 			remoteGlobalIDString = AF6852B21EF8A56700F9DACF;
 			remoteInfo = TextViewTests;
 		};
+		AFB796F21FC2593800B8383A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF6852AB1EF8A56700F9DACF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AFB796EA1FC2563500B8383A;
+			remoteInfo = TimeCalcHelp;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +84,20 @@
 		AFA0C53D1F07188700C1B923 /* LineNumberRulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineNumberRulerView.swift; sourceTree = "<group>"; };
 		AFA0C53F1F09B54E00C1B923 /* ResultsCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsCalculator.swift; sourceTree = "<group>"; };
 		AFA0C5411F0ADAB800C1B923 /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
+		AFB1C7111FCCF05500464CD9 /* TimeCalcOverview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TimeCalcOverview.png; sourceTree = "<group>"; };
+		AFB796EB1FC2563500B8383A /* TimeCalcHelp.help */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimeCalcHelp.help; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFB796ED1FC2563500B8383A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AFB7970E1FC269B400B8383A /* _config.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = _config.yml; sourceTree = "<group>"; };
+		AFB797101FC269CF00B8383A /* css */ = {isa = PBXFileReference; lastKnownFileType = folder; path = css; sourceTree = "<group>"; };
+		AFB797111FC269CF00B8383A /* _includes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _includes; sourceTree = "<group>"; };
+		AFB797121FC269CF00B8383A /* book-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "book-icon.png"; sourceTree = "<group>"; };
+		AFB797131FC269CF00B8383A /* _English.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _English.lproj; sourceTree = "<group>"; };
+		AFB797141FC269CF00B8383A /* _layouts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _layouts; sourceTree = "<group>"; };
+		AFB797151FC269CF00B8383A /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		AFB797161FC269CF00B8383A /* _plugins */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _plugins; sourceTree = "<group>"; };
+		AFB797171FC269CF00B8383A /* nav.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = nav.js; sourceTree = "<group>"; };
+		AFB797181FC269CF00B8383A /* _sass */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _sass; sourceTree = "<group>"; };
+		AFB797191FC269CF00B8383A /* jekyll-server.command */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "jekyll-server.command"; sourceTree = "<group>"; };
 		AFDA1FCC1F6F495200E525E8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroScrollView.swift; sourceTree = "<group>"; };
 		AFE9BC521F008CD400470C53 /* TimeCalc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeCalc.entitlements; sourceTree = "<group>"; };
@@ -90,6 +112,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AF6852B01EF8A56700F9DACF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AFB796E81FC2563500B8383A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,11 +151,13 @@
 		AF6852AA1EF8A56700F9DACF = {
 			isa = PBXGroup;
 			children = (
+				AFB1C7111FCCF05500464CD9 /* TimeCalcOverview.png */,
 				AF42475D1F8AEF9900408CA0 /* LICENSE.md */,
 				AFDA1FCC1F6F495200E525E8 /* README.md */,
 				AF0135E91F773516003AE71B /* scripts */,
 				AF6852B51EF8A56700F9DACF /* TimeCalc */,
 				AF361D2C1F0DB72800FAAA1C /* TimeCalcTests */,
+				AFB796EC1FC2563500B8383A /* TimeCalcHelp */,
 				AF6852B41EF8A56700F9DACF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -136,6 +167,7 @@
 			children = (
 				AF6852B31EF8A56700F9DACF /* TimeCalc.app */,
 				AF361D2B1F0DB72800FAAA1C /* TimeCalcTests.xctest */,
+				AFB796EB1FC2563500B8383A /* TimeCalcHelp.help */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -157,6 +189,25 @@
 				AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */,
 			);
 			path = TimeCalc;
+			sourceTree = "<group>";
+		};
+		AFB796EC1FC2563500B8383A /* TimeCalcHelp */ = {
+			isa = PBXGroup;
+			children = (
+				AFB797131FC269CF00B8383A /* _English.lproj */,
+				AFB797111FC269CF00B8383A /* _includes */,
+				AFB797141FC269CF00B8383A /* _layouts */,
+				AFB797161FC269CF00B8383A /* _plugins */,
+				AFB797181FC269CF00B8383A /* _sass */,
+				AFB797121FC269CF00B8383A /* book-icon.png */,
+				AFB797101FC269CF00B8383A /* css */,
+				AFB797191FC269CF00B8383A /* jekyll-server.command */,
+				AFB797151FC269CF00B8383A /* Makefile */,
+				AFB797171FC269CF00B8383A /* nav.js */,
+				AFB7970E1FC269B400B8383A /* _config.yml */,
+				AFB796ED1FC2563500B8383A /* Info.plist */,
+			);
+			path = TimeCalcHelp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,11 +245,30 @@
 				AF9B3DA61F7342000059E792 /* PBXBuildRule */,
 			);
 			dependencies = (
+				AFB796F31FC2593800B8383A /* PBXTargetDependency */,
 			);
 			name = TimeCalc;
 			productName = TextViewTests;
 			productReference = AF6852B31EF8A56700F9DACF /* TimeCalc.app */;
 			productType = "com.apple.product-type.application";
+		};
+		AFB796EA1FC2563500B8383A /* TimeCalcHelp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AFB796F01FC2563500B8383A /* Build configuration list for PBXNativeTarget "TimeCalcHelp" */;
+			buildPhases = (
+				AFB796E71FC2563500B8383A /* Sources */,
+				AFB796E81FC2563500B8383A /* Frameworks */,
+				AFB796E91FC2563500B8383A /* Resources */,
+				AFB796F11FC2588800B8383A /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TimeCalcHelp;
+			productName = TimeCalcHelp;
+			productReference = AFB796EB1FC2563500B8383A /* TimeCalcHelp.help */;
+			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -226,6 +296,10 @@
 							};
 						};
 					};
+					AFB796EA1FC2563500B8383A = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = AF6852AE1EF8A56700F9DACF /* Build configuration list for PBXProject "TimeCalc" */;
@@ -243,6 +317,7 @@
 			targets = (
 				AF6852B21EF8A56700F9DACF /* TimeCalc */,
 				AF361D2A1F0DB72800FAAA1C /* TimeCalcTests */,
+				AFB796EA1FC2563500B8383A /* TimeCalcHelp */,
 			);
 		};
 /* End PBXProject section */
@@ -261,6 +336,14 @@
 			files = (
 				AF6852BB1EF8A56700F9DACF /* Assets.xcassets in Resources */,
 				AF6852BE1EF8A56700F9DACF /* Main.storyboard in Resources */,
+				AFB796F61FC25E3300B8383A /* TimeCalcHelp.help in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AFB796E91FC2563500B8383A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +362,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "${PROJECT_DIR}/scripts/update_build_number.sh";
+		};
+		AFB796F11FC2588800B8383A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/bin/make -C \"$(dirname \"$PRODUCT_SETTINGS_PATH\")\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -309,6 +405,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AFB796E71FC2563500B8383A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -316,6 +419,11 @@
 			isa = PBXTargetDependency;
 			target = AF6852B21EF8A56700F9DACF /* TimeCalc */;
 			targetProxy = AF361D301F0DB72800FAAA1C /* PBXContainerItemProxy */;
+		};
+		AFB796F31FC2593800B8383A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AFB796EA1FC2563500B8383A /* TimeCalcHelp */;
+			targetProxy = AFB796F21FC2593800B8383A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -497,6 +605,44 @@
 			};
 			name = Release;
 		};
+		AFB796EE1FC2563500B8383A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TimeCalcHelp/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalcHelp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = help;
+			};
+			name = Debug;
+		};
+		AFB796EF1FC2563500B8383A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TimeCalcHelp/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalcHelp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = help;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -523,6 +669,15 @@
 			buildConfigurations = (
 				AF6852C31EF8A56700F9DACF /* Debug */,
 				AF6852C41EF8A56700F9DACF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AFB796F01FC2563500B8383A /* Build configuration list for PBXNativeTarget "TimeCalcHelp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AFB796EE1FC2563500B8383A /* Debug */,
+				AFB796EF1FC2563500B8383A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
