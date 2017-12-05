@@ -5,7 +5,16 @@ order: -.INF
 ---
 
 TimeCalc is a scratch pad for converting between various date formats and making calculations with dates
-and durations. Expressions are entered in the left pane and their values are displayed in the right pane. One
+and durations. For example how far apart are the date from a Kibana log
+message and the timesamp of a Cassandra column?
+
+September 6th 2017, 19:04:55.000 - 1504742693764001
+
+Or, what's two minutes and 13 seconds after a time in seconds since epoc?
+
+1499212382 + 2m 13s
+
+Expressions are entered in the left pane and their values are displayed in the right pane. One
 expression per line. Comments start with # and run to the end of the line. Datetimes, durations and arithmetic
 operations on them are supported. Whenever the text on the left is modified the results on the right are
 recalculated.

@@ -1,12 +1,19 @@
 # TimeCalc
 
-A scratch pad for time and date calculations.
+A scratch pad for time and date calculations. For example how far apart are the date from a Kibana log
+message and the timesamp of a Cassandra column?
 
-See the bottom of this page for information on building.
+    September 6th 2017, 19:04:55.000 - 1504742693764001
+
+Or, what's two minutes and 13 seconds after a time in seconds since epoc?
+
+    1499212382 + 2m 13s
 
 Type expressions on the left, see the results on the right.
 
 ![](TimeCalcOverview.png)
+
+See the bottom of this page for information on building the application.
 
 ## Syntax
 
@@ -40,6 +47,8 @@ Some examples. First of all, parsing dates.  All of the formats below are unders
     1499212382123
     # And seconds since epoch. 10 digit -> 2017-07-04 18:53:02 -05:00
     1499212382
+    # Very similar format for json serialized java Interval seconds since epoch. 10 digit with fraction -> 2017-08-14 07:17:47.720 -05:00
+    1502713067.720000000
     # Microseconds since epoc is also supported. 16 digits. This is the format of a Cassandra command line timestamp.
     # Just a date is treated as midnight current timezone -> 2017-09-03 00:00:00 -05:00
     2017-09-03

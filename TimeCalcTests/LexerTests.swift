@@ -79,11 +79,12 @@ class LexerTests: XCTestCase {
         compare([Token.DateTime(Date(timeIntervalSince1970: 1505686719))], "2017-09-17 17:18:39")
         compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395))], "2017-08-15 12:28:34.395 -0500")
         compare([Token.DateTime(Date(timeIntervalSince1970: 1497726003.340))], "2017-06-17 12:00:03.340 -07:00")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1502713067.720000000))], "1502713067.720000000")
         compare([Token.Identifier("abc"), Token.Int(456)], "abc 456")
     }
 
     private func compare(_ tokens: [Token], _ s: String) {
-        XCTAssertEqual(tokens, Lexer(input: s).tokenize())
+        XCTAssertEqual(tokens, Lexer(input: s).tokenize(), s)
     }
     
     func testPerformanceExample() {

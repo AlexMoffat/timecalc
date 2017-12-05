@@ -221,8 +221,8 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         ("(\\d{16})", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: (d / 1000000)))})}),
         // 1499212382123 (date in milliseconds)
         ("(\\d{13})", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: (d / 1000)))})}),
-        // 1499212382 (date in seconds)
-        ("(\\d{10})", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: d))})}),
+        // 1499212382.123 (date in seconds with optional fraction. Mainly to support jackson serialization of java Interval)
+        ("(\\d{10}(\\.\\d{1,9})?)", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: d))})}),
         ("(\"([^\"\r\n]*)\")", toString),
         ("('([^'\r\n]*)')", toString),
         ("([a-zA-Z][0-9a-zA-Z]*)", {r, s in .Identifier(match(r, s))}),
