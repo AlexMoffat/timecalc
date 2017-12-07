@@ -110,7 +110,7 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
     }
     
     // Standard iso format.
-    let isoDateFormat = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ssZZZZZ")
+    let isoDateFormat = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ssXXXXX")
     let isoDateFormatNoZone = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ss")
     let toDateFromISO: TokenGenerator = {r, s in
         let v = match(r, s)
@@ -118,7 +118,7 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
     }
     
     // Standard iso format with milliseconds.
-    let isoDateFormatWithMillis = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ")
+    let isoDateFormatWithMillis = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX")
     let isoDateFormatWithMillisNoZone = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd'T'HH:mm:ss.SSS")
     let toDateFromISOWithMillis: TokenGenerator = {r, s in
         let v = match(r, s)
@@ -126,14 +126,14 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
     }
     
     // ISO format but with spaces between date, time and timezone.
-    let isoDateFormatWithSpaces = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss ZZZ")
+    let isoDateFormatWithSpaces = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss XXX")
     let isoDateFormatWithSpacesNoZone = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss")
     let toDateFromISOWithSpaces: TokenGenerator = {r, s in
         isoDateFormatWithSpaces.date(from: match(r, s)).map({d in .DateTime(d)}) ?? isoDateFormatWithSpacesNoZone.date(from: match(r, s)).map({d in .DateTime(d)})
     }
     
     // ISO format with milliseconds but with spaces between date, time and timezone 
-    let isoDateFormatWithSpacesAndMillis = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss.SSS ZZZ")
+    let isoDateFormatWithSpacesAndMillis = formatterForTimeZone(TimeZone.current, "yyyy-MM-dd HH:mm:ss.SSS XXX")
     let toDateFromISOWithSpacesAndMillis: TokenGenerator = {r, s in
         isoDateFormatWithSpacesAndMillis.date(from: match(r, s)).map({d in .DateTime(d)})
     }
@@ -157,18 +157,20 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
     }
     
     // Date format that bamboo uses.
-    let bambooDateFormat = formatterForTimeZone(TimeZone.current, "d-MMM-yyyy HH:mm:ss")
+    let bambooDateFormat = formatterForTimeZone(TimeZone.current, "d-MMM-yyyy HH:mm:ss XXX")
+    let bambooDateFormatNoZone = formatterForTimeZone(TimeZone.current, "d-MMM-yyyy HH:mm:ss")
     let toDateFromBamboo: TokenGenerator = {r, s in
-        bambooDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
+        bambooDateFormat.date(from: match(r, s)).map({d in .DateTime(d)}) ?? bambooDateFormatNoZone.date(from: match(r, s)).map({d in .DateTime(d)})
     }
     
-    let twitterDateFormat = formatterForTimeZone(TimeZone.current, "EEE MMM dd HH:mm:ss ZZZ yyyy")
+    // Twitter API format
+    let twitterDateFormat = formatterForTimeZone(TimeZone.current, "EEE MMM dd HH:mm:ss XXX yyyy")
     let toDateFromTwitter: TokenGenerator = {r, s in
         twitterDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
     }
     
     // Sentry date format "Sep 29, 2017 2:00:23 PM UTC"
-    let sentryDateFormat = formatterForTimeZone(TimeZone.current, "MMM dd, yyyy hh:mm:ss a zzz")
+    let sentryDateFormat = formatterForTimeZone(TimeZone.current, "MMM dd, yyyy hh:mm:ss a xxx")
     let toDateFromSentry: TokenGenerator = {r, s in
         sentryDateFormat.date(from: match(r, s)).map({d in .DateTime(d)})
     }
@@ -216,7 +218,7 @@ let tokenGenerators: [(NSRegularExpression, TokenGenerator)] = {() -> [(NSRegula
         // June 17th 2017, 12:00:03.000
         ("((\\S+[yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d{4}), \\d{2}:\\d{2}:\\d{2}\\.\\d{3})", toDateFromKibana),
         // 20-Jul-2017 22:02:26
-        ("(\\d{1,2}-[JFMASOND][aepuco][nbrynlgptvc][a-z]?-\\d{4} \\d{1,2}:\\d{2}:\\d{2})", toDateFromBamboo),
+        ("(\\d{1,2}-[JFMASOND][aepuco][nbrynlgptvc][a-z]?-\\d{4} \\d{1,2}:\\d{2}:\\d{2}( (Z|([+-]\\d{2}:\\d{2})))?)", toDateFromBamboo),
         // 1504742693764001 (cassandra cli timestamp) microseconds
         ("(\\d{16})", {r, s in Double(match(r, s)).map({d in .DateTime(Date(timeIntervalSince1970: (d / 1000000)))})}),
         // 1499212382123 (date in milliseconds)

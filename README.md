@@ -39,6 +39,8 @@ Some examples. First of all, parsing dates.  All of the formats below are unders
     2017-08-15 17:28:34.456 +0000
     # A format that Kibana likes with the name of the month -> 2017-06-17 12:00:03 -05:00
     June 17th 2017, 12:00:03.000
+    # Bamboo's date format with UTC (Bamboo outputs without Z but it's in UTC) -> 2017-07-20 17:02:26 -05:00
+    20-Jul-2017 22:02:26 Z
     # Bamboo's date format (assumed current timezone) -> 2017-07-20 22:02:26 -05:00
     20-Jul-2017 22:02:26
     # Format from Sentry -> 2017-09-29 09:00:23 -05:00

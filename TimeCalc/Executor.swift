@@ -143,28 +143,6 @@ class Executor {
     static let DURATION_FORMAT_FAILED = "Could not format duration.";
     
     let intervalFormatter: DateComponentsFormatter = baseIntervalFormatter()
-    /*
-    let secondsIntervalFormatter: DateComponentsFormatter = {
-        let formatter = baseIntervalFormatter()
-        formatter.allowsFractionalUnits = true
-        formatter.allowedUnits = NSCalendar.Unit.second
-        return formatter
-    }()
-    
-    let minutesIntervalFormatter: DateComponentsFormatter = {
-        let formatter = baseIntervalFormatter()
-        formatter.allowsFractionalUnits = true
-        formatter.allowedUnits = [NSCalendar.Unit.second , NSCalendar.Unit.minute]
-        return formatter
-    }()
-    
-    let hoursIntervalFormatter: DateComponentsFormatter = {
-        let formatter = baseIntervalFormatter()
-        formatter.allowsFractionalUnits = true
-        formatter.allowedUnits = [NSCalendar.Unit.second, NSCalendar.Unit.minute, NSCalendar.Unit.hour]
-        return formatter
-    }()
-    */
     
     static let SHORT_FORMAT =  "yyyy-MM-dd HH:mm:ss ZZZZZ"
     static let MEDIUM_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS ZZZZZ"
