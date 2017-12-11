@@ -49,6 +49,9 @@ class ExecutorTests: XCTestCase {
         checkSuccess(toParse: "let x = 2d", expected: "2d")
         checkSuccess(toParse: "1497718803 + 2h @ 'UTC'", expected: "2017-06-17 19:00:03 Z")
         checkSuccess(toParse: "1497718803765 + 2h @ 'UTC'", expected: "2017-06-17 19:00:03.765 Z")
+        checkSuccess(toParse: "2017-06-17T19:00:03", expected: "2017-06-17 19:00:03 -05:00")
+        checkSuccess(toParse: "2017-06-17T19:00:03Z", expected: "2017-06-17 14:00:03 -05:00")
+        checkSuccess(toParse: "let tz = 'UTC'\n2017-06-17T19:00:03", expecteds: ["UTC", "2017-06-17 14:00:03 -05:00"])
         checkSuccess(toParse: "2017-06-17T19:00:03Z - 1d 1h @ 'UTC'", expected: "2017-06-16 18:00:03 Z")
         checkSuccess(toParse: "2017-06-17T19:00:03Z - 2017-06-16T18:00:03Z", expected: "1d 1h")
         checkSuccess(toParse: "2d + 1497718803", expected: "2017-06-19 12:00:03 -05:00")
@@ -72,6 +75,18 @@ class ExecutorTests: XCTestCase {
             return
         }
         XCTAssertEqual(expected, s, "Results are " + String(describing: results))
+    }
+    
+    func checkSuccess(toParse: String, expecteds: [String]) {
+        let results = try! Executor(lines: Parser(tokens: Lexer(input: toParse).tokenize()).parseDocument()).evaluate()
+        XCTAssertEqual(expecteds.count, results.count, "Need \(expecteds.count) results.")
+        for i in 0 ..< expecteds.count  {
+            guard case let .Right(.StringValue(s)) = results[i].value else {
+                XCTFail("Result is not string " + String(describing: results) + " Expected " + expecteds[i])
+                return
+            }
+            XCTAssertEqual(expecteds[i], s, "Results are " + String(describing: results) + " from " + toParse)
+        }
     }
     
     func checkFailure(toParse: String, expected: String) {

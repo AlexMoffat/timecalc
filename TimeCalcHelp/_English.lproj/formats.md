@@ -3,6 +3,9 @@ title: Parsed Formats
 description: Supported date, time, datetime and duration formats.
 order: 10
 ---
+Some examples. First of all, parsing dates.  All of the formats below are understood. See the Default TimeZone section below for
+information on how the timezone is chosen if none is provided in the input format. In most cases current timezone is used. Exceptions
+noted below.
 
     # Standard iso format -> 2017-06-17 17:00:03 -05:00
     2017-06-17T17:00:03-05:00
@@ -18,7 +21,7 @@ order: 10
     June 17th 2017, 12:00:03.000
     # Bamboo's date format with UTC (Bamboo outputs without Z but it's in UTC) -> 2017-07-20 17:02:26 -05:00
     20-Jul-2017 22:02:26 Z
-    # Bamboo's date format (assumed current timezone) -> 2017-07-20 22:02:26 -05:00
+    # Bamboo's date format (assumes UTC timezone, not current) -> 2017-07-20 17:02:26 -05:00
     20-Jul-2017 22:02:26
     # Format from Sentry -> 2017-09-29 09:00:23 -05:00
     Sep 29, 2017 2:00:23 PM UTC

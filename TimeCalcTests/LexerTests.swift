@@ -61,41 +61,41 @@ class LexerTests: XCTestCase {
         compare([Token.Int(3), Token.Operator("+"), Token.Int(5)], "3 + 5")
         compare([Token.Int(3), Token.Operator("-"), Token.Int(-5)], "3 - -5")
         compare([Token.MillisDuration(3*60*60*1000), Token.MillisDuration(4*1000), Token.MillisDuration(342)], "3h 4s 342ms")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1504414800))], "2017-09-03")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1504414800), false)], "2017-09-03")
         // Lexer - Standard iso format.
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1497744003))], "2017-06-17T19:00:03")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1497744003))], "2017-06-17T19:00:03-05:00")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1497726003))], "2017-06-17T19:00:03Z")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803))], "2017-06-17T17:00:03+00:00")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1497744003), false)], "2017-06-17T19:00:03")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1497744003), true)], "2017-06-17T19:00:03-05:00")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1497726003), true)], "2017-06-17T19:00:03Z")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803), true)], "2017-06-17T17:00:03+00:00")
         // Lexer - Standard iso format with milliseconds.
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1504728354.045))],"2017-09-06T20:05:54.045Z")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1504746354.045))],"2017-09-06T20:05:54.045")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1504746354.045))],"2017-09-06T20:05:54.045-05:00")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395))],"2017-08-15T12:28:34.395-05:00")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1504728354.045), true)],"2017-09-06T20:05:54.045Z")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1504746354.045), false)],"2017-09-06T20:05:54.045")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1504746354.045), true)],"2017-09-06T20:05:54.045-05:00")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395), true)],"2017-08-15T12:28:34.395-05:00")
         // Lexer - Date format kibana uses.
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803))], "June 17th 2017, 12:00:03.000")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803), true)], "June 17th 2017, 12:00:03.000")
         // Lexer - Twitter API format
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1505833468))], "Tue Sep 19 15:04:28 +0000 2017")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1505833468), true)], "Tue Sep 19 15:04:28 +0000 2017")
         // Lexer - Sentry date format "Sep 29, 2017 2:00:23 PM UTC"
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1506693623))], "Sep 29, 2017 2:00:23 PM UTC")
-        // Lexer - Date format that bamboo uses.
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1500606146))], "20-Jul-2017 22:02:26")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1500606146))], "20-Jul-2017 22:02:26 -05:00")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1500606146))], "21-Jul-2017 03:02:26 Z")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1506693623), true)], "Sep 29, 2017 2:00:23 PM UTC")
+        // Lexer - Date format that bamboo uses. Assumes UTC if no timezone.
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1500606146), true)], "21-Jul-2017 03:02:26")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1500606146), true)], "20-Jul-2017 22:02:26 -05:00")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1500606146), true)], "21-Jul-2017 03:02:26 Z")
         // Lexer - ISO format but with spaces between date, time and timezone.
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114))], "2017-08-15 17:28:34 +0000")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1505686719))], "2017-09-17 17:18:39")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114), true)], "2017-08-15 17:28:34 +0000")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1505686719), false)], "2017-09-17 17:18:39")
         // Lexer - ISO format with milliseconds but with spaces between date, time and timezone 
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395))], "2017-08-15 12:28:34.395 -0500")
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1497726003.340))], "2017-06-17 12:00:03.340 -07:00")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395), true)], "2017-08-15 12:28:34.395 -0500")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1497726003.340), true)], "2017-06-17 12:00:03.340 -07:00")
         // Lexer - Seconds
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803))], "1497718803")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803), true)], "1497718803")
         // Lexer - Seconds with fraction mainly to support java interval serialized with jackson
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1502713067.720000000))], "1502713067.720000000")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1502713067.720000000), true)], "1502713067.720000000")
         // Lexer - milliseconds
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803.876))], "1497718803876")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1497718803.876), true)], "1497718803876")
         // Lexer - microseconds
-        compare([Token.DateTime(Date(timeIntervalSince1970: 1504742693.764001))], "1504742693764001")
+        compare([Token.DateTime(Date(timeIntervalSince1970: 1504742693.764001), true)], "1504742693764001")
         compare([Token.Identifier("abc"), Token.Int(456)], "abc 456")
     }
 

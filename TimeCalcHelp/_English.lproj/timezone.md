@@ -1,11 +1,17 @@
 ---
-title: Timezones
-description: Displaying dates in different timezones.
-order: 40
+title: Default timezone
+description: Changing the default timezone for parsing.
+order: 95
 ---
-Results can be shown in different timezone using abbreviations or names.
+The `tz` variable controls the TimeZone used when parsing date formats that don't have a specific TimeZone. For instance
+`2017-06-17T17:00:03-05:00`  specifies a TimeZone while `2017-06-17T17:00:03` does not. The default is the user's current TimeZone
+but setting `tz` changes this.
 
-    # Convert to central daylight time -> 2017-06-17 14:00:03.340000 -05:00
-    2017-06-17 12:00:03.340 -07:00 @ "CDT"
-    # Use the timezone name -> 2017-06-17 14:00:03.340000 -05:00
-    2017-06-17 12:00:03.340 -07:00 @ "America/Chicago"
+    # No timezone in the input -> 2017-06-17 17:00:03 -05:00
+    2017-06-17T17:00:03
+    # Set the default to UTC
+    let tz = 'UTC'
+    # Parse the same value but get -> 2017-06-17 12:00:03 -05:00
+    2017-06-17T17:00:03
+    # Reset to current timezone by setting tz to an empty string
+    let tz = ''

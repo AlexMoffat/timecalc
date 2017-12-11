@@ -56,8 +56,9 @@ struct StringNode: ExprNode {
 
 struct DateTimeNode: ExprNode {
     let value: Date
+    let timezoneSpecified: Bool
     var description: String {
-        return "DateTimeNode(\(value))"
+        return "DateTimeNode(\(value), \(timezoneSpecified))"
     }
 }
 
@@ -208,10 +209,10 @@ class Parser {
     }
     
     func parseDateTime() throws -> DateTimeNode {
-        guard case let Token.DateTime(date) = try popCurrentToken() else {
+        guard case let Token.DateTime(date, timezoneSpecified) = try popCurrentToken() else {
             throw ParseError.ExpectedDateTime
         }
-        return DateTimeNode(value: date)
+        return DateTimeNode(value: date, timezoneSpecified: timezoneSpecified)
     }
     
     func parseDurations() throws -> DurationNode {

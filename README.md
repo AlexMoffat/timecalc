@@ -25,7 +25,9 @@ Datetimes, durations and arithmetic operations on them are supported.
 
 ### Parsed Formats
 
-Some examples. First of all, parsing dates.  All of the formats below are understood.
+Some examples. First of all, parsing dates.  All of the formats below are understood. See the Default TimeZone section below for
+information on how the timezone is chosen if none is provided in the input format. In most cases current timezone is used. Exceptions
+noted below.
 
     # Standard iso format -> 2017-06-17 17:00:03 -05:00
     2017-06-17T17:00:03-05:00
@@ -41,7 +43,7 @@ Some examples. First of all, parsing dates.  All of the formats below are unders
     June 17th 2017, 12:00:03.000
     # Bamboo's date format with UTC (Bamboo outputs without Z but it's in UTC) -> 2017-07-20 17:02:26 -05:00
     20-Jul-2017 22:02:26 Z
-    # Bamboo's date format (assumed current timezone) -> 2017-07-20 22:02:26 -05:00
+    # Bamboo's date format (assumes UTC timezone, not current) -> 2017-07-20 17:02:26 -05:00
     20-Jul-2017 22:02:26
     # Format from Sentry -> 2017-09-29 09:00:23 -05:00
     Sep 29, 2017 2:00:23 PM UTC
@@ -139,7 +141,7 @@ Variables can be defined. The right hand side after the = can be any expression.
     x . day
 
 There are seven reserved variables whose values you can't change `now`, `day`, `d`, `h`, `m`, `s`, and `ms`.
-There's also one special variable `fmt` whose value you can modify but which has special effects.
+There are also two special variables `fmt` and `tz` whose value you can modify but which have special effects.
 
     # now shows the current date and time. Maybe -> 2017-11-12 19:21:52.185000 -06:00
     now
@@ -160,6 +162,21 @@ The `fmt` variable controls the output format for dates.
     2017-08-15 17:28:34 +0000
     # or use singe quotes. Single and double quotes work the same way.
     let fmt = ''
+
+### Default TimeZone
+
+The `tz` variable controls the TimeZone used when parsing date formats that don't have a specific TimeZone. For instance
+`2017-06-17T17:00:03-05:00`  specifies a TimeZone while `2017-06-17T17:00:03` does not. The default is the user's current TimeZone
+but setting `tz` changes this.
+
+     # No timezone in the input -> 2017-06-17 17:00:03 -05:00
+     2017-06-17T17:00:03
+     # Set the default to UTC
+     let tz = 'UTC'
+     # Parse the same value but get -> 2017-06-17 12:00:03 -05:00
+     2017-06-17T17:00:03
+     # Reset to current timezone by setting tz to an empty string
+     let tz = ''
 
 ## Building
 

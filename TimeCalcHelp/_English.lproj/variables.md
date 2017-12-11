@@ -11,7 +11,7 @@ Variables can be defined. The right hand side after the = can be any expression.
     x . day
 
 There are seven reserved variables whose values you can't change `now`, `day`, `d`, `h`, `m`, `s`, and `ms`.
-There's also one special variable `fmt` whose value you can modify but which has special effects.
+There are also two special variables `fmt` and `tz` whose value you can modify but which have special effects.
 
     # now shows the current date and time. Maybe -> 2017-11-12 19:21:52.185000 -06:00
     now

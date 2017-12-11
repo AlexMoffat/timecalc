@@ -151,6 +151,8 @@ class Executor {
     var mediumFormat = MEDIUM_FORMAT
     var longFormat =   LONG_FORMAT
     
+    var effectiveTimeZone = TimeZone.current;
+    
     var environment = Environment()
     var lines: [LineNode]
     
@@ -222,7 +224,19 @@ class Executor {
         case let str as IdentifierNode:
             return environment.valueFromEnvironment(str.value)
         case let dt as DateTimeNode:
-            return .Right(.DateValue(value: dt.value, timezone: TimeZone.current))
+            if (dt.timezoneSpecified) {
+                return .Right(.DateValue(value: dt.value, timezone: TimeZone.current))
+            } else {
+                // If the timezone to use has been modified then adjust to current timezone. It was parsed as if
+                // in current timezone but should have been parsed as if in effective timezone.
+                if (effectiveTimeZone != TimeZone.current) {
+                    let targetOffset = TimeInterval(effectiveTimeZone.secondsFromGMT(for: dt.value))
+                    let localOffset = TimeInterval(TimeZone.current.secondsFromGMT(for: dt.value))
+                    return .Right(.DateValue(value: dt.value.addingTimeInterval(localOffset - targetOffset), timezone: TimeZone.current))
+                } else {
+                    return .Right(.DateValue(value: dt.value, timezone: TimeZone.current))
+                }
+            }
         case let d as DurationNode:
             return .Right(.DurationValue(value: d.value))
         case let assignment as AssignmentNode:
@@ -241,7 +255,8 @@ class Executor {
             if environment.isReserved(expr.variable.value) {
                 return .Left("\(expr.variable.value) is a reserved identifier. You can not change its value.")
             }
-            if case .StringValue(let s) = v, expr.variable.value == "fmt" {
+            switch v {
+            case let .StringValue(s) where expr.variable.value == "fmt":
                 if s == "" {
                     shortFormat = Executor.SHORT_FORMAT
                     mediumFormat = Executor.MEDIUM_FORMAT
@@ -252,6 +267,14 @@ class Executor {
                     mediumFormat = s
                     longFormat = s
                 }
+            case let .StringValue(s) where expr.variable.value == "tz":
+                if s == "" {
+                    effectiveTimeZone = TimeZone.current
+                } else {
+                    effectiveTimeZone = TimeZone.init(identifier: s) ?? (TimeZone.init(abbreviation: s) ?? TimeZone.current)
+                }
+            default:
+                break
             }
             environment[expr.variable.value] = v
             return value
