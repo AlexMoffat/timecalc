@@ -202,15 +202,15 @@ class Executor {
     func toValue(_ d: Date, _ ts: TimeZone) -> ResultValue {
         let ns = NSCalendar.current.component(.nanosecond, from: d)
         if ns == 0 {
-            return .Right(.StringValue(value: formatterForTimeZone(ts, shortFormat).string(from: d)))
+            return .Right(.StringValue(value: Recognizers.formatterForTimeZone(shortFormat, ts).string(from: d)))
         } else {
             let micros: Int = Int(floor(Double(ns / 1000)))
             let millis: Int = Int(floor(Double(micros / 1000)))
             let microsRemainder = micros - (millis * 1000)
             if microsRemainder == 0 {
-                return .Right(.StringValue(value: formatterForTimeZone(ts, mediumFormat).string(from: d)))
+                return .Right(.StringValue(value: Recognizers.formatterForTimeZone(mediumFormat, ts).string(from: d)))
             } else {
-                return .Right(.StringValue(value: formatterForTimeZone(ts, longFormat).string(from: d)))
+                return .Right(.StringValue(value: Recognizers.formatterForTimeZone(longFormat, ts).string(from: d)))
             }
         }
     }
@@ -332,7 +332,7 @@ class Executor {
     func extractComponent(date: Date, zone: TimeZone, ident: String) -> ResultValue {
         switch ident {
         case "day":
-            return .Right(.StringValue(value: formatterForTimeZone(zone, "EEEE").string(from: date)))
+            return .Right(.StringValue(value: Recognizers.formatterForTimeZone("EEEE", zone).string(from: date)))
         case "ms":
             return .Right(.StringValue(value: String(Int((date.timeIntervalSince1970 * 1000)))))
         case "s":

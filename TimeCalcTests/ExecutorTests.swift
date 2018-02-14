@@ -43,7 +43,7 @@ class ExecutorTests: XCTestCase {
         super.tearDown()
     }
 
-    func testExample() {
+    func testExecutor() {
         checkSuccess(toParse: "2 + 3", expected: "5")
         checkSuccess(toParse: "2 + -3", expected: "-1")
         checkSuccess(toParse: "let x = 2d", expected: "2d")
@@ -68,7 +68,7 @@ class ExecutorTests: XCTestCase {
     }
 
     func checkSuccess(toParse: String, expected: String) {
-        let results = try! Executor(lines: Parser(tokens: Lexer(input: toParse).tokenize()).parseDocument()).evaluate()
+        let results = try! Executor(lines: Parser(tokens: Lexer().tokenize(toParse)).parseDocument()).evaluate()
         XCTAssertEqual(1, results.count, "Need one result.")
         guard case let .Right(.StringValue(s)) = results[0].value else {
             XCTFail("Result is not string " + String(describing: results) + " Expected " + expected)
@@ -78,7 +78,7 @@ class ExecutorTests: XCTestCase {
     }
     
     func checkSuccess(toParse: String, expecteds: [String]) {
-        let results = try! Executor(lines: Parser(tokens: Lexer(input: toParse).tokenize()).parseDocument()).evaluate()
+        let results = try! Executor(lines: Parser(tokens: Lexer().tokenize(toParse)).parseDocument()).evaluate()
         XCTAssertEqual(expecteds.count, results.count, "Need \(expecteds.count) results.")
         for i in 0 ..< expecteds.count  {
             guard case let .Right(.StringValue(s)) = results[i].value else {
@@ -90,7 +90,7 @@ class ExecutorTests: XCTestCase {
     }
     
     func checkFailure(toParse: String, expected: String) {
-        let results = try! Executor(lines: Parser(tokens: Lexer(input: toParse).tokenize()).parseDocument()).evaluate()
+        let results = try! Executor(lines: Parser(tokens: Lexer().tokenize(toParse)).parseDocument()).evaluate()
         XCTAssertEqual(1, results.count, "Need one result.")
         guard case let .Left(s) = results[0].value else {
             XCTFail("Result is not error " + String(describing: results) + " Expected " + expected)
@@ -98,12 +98,4 @@ class ExecutorTests: XCTestCase {
         }
         XCTAssertEqual(expected, s, "Results are " + String(describing: results))
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }

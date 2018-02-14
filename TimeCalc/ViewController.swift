@@ -73,10 +73,10 @@ class ViewController: NSViewController {
         if textHasChanged {
             textHasChanged = false
         } else {
-            let currentText = (text.textStorage as NSAttributedString!).string
+            let currentText = text.string
             if currentText != previousTextValue {
                 previousTextValue = currentText
-                results = try! Executor(lines: Parser(tokens: Lexer(input: previousTextValue).tokenize()).parseDocument()).evaluate()
+                results = try! Executor(lines: Parser(tokens: Lexer().tokenize(previousTextValue)).parseDocument()).evaluate()
                 displayResult()
             }
         }

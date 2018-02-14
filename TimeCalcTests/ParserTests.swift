@@ -43,7 +43,7 @@ class ParserTests: XCTestCase {
         super.tearDown()
     }
 
-    func testExample() {
+    func testParser() {
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(IdentifierNode(x)), error: nil)]",
                         toParse:  "x")
         
@@ -70,17 +70,11 @@ class ParserTests: XCTestCase {
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(BinaryOpNode(op: *, lhs: DurationNode(10800000), rhs: BinaryOpNode(op: +, lhs: NumberNode(2), rhs: NumberNode(1)))), error: nil)]", toParse: "3h * (2 + 1)")
         
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: nil, error: Optional(Parser Expected a newline.))]", toParse: "2 +")
+        
+        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(DateTimeNode(2017-06-17 17:00:03 +0000, false)), error: nil), LineNode(lineNumber: 2, value: Optional(AssignmentNode(variable: IdentifierNode(x), value: NumberNode(10))), error: nil)]", toParse: "2017-06-17T12:00:03,340\nlet x = 10")
     }
 
     func parseAndCompare(expected: String, toParse: String) {
-        XCTAssertEqual(expected, String(describing: try! Parser(tokens: Lexer(input: toParse).tokenize()).parseDocument()), toParse)
+        XCTAssertEqual(expected, String(describing: try! Parser(tokens: Lexer().tokenize(toParse)).parseDocument()), toParse)
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
