@@ -35,6 +35,11 @@ class ResultsCalculator {
     
     let resultStyle = [
         NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFont.Weight.regular),
+        NSAttributedStringKey.foregroundColor: NSColor.black
+    ]
+    let commentStyle = [
+        NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFont.Weight.regular),
+        NSAttributedStringKey.obliqueness: NSNumber(value: 0.20),
         NSAttributedStringKey.foregroundColor: NSColor.gray
     ]
     let errorStyle = [
@@ -84,6 +89,8 @@ class ResultsCalculator {
                             switch s {
                             case let .StringValue(v):
                                 text.append(NSAttributedString(string: v, attributes: resultStyle))
+                            case let .CommentValue(v):
+                                text.append(NSAttributedString(string: v, attributes: commentStyle))
                             default:
                                 text.append(NSAttributedString(string: "", attributes: resultStyle))
                             }

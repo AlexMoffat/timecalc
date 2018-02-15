@@ -35,20 +35,9 @@ class LexerTests: XCTestCase {
 
     var lexer: Lexer = Lexer()
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        lexer = Lexer()
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testLexer() {
         cmp([Token.Newline], "  \n");
-        cmp([Token.Newline], "# a comment  \n");
+        cmp([Token.Comment("# a comment  "), Token.Newline], "  # a comment  \n");
         cmp([Token.Let], "let ");
         cmp([Token.Assign], "= ")
         cmp([Token.Int(12)], "12")
@@ -68,6 +57,7 @@ class LexerTests: XCTestCase {
         
         // Lexer - Duration
         cmp([Token.MillisDuration(3*60*60*1000), Token.MillisDuration(4*1000), Token.MillisDuration(342)], "3h 4s 342ms")
+        cmp([Token.MillisDuration(25*60*1000), Token.MillisDuration(-5*1000)], "25m -5s")
         
         // Lexer - Standard iso format with milliseconds.
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1504728354.045), true)],"2017-09-06T20:05:54.045Z")

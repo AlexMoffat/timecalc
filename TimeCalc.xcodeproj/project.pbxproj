@@ -11,6 +11,8 @@
 		AF3AEC1D1F16E485008D7311 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3AEC1C1F16E485008D7311 /* Parser.swift */; };
 		AF3D7621203348900023ECA7 /* Recognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D7620203348900023ECA7 /* Recognizer.swift */; };
 		AF3D7623203494920023ECA7 /* RecognizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D7622203494920023ECA7 /* RecognizerTests.swift */; };
+		AF3D76252034F5510023ECA7 /* MillisFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D76242034F5510023ECA7 /* MillisFormatter.swift */; };
+		AF3D76292034FC900023ECA7 /* MillisFormatterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D76282034FC900023ECA7 /* MillisFormatterTest.swift */; };
 		AF473F241F1EF1B300F6F856 /* ExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF473F231F1EF1B300F6F856 /* ExecutorTests.swift */; };
 		AF6852B71EF8A56700F9DACF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6852B61EF8A56700F9DACF /* AppDelegate.swift */; };
 		AF6852B91EF8A56700F9DACF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6852B81EF8A56700F9DACF /* ViewController.swift */; };
@@ -75,6 +77,8 @@
 		AF3AEC1C1F16E485008D7311 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		AF3D7620203348900023ECA7 /* Recognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recognizer.swift; sourceTree = "<group>"; };
 		AF3D7622203494920023ECA7 /* RecognizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizerTests.swift; sourceTree = "<group>"; };
+		AF3D76242034F5510023ECA7 /* MillisFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MillisFormatter.swift; sourceTree = "<group>"; };
+		AF3D76282034FC900023ECA7 /* MillisFormatterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MillisFormatterTest.swift; sourceTree = "<group>"; };
 		AF42475D1F8AEF9900408CA0 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		AF473F231F1EF1B300F6F856 /* ExecutorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutorTests.swift; sourceTree = "<group>"; };
 		AF6852B31EF8A56700F9DACF /* TimeCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TimeCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +153,7 @@
 				AF361D351F0DB76200FAAA1C /* LexerTests.swift */,
 				AF361D2F1F0DB72800FAAA1C /* Info.plist */,
 				AF3D7622203494920023ECA7 /* RecognizerTests.swift */,
+				AF3D76282034FC900023ECA7 /* MillisFormatterTest.swift */,
 			);
 			path = TimeCalcTests;
 			sourceTree = "<group>";
@@ -193,6 +198,7 @@
 				AF75CE651F1AEE26006E851D /* Executor.swift */,
 				AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */,
 				AF3D7620203348900023ECA7 /* Recognizer.swift */,
+				AF3D76242034F5510023ECA7 /* MillisFormatter.swift */,
 			);
 			path = TimeCalc;
 			sourceTree = "<group>";
@@ -391,6 +397,7 @@
 			files = (
 				AF75CE641F19736D006E851D /* ParserTests.swift in Sources */,
 				AF473F241F1EF1B300F6F856 /* ExecutorTests.swift in Sources */,
+				AF3D76292034FC900023ECA7 /* MillisFormatterTest.swift in Sources */,
 				AF3D7623203494920023ECA7 /* RecognizerTests.swift in Sources */,
 				AFDA1FCD1F6F495200E525E8 /* README.md in Sources */,
 				AF361D361F0DB76200FAAA1C /* LexerTests.swift in Sources */,
@@ -407,6 +414,7 @@
 				AF3AEC1D1F16E485008D7311 /* Parser.swift in Sources */,
 				AF6852B91EF8A56700F9DACF /* ViewController.swift in Sources */,
 				AF6852B71EF8A56700F9DACF /* AppDelegate.swift in Sources */,
+				AF3D76252034F5510023ECA7 /* MillisFormatter.swift in Sources */,
 				AF3D7621203348900023ECA7 /* Recognizer.swift in Sources */,
 				AFA0C5421F0ADAB800C1B923 /* Lexer.swift in Sources */,
 				AF75CE661F1AEE26006E851D /* Executor.swift in Sources */,

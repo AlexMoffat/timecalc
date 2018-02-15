@@ -36,6 +36,7 @@ enum Value: CustomStringConvertible {
     case IntValue(value: Int)
     case IdentifierValue(value: String)
     case StringValue(value: String)
+    case CommentValue(value: String)
     
     var description: String {
         switch self {
@@ -49,6 +50,8 @@ enum Value: CustomStringConvertible {
             return "IdentifierValue(\(i))"
         case let .StringValue(s):
             return "StringValue(\(s))"
+        case let .CommentValue(s):
+            return "CommentValue(\(s))"
         }
     }
 }
@@ -131,22 +134,16 @@ class Environment {
     }
 }
 
-func baseIntervalFormatter() -> DateComponentsFormatter {
-    let formatter = DateComponentsFormatter()
-    formatter.unitsStyle = .abbreviated
-    formatter.zeroFormattingBehavior = .dropAll
-    return formatter;
-}
-
 class Executor {
     
     static let DURATION_FORMAT_FAILED = "Could not format duration.";
     
-    let intervalFormatter: DateComponentsFormatter = baseIntervalFormatter()
+    let intervalFormatter = MillisFormatter()
     
     static let SHORT_FORMAT =  "yyyy-MM-dd HH:mm:ss ZZZZZ"
     static let MEDIUM_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS ZZZZZ"
-    static let LONG_FORMAT =   "yyyy-MM-dd HH:mm:ss.SSSSSS ZZZZZ"
+    static let LONG_FORMAT =   "yyyy-MM-dd HH:mm:ss.SSS'MS' ZZZZZ"
+    var usingDefaultFormats = true
     var shortFormat =  SHORT_FORMAT
     var mediumFormat = MEDIUM_FORMAT
     var longFormat =   LONG_FORMAT
@@ -186,12 +183,14 @@ class Executor {
             case let .DateValue(d):
                 return toValue(d.value, d.timezone)
             case let .DurationValue(ms):
-                return .Right(.StringValue(value: intervalFormatter.string(from: (Double(ms) / 1000)) ?? Executor.DURATION_FORMAT_FAILED))
+                return .Right(.StringValue(value: intervalFormatter.format(ms: ms)))
             case let .IntValue(i):
                 return .Right(.StringValue(value: String(i)))
             case .IdentifierValue(_):
                 return toString(environment.valueFromEnvironment(v))
             case .StringValue(_):
+                return value
+            case .CommentValue(_):
                 return value
             }
         case .Left(_):
@@ -204,19 +203,25 @@ class Executor {
         if ns == 0 {
             return .Right(.StringValue(value: Recognizers.formatterForTimeZone(shortFormat, ts).string(from: d)))
         } else {
-            let micros: Int = Int(floor(Double(ns / 1000)))
-            let millis: Int = Int(floor(Double(micros / 1000)))
+            let micros: Int = Int(((Double(ns) / 1000).rounded()))
+            let millis: Int = Int(((Double(ns) / (1000 * 1000)).rounded()))
             let microsRemainder = micros - (millis * 1000)
             if microsRemainder == 0 {
                 return .Right(.StringValue(value: Recognizers.formatterForTimeZone(mediumFormat, ts).string(from: d)))
             } else {
-                return .Right(.StringValue(value: Recognizers.formatterForTimeZone(longFormat, ts).string(from: d)))
+                if usingDefaultFormats {
+                    return .Right(.StringValue(value: Recognizers.formatterForTimeZone(longFormat, ts).string(from: d).replacingOccurrences(of: "MS", with: String(format: "%03d", microsRemainder))))
+                } else {
+                    return .Right(.StringValue(value: Recognizers.formatterForTimeZone(longFormat, ts).string(from: d)))
+                }
             }
         }
     }
     
     func evaluateExpression(expr: ExprNode) -> ResultValue {
         switch expr {
+        case let com as CommentNode:
+            return .Right(.CommentValue(value: com.value))
         case let num as NumberNode:
             return .Right(.IntValue(value: num.value))
         case let str as StringNode:
@@ -258,11 +263,13 @@ class Executor {
             switch v {
             case let .StringValue(s) where expr.variable.value == "fmt":
                 if s == "" {
+                    usingDefaultFormats = true
                     shortFormat = Executor.SHORT_FORMAT
                     mediumFormat = Executor.MEDIUM_FORMAT
                     longFormat = Executor.LONG_FORMAT
                 } else {
                     // TODO - Check that the format is valid.
+                    usingDefaultFormats = false
                     shortFormat = s
                     mediumFormat = s
                     longFormat = s
@@ -344,16 +351,8 @@ class Executor {
     
     func extractComponent(ms: Int, ident: String) -> ResultValue {
         switch ident {
-        case "ms":
-            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1, unit: "ms")))
-        case "s":
-            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000, unit: "s")))
-        case "m":
-            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000 * 60, unit: "m")))
-        case "h":
-            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000 * 60 * 60, unit: "h")))
-        case "d":
-            return .Right(.StringValue(value: formatDuration(ms: ms, divisor: 1000 * 60 * 60 * 24, unit: "d")))
+        case "ms", "s", "m", "h", "d":
+            return .Right(.StringValue(value: intervalFormatter.format(ms: ms, withLargestUnit: ident)))
         default:
             return .Left("Can not extract component \(ident) from a duration.")
         }

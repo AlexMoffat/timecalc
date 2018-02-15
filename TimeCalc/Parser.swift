@@ -54,6 +54,13 @@ struct StringNode: ExprNode {
     }
 }
 
+struct CommentNode: ExprNode {
+    let value: String
+    var description: String {
+        return "CommentNode(\(value))"
+    }
+}
+
 struct DateTimeNode: ExprNode {
     let value: Date
     let timezoneSpecified: Bool
@@ -97,6 +104,7 @@ struct LineNode: ExprNode {
 
 enum ParseError: Error, CustomStringConvertible {
     case ExpectedCharacter(Character)
+    case ExpectedComment
     case ExpectedDateTime
     case ExpectedDuration
     case ExpectedExpression
@@ -113,6 +121,8 @@ enum ParseError: Error, CustomStringConvertible {
         switch self {
         case let .ExpectedCharacter(c):
             return "Parser Expected character \(c)."
+        case .ExpectedComment:
+            return "Parser Expected a comment."
         case .ExpectedDateTime:
             return "Parser Expected a date time value."
         case .ExpectedDuration:
@@ -312,11 +322,20 @@ class Parser {
         return LineNode(lineNumber: currentLineNumber, value: value, error: nil)
     }
     
+    func parseComment() throws -> CommentNode {
+        guard case let Token.Comment(value) = try popCurrentToken() else {
+            throw ParseError.ExpectedComment
+        }
+        return CommentNode(value: value)
+    }
+    
     func parseLine() throws -> LineNode {
         let value: ExprNode
         switch (try peekCurrentToken()) {
         case .Newline:
             return try parseNewline()
+        case .Comment:
+            value = try parseComment()
         case .Let:
             value = try parseAssignment()
         default:
@@ -341,6 +360,7 @@ class Parser {
         return LineNode(lineNumber: lineNumber, value: nil, error: error)
     }
     
+    // Main entry point.
     func parseDocument() throws -> [LineNode] {
         var lines = [LineNode]()
         while (tokensAvailable) {

@@ -33,16 +33,6 @@ import XCTest
 
 class ParserTests: XCTestCase {
 
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-
     func testParser() {
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(IdentifierNode(x)), error: nil)]",
                         toParse:  "x")
@@ -68,6 +58,8 @@ class ParserTests: XCTestCase {
                         toParse: "2017-06-17T19:00:03Z - 1d 1h @ 'UTC'")
         
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(BinaryOpNode(op: *, lhs: DurationNode(10800000), rhs: BinaryOpNode(op: +, lhs: NumberNode(2), rhs: NumberNode(1)))), error: nil)]", toParse: "3h * (2 + 1)")
+        
+        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(DurationNode(1495000)), error: nil)]", toParse: "25m -5s")
         
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: nil, error: Optional(Parser Expected a newline.))]", toParse: "2 +")
         

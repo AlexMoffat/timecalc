@@ -31,33 +31,30 @@
 import XCTest
 @testable import TimeCalc
 
-class RecognizerTests: XCTestCase {
+class MillisFormatterTest: XCTestCase {
 
-    func testISODatesWithMillis() {
-        let recognizer = Recognizers.ISODatesWithMillis()
-        
-        cmp(recognizer, "2017-08-15 12:28:34.395 -0500", 1502818114.395, includesTimeZone: true)
-        
-        cmp(recognizer, "2017-06-17 12:00:03.340 -07:00", 1497726003.340, includesTimeZone: true)
-        
-        cmp(recognizer, "2017-06-17T12:00:03,340 -07:00", 1497726003.340, includesTimeZone: true)
-        
-        cmp(recognizer, "2017-06-17T12:00:03,340", 1497718803.340, includesTimeZone: false)
-    }
-    
-    func testSentryDates() {
-        let recognizer = Recognizers.SentryDates()
-        
-        cmp(recognizer, "Sep 29, 2017 2:00:23 PM UTC", 1506693623, includesTimeZone: true)
-    }
-    
-    private func cmp(_ recognizer: Recognizer, _ dateAsString: String, _ dateAsDouble: Double, includesTimeZone: Bool) {
-        let result = recognizer.tryToRecognize(dateAsString)
-        XCTAssertFalse(result == nil, "Did not recognize " + dateAsString)
-        if result != nil {
-        XCTAssertEqual("", result?.remainder, "Did not consume all \"" + dateAsString + "\" - remainder " + (result?.remainder)!)
-        XCTAssertEqual(Token.DateTime(Date(timeIntervalSince1970: dateAsDouble), includesTimeZone), result?.token, "Did not correctly parse " + dateAsString)
-        }
-    }
+    var formatter = MillisFormatter()
 
+    func testFormatter() {
+        
+        XCTAssertEqual("1d", formatter.format(ms: 24 * 60 * 60 * 1000))
+        
+        XCTAssertEqual("2d 3h", formatter.format(ms: (2 * 24 + 3) * 60 * 60 * 1000))
+        
+        XCTAssertEqual("2d 10m", formatter.format(ms: (2 * 24 * 60 + 10) * 60 * 1000))
+        
+        XCTAssertEqual("1d 10m 15ms", formatter.format(ms: (24 * 60 + 10) * 60 * 1000 + 15))
+        
+        XCTAssertEqual("1d 10m 45s 15ms", formatter.format(ms: ((24 * 60 + 10) * 60 + 45) * 1000 + 15))
+        
+        XCTAssertEqual("2h 25s", formatter.format(ms: (2 * 60 * 60 + 25) * 1000))
+        
+        XCTAssertEqual("-10m -5s", formatter.format(ms: -(10 * 60 + 5) * 1000))
+        
+        XCTAssertEqual("51h", formatter.format(ms: (2 * 24 + 3) * 60 * 60 * 1000, withLargestUnit: "h"))
+        
+        XCTAssertEqual("24h 10m 45s 15ms", formatter.format(ms: ((24 * 60 + 10) * 60 + 45) * 1000 + 15, withLargestUnit: "h"))
+        
+        XCTAssertEqual("1450m 45s 15ms", formatter.format(ms: ((24 * 60 + 10) * 60 + 45) * 1000 + 15, withLargestUnit: "m"))
+    }
 }

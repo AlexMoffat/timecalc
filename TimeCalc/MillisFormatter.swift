@@ -28,36 +28,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import XCTest
-@testable import TimeCalc
+import Foundation
 
-class RecognizerTests: XCTestCase {
-
-    func testISODatesWithMillis() {
-        let recognizer = Recognizers.ISODatesWithMillis()
-        
-        cmp(recognizer, "2017-08-15 12:28:34.395 -0500", 1502818114.395, includesTimeZone: true)
-        
-        cmp(recognizer, "2017-06-17 12:00:03.340 -07:00", 1497726003.340, includesTimeZone: true)
-        
-        cmp(recognizer, "2017-06-17T12:00:03,340 -07:00", 1497726003.340, includesTimeZone: true)
-        
-        cmp(recognizer, "2017-06-17T12:00:03,340", 1497718803.340, includesTimeZone: false)
-    }
+class MillisFormatter {
     
-    func testSentryDates() {
-        let recognizer = Recognizers.SentryDates()
-        
-        cmp(recognizer, "Sep 29, 2017 2:00:23 PM UTC", 1506693623, includesTimeZone: true)
-    }
+    typealias Unit = (millis: Int, suffix: String)
     
-    private func cmp(_ recognizer: Recognizer, _ dateAsString: String, _ dateAsDouble: Double, includesTimeZone: Bool) {
-        let result = recognizer.tryToRecognize(dateAsString)
-        XCTAssertFalse(result == nil, "Did not recognize " + dateAsString)
-        if result != nil {
-        XCTAssertEqual("", result?.remainder, "Did not consume all \"" + dateAsString + "\" - remainder " + (result?.remainder)!)
-        XCTAssertEqual(Token.DateTime(Date(timeIntervalSince1970: dateAsDouble), includesTimeZone), result?.token, "Did not correctly parse " + dateAsString)
+    static let units = [
+        (millis: 24 * 60 * 60 * 1000, suffix: "d"),
+        (millis:      60 * 60 * 1000, suffix: "h"),
+        (millis:           60 * 1000, suffix: "m"),
+        (millis:                1000, suffix: "s"),
+        (millis:                   1, suffix: "ms")
+    ]
+    
+    func format(ms: Int, withLargestUnit: String = "d") -> String {
+        let sign = ms < 0 ? "-" : ""
+        var remainingValue = abs(ms)
+        var values = [String]()
+        var format = false
+        
+        for unit in MillisFormatter.units {
+            if !format && withLargestUnit == unit.suffix {
+                format = true
+            }
+            if format && remainingValue >= unit.millis {
+                values.append(sign + String(remainingValue / unit.millis) + unit.suffix)
+                remainingValue = remainingValue % unit.millis
+            }
         }
+        
+        assert(remainingValue == 0)
+        
+        return values.joined(separator: " ")
     }
-
 }

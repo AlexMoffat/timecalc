@@ -111,7 +111,7 @@ class Recognizers {
         init() {
             // Allow up to eight digits so that you can have a complete day in milliseconds. This means that the
             // output of any <duration> . d can be parsed.
-            super.init(["([1-9][0-9]{0,7})(d|h|m(?!s)|s|ms)"])
+            super.init(["(-?[1-9][0-9]{0,7})(d|h|m(?!s)|s|ms)"])
         }
         
         override func createToken(_ regex: NSRegularExpression, _ match: NSTextCheckingResult, _ s: String) -> Token? {
@@ -147,6 +147,13 @@ class Recognizers {
         
         override func createToken(_ regex: NSRegularExpression, _ match: NSTextCheckingResult, _ s: String) -> Token? {
             return tokenGenerator(matchingString(match, s))
+        }
+    }
+    
+    class Comment: Text {
+        
+        init() {
+            super.init("#[^\r\n]*", {s in .Comment(s)})
         }
     }
     

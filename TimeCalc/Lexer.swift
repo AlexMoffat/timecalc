@@ -30,8 +30,9 @@
 
 import Foundation
 
-public enum Token {
+public enum Token: Equatable {
     case Whitespace
+    case Comment(String)
     case Newline
     case Let
     case Assign
@@ -47,32 +48,13 @@ public enum Token {
     case Unknown(String)
 }
 
-extension Token: Equatable {
-    public static func ==(lhs: Token, rhs: Token) -> Bool {
-        switch (lhs, rhs) {
-        case (.Whitespace, .Whitespace) : return true
-        case (.Newline, .Newline) : return true
-        case (.Let, .Let) : return true
-        case (.Assign, .Assign) : return true
-        case (.OpenParen, .OpenParen) : return true
-        case (.CloseParen, .CloseParen) : return true
-        case let (.Operator(l), .Operator(r)) : return l == r
-        case let (.MillisDuration(l), .MillisDuration(r)) : return l == r
-        case let (.DateTime(l), .DateTime(r)) : return l == r
-        case let (.Identifier(l), .Identifier(r)) : return l == r
-        case let (.Int(l), .Int(r)) : return l == r
-        case let (.String(l), .String(r)) : return l == r
-        case let (.Unknown(l), .Unknown(r)) : return l == r
-        default : return false
-        }
-    }
-}
-
 class Lexer {
     
+    // Recognizers need to be ordered here so that if recognizer A recognizes the prefix of a pattern recognized by B
+    // B comes before A in the list.
     let recongizers: [Recognizer] = [
         Recognizers.Constant("[ \t]+",    {.Whitespace}),
-        Recognizers.Constant("#[^\r\n]*", {.Whitespace}),
+        Recognizers.Comment(),
         Recognizers.Constant("\r?\n",     {.Newline}),
         Recognizers.Constant("let",       {.Let}),
         Recognizers.Constant("=",         {.Assign}),
@@ -109,7 +91,7 @@ class Lexer {
         // "Tue Sep 19 15:04:28 +0000 2017"
         // "EEE MMM dd HH:mm:ss ZZZ yyyy"
         Recognizers.Dates(
-            regularExpressions: ["[MTWFS]\\S{2} [JFMASOND]\\S{2} \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4}"],
+            regularExpressions: ["[MTWFS]\\S{2} [JFMASOND][aepuco][nbrynlgptvc] \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4}"],
             dateFormats: [("EEE MMM dd HH:mm:ss XXX yyyy", includesTimeZone: true)]),
         
         // Cookie expiry date as it appeared in some logging messages
