@@ -30,9 +30,11 @@
 
 import Foundation
 
+// The remaining string to continue to try and recognize tokens in and the token that was recognized.
 typealias RecognizerResult = (remainder: String, token: Token)?
 
 protocol Recognizer {
+    // See if this recognizer can recognize a token at the start of the string.
     func tryToRecognize(_ s: String) -> RecognizerResult
 }
 
@@ -50,6 +52,8 @@ class Recognizers {
         return fmt
     }
     
+    // Try to match the start of a String against one or more regular expressions. Call createToken for the first
+    // one that matches. If a token is created then strip the match from the start of the string.
     class Regex: Recognizer {
         
         let regexes: [NSRegularExpression]
@@ -78,6 +82,7 @@ class Recognizers {
         }
     }
     
+    // If the pattern is recognized the token from the tokenGenerator is returned.
     class Constant: Regex {
         let tokenGenerator: () -> Token
         
@@ -108,9 +113,9 @@ class Recognizers {
     
     class Duration: Regex {
         
+        // Allow up to eight digits so that you can have a complete day in milliseconds. This means that the
+        // output of any <duration> . d can be parsed.
         init() {
-            // Allow up to eight digits so that you can have a complete day in milliseconds. This means that the
-            // output of any <duration> . d can be parsed.
             super.init(["(-?[1-9][0-9]{0,7})(d|h|m(?!s)|s|ms)"])
         }
         
@@ -137,6 +142,7 @@ class Recognizers {
         }
     }
     
+    // Create a token using the text matched by the regular expression.
     class Text: Regex {
         let tokenGenerator: (String) -> Token?
         
@@ -189,6 +195,7 @@ class Recognizers {
         }
     }
     
+    // A regular expression that recognizes a sequence of digits and a way to convert that to a number of seconds.
     class Timestamp: Regex {
         
         let convertToSeconds: (Double) -> Double
@@ -203,7 +210,11 @@ class Recognizers {
         }
     }
     
-    // Format patterns defined http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
+    // Format patterns for date formats are defined by
+    // http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
+    
+    // Try each of the date formats against each of the strings matched by the regular expressions.
+    // The first format that converts the string into a date is used.
     class Dates: Regex {
         typealias FormatterSpec = (String, includesTimeZone: Bool)
         typealias FormatterDefinition = (DateFormatter, includesTimeZone: Bool)
@@ -224,6 +235,29 @@ class Recognizers {
             let m = matchingString(match, s)
             for formatter in formatters {
                 if let date = formatter.0.date(from: m) {
+                    return .DateTime(date, formatter.includesTimeZone)
+                }
+            }
+            return nil
+        }
+    }
+    
+    // Adds a reformatting step to the Dates class. The template is used to generate the string passed to the
+    // date formatters. This lets you remove unwanted punctuation and perform other reordering.
+    class DatesWithReformat: Dates {
+        
+        let template: String
+        
+        init(regularExpressions: [String], dateFormats: [FormatterSpec], template: String) {
+            self.template = template
+            super.init(regularExpressions: regularExpressions, dateFormats: dateFormats)
+        }
+        
+        override func createToken(_ regex: NSRegularExpression, _ match: NSTextCheckingResult, _ s: String) -> Token? {
+            let m = matchingString(match, s)
+            let reformattedDate = regex.stringByReplacingMatches(in: m, options: [], range: NSMakeRange(0, m.count), withTemplate: template)
+            for formatter in formatters {
+                if let date = formatter.0.date(from: reformattedDate) {
                     return .DateTime(date, formatter.includesTimeZone)
                 }
             }
@@ -275,7 +309,6 @@ class Recognizers {
     }
     
     class BambooDates: Dates {
-        
         // Date format that bamboo uses. Assumes UTC if no timezone.
         // "21-Jul-2017 03:02:26"
         // "20-Jul-2017 22:02:26 -05:00"
@@ -290,35 +323,51 @@ class Recognizers {
         }
     }
     
-    class DatesWithReformat: Dates {
-        
-        let template: String
-        
-        init(regularExpressions: [String], dateFormats: [FormatterSpec], template: String) {
-            self.template = template
-            super.init(regularExpressions: regularExpressions, dateFormats: dateFormats)
+    class FinatraAccessLogDates: Dates {
+        // Finatra access logging filter
+        // 14/Feb/2018:14:39:14 +0000
+        init() {
+            super.init(
+                regularExpressions: ["\\d{2}/[JFMASOND][aepuco][nbrynlgptvc]/\\d{4}:\\d{2}:\\d{2}:\\d{2}\\s+[+-]\\d{4}"],
+                dateFormats: [("dd/MMM/yyyy:HH:mm:ss XXX", includesTimeZone: true)])
         }
-        
-        override func createToken(_ regex: NSRegularExpression, _ match: NSTextCheckingResult, _ s: String) -> Token? {
-            let m = matchingString(match, s)
-            let reformattedDate = regex.stringByReplacingMatches(in: m, options: [], range: NSMakeRange(0, m.count), withTemplate: template)
-            for formatter in formatters {
-                if let date = formatter.0.date(from: reformattedDate) {
-                    return .DateTime(date, formatter.includesTimeZone)
-                }
-            }
-            return nil
+    }
+    
+    class JiraDates: Dates {
+        // A date from jira
+        // 06/Feb/18 8:38 AM
+        init() {
+            super.init(regularExpressions: ["\\d{2}/[JFMASOND][aepuco][nbrynlgptvc]/\\d{2} \\d{1,2}:\\d{2} [AP]M"],
+                       dateFormats: [("dd/MMM/yy hh:mm a", includesTimeZone: false)])
+        }
+    }
+    
+    class PlainDates: Dates {
+        // Just a date with no timezone
+        // 2017-08-15
+        init() {
+            super.init(regularExpressions: ["\\d{4}-\\d{2}-\\d{2}"],
+                       dateFormats: [("yyyy-MM-dd", includesTimeZone: false)])
+        }
+    }
+    
+    class TwitterDates: Dates {
+        // Twitter API format
+        // "Tue Sep 19 15:04:28 +0000 2017"
+        // "EEE MMM dd HH:mm:ss ZZZ yyyy"
+        init() {
+            super.init(regularExpressions: ["[MTWFS]\\S{2} [JFMASOND][aepuco][nbrynlgptvc] \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4}"],
+                       dateFormats: [("EEE MMM dd HH:mm:ss XXX yyyy", includesTimeZone: true)])
         }
     }
     
     class ISODates: DatesWithReformat {
-        
         // Standard ISO format. TimeZone is optional.
+        // 2017-06-17T17:00:03 -05:00
         // 2017-06-17T17:00:03+00:00
         // 2017-06-17T19:00:03Z
         // 2017-08-15 17:28:34 +0000
         // 2017-08-15 17:28:34 Z
-        
         init() {
             super.init(regularExpressions: ["(\\d{4}-\\d{2}-\\d{2})(?:T|\\s+)(\\d{2}:\\d{2}:\\d{2})\\s*([+-](\\d{4}|(\\d{2}:\\d{2})))", "(\\d{4}-\\d{2}-\\d{2})(?:T|\\s+)(\\d{2}:\\d{2}:\\d{2})(?:\\s*(Z))?"],
                        dateFormats: [("yyyy-MM-dd'T'HH:mm:ss XXXXX", includesTimeZone: true), ("yyyy-MM-dd'T'HH:mm:ss", includesTimeZone: false)],
@@ -327,7 +376,6 @@ class Recognizers {
     }
     
     class ISODatesWithMillis: DatesWithReformat {
-        
         // Standard ISO format with milliseconds. May have timezone.
         // 2017-08-15T12:28:34.395-05:00
         // 2017-09-06T20:05:54.000Z git timestamp from version string.
@@ -337,6 +385,18 @@ class Recognizers {
             super.init(regularExpressions: ["(\\d{4}-\\d{2}-\\d{2})(?:T|\\s+)(\\d{2}:\\d{2}:\\d{2})(?:\\.|,)(\\d{3})\\s*([+-](\\d{4}|(?:\\d{2}:\\d{2})))", "(\\d{4}-\\d{2}-\\d{2})(?:T|\\s+)(\\d{2}:\\d{2}:\\d{2})(?:\\.|,)(\\d{3})(?:\\s*(Z))?"],
                        dateFormats: [("yyyy-MM-dd'T'HH:mm:ss.SSS XXXXX", includesTimeZone: true), ("yyyy-MM-dd'T'HH:mm:ss.SSS", includesTimeZone: false)],
                        template: "$1T$2.$3 $4")
+        }
+    }
+    
+    class CookieExpiryDates: DatesWithReformat {
+        // Cookie expiry date as it appeared in some logging messages
+        // "Fri, 14 Feb 2020 14:39:13 UTC"
+        // Similar but with dashes
+        // "Thu, 31-Jan-2019 23:57:29 GMT"
+        init() {
+            super.init(regularExpressions: ["([MTWFS]\\S{2}),? (\\d{1,2})[ -]([JFMASOND][aepuco][nbrynlgptvc])[ -](\\d{4}) (\\d{2}:\\d{2}:\\d{2}) (\\S{3})"],
+                       dateFormats: [("EEE dd MMM yyyy HH:mm:ss z", includesTimeZone: true)],
+                       template: "$1 $2 $3 $4 $5 $6")
         }
     }
 }

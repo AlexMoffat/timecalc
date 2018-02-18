@@ -67,41 +67,42 @@ class Lexer {
         // Durations. For example 2d 4h 10s is 2 days, 4 hours and 10 seconds. Each space separated item is a separate duration.
         Recognizers.Duration(),
         
+        // Standard ISO format with milliseconds. May have timezone.
+        // 2017-08-15T12:28:34.395-05:00
+        // 2017-09-06T20:05:54.000Z git timestamp from version string.
+        // 2017-08-15 17:28:34.456 +0000
+        // 2018-02-07 20:05:36,501
         Recognizers.ISODatesWithMillis(),
         
+        // Standard ISO format. TimeZone is optional.
+        // 2017-06-17T17:00:03+00:00
+        // 2017-06-17T19:00:03Z
+        // 2017-08-15 17:28:34 +0000
+        // 2017-08-15 17:28:34 Z
         Recognizers.ISODates(),
         
         // Finatra access logging filter
         // 14/Feb/2018:14:39:14 +0000
-        Recognizers.Dates(
-            regularExpressions: ["\\d{2}/[JFMASOND][aepuco][nbrynlgptvc]/\\d{4}:\\d{2}:\\d{2}:\\d{2}\\s+[+-]\\d{4}"],
-            dateFormats: [("dd/MMM/yyyy:HH:mm:ss XXX", includesTimeZone: true)]),
+        Recognizers.FinatraAccessLogDates(),
         
         // A date from jira
         // 06/Feb/18 8:38 AM
-        Recognizers.Dates(
-            regularExpressions: ["\\d{2}/[JFMASOND][aepuco][nbrynlgptvc]/\\d{2} \\d{1,2}:\\d{2} [AP]M"],
-            dateFormats: [("dd/MMM/yy hh:mm a", includesTimeZone: false)]),
+        Recognizers.JiraDates(),
         
         // Just a date with no timezone
         // 2017-08-15
-        Recognizers.Dates(regularExpressions: ["\\d{4}-\\d{2}-\\d{2}"], dateFormats: [("yyyy-MM-dd", includesTimeZone: false)]),
+        Recognizers.PlainDates(),
         
         // Twitter API format
         // "Tue Sep 19 15:04:28 +0000 2017"
         // "EEE MMM dd HH:mm:ss ZZZ yyyy"
-        Recognizers.Dates(
-            regularExpressions: ["[MTWFS]\\S{2} [JFMASOND][aepuco][nbrynlgptvc] \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4}"],
-            dateFormats: [("EEE MMM dd HH:mm:ss XXX yyyy", includesTimeZone: true)]),
+        Recognizers.TwitterDates(),
         
         // Cookie expiry date as it appeared in some logging messages
         // "Fri, 14 Feb 2020 14:39:13 UTC"
         // Similar but with dashes
         // "Thu, 31-Jan-2019 23:57:29 GMT"
-        Recognizers.DatesWithReformat(
-            regularExpressions: ["([MTWFS]\\S{2}),? (\\d{1,2})[ -]([JFMASOND][aepuco][nbrynlgptvc])[ -](\\d{4}) (\\d{2}:\\d{2}:\\d{2}) (\\S{3})"],
-            dateFormats: [("EEE dd MMM yyyy HH:mm:ss z", includesTimeZone: true)],
-            template: "$1 $2 $3 $4 $5 $6"),
+        Recognizers.CookieExpiryDates(),
         
         // Sentry
         // "Sep 29, 2017 2:00:23 PM UTC"
