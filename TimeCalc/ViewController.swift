@@ -37,6 +37,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var resultsView: NSTextView!
     @IBOutlet weak var resultsScrollView: SynchroScrollView!
     
+    static let FONT_SIZE: CGFloat = 16
+    
     let calculator = ResultsCalculator()
     
     var textHasChanged = false
@@ -59,7 +61,7 @@ class ViewController: NSViewController {
         resultsScrollView.setSynchronziedScrollView(view: textScrollView)
         
         text.typingAttributes = [
-            NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: 16, weight: NSFont.Weight.regular)
+            NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular)
         ]
     }
 

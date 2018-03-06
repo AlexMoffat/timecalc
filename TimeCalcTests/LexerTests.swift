@@ -83,6 +83,7 @@ class LexerTests: XCTestCase {
         
         // Lexer - Just a date
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1504414800), false)], "2017-09-03")
+        cmp([Token.DateTime(Date(timeIntervalSince1970: 1533013200), false)], "July 31, 2018")
         
         // Lexer - Date format kibana uses.
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1497718803), true)], "June 17th 2017, 12:00:03.000")
@@ -98,6 +99,7 @@ class LexerTests: XCTestCase {
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1506693623), true)], "Sep 29, 2017 2:00:23 PM UTC")
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1506650423), true)], "Sep 29, 2017 2:00:23 AM UTC")
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1517858358), true)], "Feb. 5, 2018, 7:19:18 p.m. UTC")
+        cmp([Token.DateTime(Date(timeIntervalSince1970: 1519072439), true)], "Feb 19, 2018 8:33:59 PM UTC")
         
         // Lexer - Date format that bamboo uses. Assumes UTC if no timezone.
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1500606146), true)], "21-Jul-2017 03:02:26")

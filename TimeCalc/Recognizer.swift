@@ -44,6 +44,8 @@ class Recognizers {
     
     private static let POSIX_LOCALE = Locale(identifier: "en_US_POSIX")
     
+    private static let MONTH_PREFIX_PATTERN = "[JFMASOND][aepueco][nbrylgptvc]";
+    
     static let formatterForTimeZone = {(format: String, zone: TimeZone?) -> DateFormatter in
         let fmt = DateFormatter()
         fmt.locale = POSIX_LOCALE
@@ -272,7 +274,7 @@ class Recognizers {
         // Sentry date format         "Sep 29, 2017 2:00:23 PM UTC"
         // Another sentry date format "Feb. 5, 2018, 7:19:18 p.m. UTC"
         init() {
-            super.init(["([JFMASOND][aepuco][nbrynlgptvc])\\.? (\\d{1,2}), (\\d{4}),? (\\d{1,2}:\\d{2}:\\d{2}) (?i:([ap]\\.?m\\.?)) (\\S{3})"])
+            super.init(["(\(MONTH_PREFIX_PATTERN))\\.? (\\d{1,2}), (\\d{4}),? (\\d{1,2}:\\d{2}:\\d{2}) (?i:([ap]\\.?m\\.?)) (\\S{3})"])
         }
         
         override func createToken(_ regex: NSRegularExpression, _ match: NSTextCheckingResult, _ s: String) -> Token? {
@@ -316,7 +318,7 @@ class Recognizers {
         // Bamboo "completed" date
         // 13 Feb 2018, 5:14:39 PM
         init() {
-            super.init(regularExpressions: ["\\d{1,2}-[JFMASOND][aepuco][nbrynlgptvc][a-z]?-\\d{4} \\d{1,2}:\\d{2}:\\d{2}( (Z|([+-]\\d{2}:\\d{2})))?", "\\d{1,2} [JFMASOND][aepuco][nbrynlgptvc] \\d{4}, \\d{1,2}:\\d{2}:\\d{2} [AP]M"],
+            super.init(regularExpressions: ["\\d{1,2}-\(MONTH_PREFIX_PATTERN)[a-z]?-\\d{4} \\d{1,2}:\\d{2}:\\d{2}( (Z|([+-]\\d{2}:\\d{2})))?", "\\d{1,2} [JFMASOND][aepuco][nbrynlgptvc] \\d{4}, \\d{1,2}:\\d{2}:\\d{2} [AP]M"],
                        formatters: [(formatterForTimeZone("d-MMM-yyyy HH:mm:ss XXX", TimeZone.current), includesTimeZone: true),
                                     (formatterForTimeZone("d-MMM-yyyy HH:mm:ss", TimeZone.init(identifier: "UTC")), includesTimeZone: true),
                                     (formatterForTimeZone("dd MMM yyyy, hh:mm:ss a", TimeZone.current), includesTimeZone: false)])
@@ -328,7 +330,7 @@ class Recognizers {
         // 14/Feb/2018:14:39:14 +0000
         init() {
             super.init(
-                regularExpressions: ["\\d{2}/[JFMASOND][aepuco][nbrynlgptvc]/\\d{4}:\\d{2}:\\d{2}:\\d{2}\\s+[+-]\\d{4}"],
+                regularExpressions: ["\\d{2}/\(MONTH_PREFIX_PATTERN)/\\d{4}:\\d{2}:\\d{2}:\\d{2}\\s+[+-]\\d{4}"],
                 dateFormats: [("dd/MMM/yyyy:HH:mm:ss XXX", includesTimeZone: true)])
         }
     }
@@ -337,7 +339,7 @@ class Recognizers {
         // A date from jira
         // 06/Feb/18 8:38 AM
         init() {
-            super.init(regularExpressions: ["\\d{2}/[JFMASOND][aepuco][nbrynlgptvc]/\\d{2} \\d{1,2}:\\d{2} [AP]M"],
+            super.init(regularExpressions: ["\\d{2}/\(MONTH_PREFIX_PATTERN)/\\d{2} \\d{1,2}:\\d{2} [AP]M"],
                        dateFormats: [("dd/MMM/yy hh:mm a", includesTimeZone: false)])
         }
     }
@@ -351,12 +353,22 @@ class Recognizers {
         }
     }
     
+    class FullMonthPlainDates: DatesWithReformat {
+        // Just a date with no timezone
+        // July 31, 2018
+        init() {
+            super.init(regularExpressions: ["(\(MONTH_PREFIX_PATTERN)\\S{0,6})\\s+(\\d{2}),?\\s+(\\d{4})"],
+                       dateFormats: [("MMM dd yyyy", includesTimeZone: false)],
+                       template: "$1 $2 $3")
+        }
+    }
+    
     class TwitterDates: Dates {
         // Twitter API format
         // "Tue Sep 19 15:04:28 +0000 2017"
         // "EEE MMM dd HH:mm:ss ZZZ yyyy"
         init() {
-            super.init(regularExpressions: ["[MTWFS]\\S{2} [JFMASOND][aepuco][nbrynlgptvc] \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4}"],
+            super.init(regularExpressions: ["[MTWFS]\\S{2} \(MONTH_PREFIX_PATTERN) \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4}"],
                        dateFormats: [("EEE MMM dd HH:mm:ss XXX yyyy", includesTimeZone: true)])
         }
     }
@@ -394,7 +406,7 @@ class Recognizers {
         // Similar but with dashes
         // "Thu, 31-Jan-2019 23:57:29 GMT"
         init() {
-            super.init(regularExpressions: ["([MTWFS]\\S{2}),? (\\d{1,2})[ -]([JFMASOND][aepuco][nbrynlgptvc])[ -](\\d{4}) (\\d{2}:\\d{2}:\\d{2}) (\\S{3})"],
+            super.init(regularExpressions: ["([MTWFS]\\S{2}),? (\\d{1,2})[ -](\(MONTH_PREFIX_PATTERN))[ -](\\d{4}) (\\d{2}:\\d{2}:\\d{2}) (\\S{3})"],
                        dateFormats: [("EEE dd MMM yyyy HH:mm:ss z", includesTimeZone: true)],
                        template: "$1 $2 $3 $4 $5 $6")
         }

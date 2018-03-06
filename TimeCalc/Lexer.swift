@@ -89,10 +89,6 @@ class Lexer {
         // 06/Feb/18 8:38 AM
         Recognizers.JiraDates(),
         
-        // Just a date with no timezone
-        // 2017-08-15
-        Recognizers.PlainDates(),
-        
         // Twitter API format
         // "Tue Sep 19 15:04:28 +0000 2017"
         // "EEE MMM dd HH:mm:ss ZZZ yyyy"
@@ -116,6 +112,14 @@ class Lexer {
         // Bamboo
         // 20-Jul-2017 22:02:26
         Recognizers.BambooDates(),
+        
+        // Just a date with no timezone
+        // 2017-08-15
+        Recognizers.PlainDates(),
+        
+        // Date with month first
+        // July 31 2018 or June 25, 2018
+        Recognizers.FullMonthPlainDates(),
         
         // 1504742693764001 (cassandra cli timestamp) microseconds. These are in UTC
         Recognizers.Timestamp("\\d{16}", convertToSeconds: {d in d / 1000000}),

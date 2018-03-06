@@ -411,6 +411,8 @@ class Executor {
                 return .Right(.DurationValue(value: Int((lv.value.timeIntervalSince1970 * 1000) - (rv.value.timeIntervalSince1970 * 1000))))
             case let (.DurationValue(lv), .DurationValue(rv)):
                 return .Right(.DurationValue(value: (lv - rv)))
+            case let (.IntValue(lv), .IntValue(rv)):
+                return .Right(.IntValue(value: (lv - rv)))
             default:
                 return .Left("Unable to subtract \(right) from \(left)")
             }

@@ -36,6 +36,7 @@ class ExecutorTests: XCTestCase {
     func testExecutor() {
         checkSuccess(toParse: "2 + 3", expected: "5")
         checkSuccess(toParse: "2 + -3", expected: "-1")
+        checkSuccess(toParse: "70 - 43", expected: "27")
         checkSuccess(toParse: "let x = 2d", expected: "2d")
         checkSuccess(toParse: "1497718803 + 2h @ 'UTC'", expected: "2017-06-17 19:00:03 Z")
         checkSuccess(toParse: "1497718803765 + 2h @ 'UTC'", expected: "2017-06-17 19:00:03.765 Z")
