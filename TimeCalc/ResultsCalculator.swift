@@ -31,6 +31,7 @@
 import Cocoa
 import Foundation
 
+@available(OSX 10.13, *)
 class ResultsCalculator {
     
     let resultStyle = [

@@ -48,6 +48,7 @@ public enum Token: Equatable {
     case Unknown(String)
 }
 
+@available(OSX 10.13, *)
 class Lexer {
     
     // Recognizers need to be ordered here so that if recognizer A recognizes the prefix of a pattern recognized by B
@@ -66,6 +67,8 @@ class Lexer {
         
         // Durations. For example 2d 4h 10s is 2 days, 4 hours and 10 seconds. Each space separated item is a separate duration.
         Recognizers.Duration(),
+        
+        Recognizers.JavaDuration(),
         
         // Standard ISO format with milliseconds. May have timezone.
         // 2017-08-15T12:28:34.395-05:00

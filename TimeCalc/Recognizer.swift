@@ -144,6 +144,44 @@ class Recognizers {
         }
     }
     
+    @available(OSX 10.13, *)
+    class JavaDuration: Regex {
+        
+        init() {
+            super.init(["(?<negate>[-+]?)[Pp](?:(?<days>[-+]?[0-9]+)[Dd])?([Tt](?:(?<hours>[-+]?[0-9]+)[Hh])?(?:(?<minutes>[-+]?[0-9]+)[Mm])?(?:(?<seconds>[-+]?[0-9]+)(?:[.,](?<millis>[0-9]{0,3}))?[Ss])?)?"])
+        }
+        
+        override func createToken(_ regex: NSRegularExpression, _ match: NSTextCheckingResult, _ s: String) -> Token? {
+            
+            let negate = (match.range(withName: "negate").location != NSNotFound) ? s[Range(match.range(withName: "negate"), in: s)!] == "-" : false
+            let secondsDuration =
+                extractMatch("days", match, s) * (24 * 60 * 60) +
+                    extractMatch("hours", match, s) * (60 * 60) +
+                    extractMatch("minutes", match, s) * 60 +
+                    extractMatch("seconds", match, s)
+            let millis: Int
+            if match.range(withName: "millis").location != NSNotFound {
+                var millisString = s[Range(match.range(withName: "millis"), in: s)!]
+                for _ in 0..<(3 - millisString.count) {
+                    millisString = millisString + "0"
+                }
+                millis = Int(millisString)!
+            } else {
+                millis = 0
+            }
+            let millisDuration = secondsDuration * 1000 + millis
+            if negate {
+                return .MillisDuration(-1 * millisDuration)
+            } else {
+                return .MillisDuration(millisDuration)
+            }
+        }
+        
+        func extractMatch(_ name: String, _ match: NSTextCheckingResult, _ s: String) -> Int {
+            return (match.range(withName: name).location != NSNotFound) ? Int(s[Range(match.range(withName: name), in: s)!])! : 0
+        }
+    }
+    
     // Create a token using the text matched by the regular expression.
     class Text: Regex {
         let tokenGenerator: (String) -> Token?

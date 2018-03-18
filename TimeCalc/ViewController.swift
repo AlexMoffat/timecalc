@@ -30,6 +30,7 @@
 
 import Cocoa
 
+@available(OSX 10.13, *)
 class ViewController: NSViewController {
 
     @IBOutlet weak var text: NSTextView!
@@ -97,6 +98,7 @@ class ViewController: NSViewController {
     }
 }
 
+@available(OSX 10.13, *)
 extension ViewController: NSTextViewDelegate {
     
     func textDidChange(_ notification: Notification) {

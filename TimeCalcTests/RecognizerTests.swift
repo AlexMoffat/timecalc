@@ -51,13 +51,41 @@ class RecognizerTests: XCTestCase {
         cmp(recognizer, "Sep 29, 2017 2:00:23 PM UTC", 1506693623, includesTimeZone: true)
     }
     
+    
+    @available(OSX 10.13, *)
+    func testJavaDurations() {
+        let recognizer = Recognizers.JavaDuration()
+        
+        cmp(recognizer, "P2D", 2 * 24 * 60 * 60 * 1000)
+        
+        cmp(recognizer, "PT5.302s", 5 * 1000 + 302)
+        
+        cmp(recognizer, "PT2H1M10,4S", ((2 * 60 + 1) * 60 + 10) * 1000 + 400)
+        
+        cmp(recognizer, "-PT2S", -2000)
+        
+        cmp(recognizer, "PT-2S", -2000)
+        
+        cmp(recognizer, "PT1M-2S", 58000)
+    }
+    
     private func cmp(_ recognizer: Recognizer, _ dateAsString: String, _ dateAsDouble: Double, includesTimeZone: Bool) {
         let result = recognizer.tryToRecognize(dateAsString)
         XCTAssertFalse(result == nil, "Did not recognize " + dateAsString)
         if result != nil {
-        XCTAssertEqual("", result?.remainder, "Did not consume all \"" + dateAsString + "\" - remainder " + (result?.remainder)!)
-        XCTAssertEqual(Token.DateTime(Date(timeIntervalSince1970: dateAsDouble), includesTimeZone), result?.token, "Did not correctly parse " + dateAsString)
+            XCTAssertEqual("", result?.remainder, "Did not consume all \"" + dateAsString + "\" - remainder " + (result?.remainder)!)
+            XCTAssertEqual(Token.DateTime(Date(timeIntervalSince1970: dateAsDouble), includesTimeZone), result?.token, "Did not correctly parse " + dateAsString)
         }
+    }
+    
+    private func cmp(_ recognizer: Recognizer, _ durationAsString: String, _ durationAsNum: Int) {
+        let result = recognizer.tryToRecognize(durationAsString)
+        XCTAssertFalse(result == nil, "Did not recognize " + durationAsString)
+        if result != nil {
+            XCTAssertEqual("", result?.remainder, "Did not consume all \"" + durationAsString + "\" - remainder " + (result?.remainder)!)
+            XCTAssertEqual(Token.MillisDuration(durationAsNum), result?.token, "Did not correctly parse " + durationAsString)
+        }
+        
     }
 
 }

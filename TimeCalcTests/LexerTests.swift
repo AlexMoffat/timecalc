@@ -31,6 +31,7 @@
 import XCTest
 @testable import TimeCalc
 
+@available(OSX 10.13, *)
 class LexerTests: XCTestCase {
 
     var lexer: Lexer = Lexer()
@@ -112,6 +113,14 @@ class LexerTests: XCTestCase {
         
         // Lexer - A date from jira
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1517927880), false)], "06/Feb/18 8:38 AM")
+        
+        // Lexer - Java duration
+        // PT7776000S
+        cmp([Token.MillisDuration(7776000 * 1000)], "PT7776000S")
+        // PT2H3M
+        cmp([Token.MillisDuration((2 * 60 + 3) * 60 * 1000)], "PT2H3M")
+        // P1DT10S
+        cmp([Token.MillisDuration((24 * 60 * 60 + 10) * 1000)], "P1DT10S")
         
         // Lexer - Seconds
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1497718803), true)], "1497718803")

@@ -31,6 +31,7 @@
 import XCTest
 @testable import TimeCalc
 
+@available(OSX 10.13, *)
 class ExecutorTests: XCTestCase {
 
     func testExecutor() {
