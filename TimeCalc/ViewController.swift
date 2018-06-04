@@ -32,7 +32,7 @@ import Cocoa
 
 @available(OSX 10.13, *)
 class ViewController: NSViewController {
-
+    
     @IBOutlet weak var text: NSTextView!
     @IBOutlet weak var textScrollView: SynchroScrollView!
     @IBOutlet weak var resultsView: NSTextView!
@@ -41,6 +41,10 @@ class ViewController: NSViewController {
     static let FONT_SIZE: CGFloat = 16
     
     let calculator = ResultsCalculator()
+    
+    let typingAttributes = [
+        NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular)
+    ]
     
     var textHasChanged = false
     var textChangeTimer: Timer? = nil
@@ -61,9 +65,7 @@ class ViewController: NSViewController {
         textScrollView.setSynchronziedScrollView(view: resultsScrollView)
         resultsScrollView.setSynchronziedScrollView(view: textScrollView)
         
-        text.typingAttributes = [
-            NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular)
-        ]
+        text.typingAttributes = typingAttributes
     }
 
     override var representedObject: Any? {
@@ -95,6 +97,22 @@ class ViewController: NSViewController {
         textScrollView.paused = false
         resultsScrollView.paused = false
         resultsScrollView.synchroViewContentBoundsDidChange(notifyingView: textScrollView.contentView)
+    }
+    
+    func insertFromService(_ s: NSString) {
+        guard let storage = text.textStorage else {
+            return
+        }
+        text.moveToEndOfDocument(self)
+        let len = storage.length
+        if  len != 0 {
+            if let lastChar = Unicode.Scalar(storage.mutableString.character(at: len - 1)) {
+                if !NSCharacterSet.newlines.contains(lastChar) {
+                    text.insertNewline(self)
+                }
+            }
+        }
+        storage.append(NSAttributedString(string: s as String, attributes: typingAttributes))
     }
 }
 

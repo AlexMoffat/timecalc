@@ -33,16 +33,42 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-
-
+    // Text from service is received before app becomes active when app is started by
+    // service menu action. In that case text is stored here because the controller
+    // is not yet available.
+    var serviceText: NSString?
+    var controller: ViewController?
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+        
+        NSApp.servicesProvider = self
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
-
-
+    
+    func applicationDidBecomeActive(_ notification: Notification) {
+        controller = NSApp?.mainWindow?.contentViewController as? ViewController
+        // If we were launched by a service action the text provided will be here and
+        // needs to be sent to the controller.
+        if serviceText != nil {
+            controller?.insertFromService(serviceText!)
+            serviceText = nil
+        }
+    }
+    
+    @objc
+    func convert(_ pboard: NSPasteboard, userData: String, error: AutoreleasingUnsafeMutablePointer<NSString?>) {
+        let contents = pboard.readObjects(forClasses: [NSString.self], options: nil) as! [NSString]
+        if contents.count > 0 {
+            if controller != nil {
+                controller?.insertFromService(contents[0])
+            } else {
+                serviceText = contents[0]
+            }
+        }
+    }
 }
 
