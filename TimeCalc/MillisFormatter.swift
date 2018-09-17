@@ -30,6 +30,10 @@
 
 import Foundation
 
+/**
+ * Format a value in milliseconds as a number of days, hours, minutes, seconds and milliseconds. You can choose the larges unit to
+ * use, for example you can have a format with a largest unit of minutes. Zero values are not output, so 2d 10m not 2d 0h 10m.
+ */
 class MillisFormatter {
     
     typealias Unit = (millis: Int, suffix: String)

@@ -74,7 +74,7 @@ class RecognizerTests: XCTestCase {
         XCTAssertFalse(result == nil, "Did not recognize " + dateAsString)
         if result != nil {
             XCTAssertEqual("", result?.remainder, "Did not consume all \"" + dateAsString + "\" - remainder " + (result?.remainder)!)
-            XCTAssertEqual(Token.DateTime(Date(timeIntervalSince1970: dateAsDouble), includesTimeZone), result?.token, "Did not correctly parse " + dateAsString)
+            XCTAssertEqual(Token.DateTime(Date(timeIntervalSince1970: dateAsDouble), includesTimeZone), result?.tokens[0], "Did not correctly parse " + dateAsString)
         }
     }
     
@@ -83,7 +83,7 @@ class RecognizerTests: XCTestCase {
         XCTAssertFalse(result == nil, "Did not recognize " + durationAsString)
         if result != nil {
             XCTAssertEqual("", result?.remainder, "Did not consume all \"" + durationAsString + "\" - remainder " + (result?.remainder)!)
-            XCTAssertEqual(Token.MillisDuration(durationAsNum), result?.token, "Did not correctly parse " + durationAsString)
+            XCTAssertEqual(Token.MillisDuration(durationAsNum), result?.tokens[0], "Did not correctly parse " + durationAsString)
         }
         
     }

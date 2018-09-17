@@ -30,11 +30,18 @@
 
 import Foundation
 
+/**
+ * Turn the output from the Parser, a list of LineNodes, into a list of Results that can be displayed.
+ */
+
 enum Value: CustomStringConvertible {
     case DateValue(value: Date, timezone: TimeZone)
     case DurationValue(value: Int)
     case IntValue(value: Int)
+    // value is the name of the identifier, for example X
     case IdentifierValue(value: String)
+    // an identifier that we have no value for in the environment, value is name of identifier, for example Y
+    case UnresolvedIdentifierValue(value: String)
     case StringValue(value: String)
     case CommentValue(value: String)
     
@@ -48,6 +55,8 @@ enum Value: CustomStringConvertible {
             return "IntValue(\(i))"
         case let.IdentifierValue(i):
             return "IdentifierValue(\(i))"
+        case let .UnresolvedIdentifierValue(i):
+            return "UnresolvedIdentifierValue(\(i))"
         case let .StringValue(s):
             return "StringValue(\(s))"
         case let .CommentValue(s):
@@ -76,12 +85,12 @@ class Environment {
     
     init() {
         reservedValues["now"] = .DateValue(value: Date(), timezone: TimeZone.current)
-        reservedValues["day"] = .IdentifierValue(value: "day")
-        reservedValues["ms"] = .IdentifierValue(value: "ms")
-        reservedValues["s"] = .IdentifierValue(value: "s")
-        reservedValues["m"] = .IdentifierValue(value: "m")
-        reservedValues["h"] = .IdentifierValue(value: "h")
-        reservedValues["d"] = .IdentifierValue(value: "d")
+        reservedValues["day"] = .StringValue(value: "day")
+        reservedValues["ms"] = .StringValue(value: "ms")
+        reservedValues["s"] = .StringValue(value: "s")
+        reservedValues["m"] = .StringValue(value: "m")
+        reservedValues["h"] = .StringValue(value: "h")
+        reservedValues["d"] = .StringValue(value: "d")
     }
     
     subscript(index: String) -> Value? {
@@ -103,7 +112,7 @@ class Environment {
                 if let v = self[i] {
                     return .Right(v)
                 } else {
-                    return .Left("\(String(describing: value)) is an undefined identifier. It has no value.")
+                    return .Right(.UnresolvedIdentifierValue(value: i))
                 }
             } else {
                 return .Right(value)
@@ -118,7 +127,7 @@ class Environment {
             if let v = self[i] {
                 return .Right(v)
             } else {
-                return .Left("\(String(describing: value)) is an undefined identifier. It has no value.")
+                return .Right(.UnresolvedIdentifierValue(value: i))
             }
         } else {
             return .Right(value)
@@ -129,7 +138,7 @@ class Environment {
         if let v = self[stringValue] {
             return .Right(v)
         } else {
-            return .Left("\(stringValue) is an undefined identifier. It has no value.")
+            return .Right(.UnresolvedIdentifierValue(value: stringValue))
         }
     }
 }
@@ -188,6 +197,8 @@ class Executor {
                 return .Right(.StringValue(value: String(i)))
             case .IdentifierValue(_):
                 return toString(environment.valueFromEnvironment(v))
+            case let .UnresolvedIdentifierValue(i):
+                return .Right(.StringValue(value: i))
             case .StringValue(_):
                 return value
             case .CommentValue(_):
@@ -258,7 +269,7 @@ class Executor {
         switch value {
         case let .Right(v):
             if environment.isReserved(expr.variable.value) {
-                return .Left("\(expr.variable.value) is a reserved identifier. You can not change its value.")
+                return .Left("\(expr.variable.value) is a reserved variable. You can not change its value.")
             }
             switch v {
             case let .StringValue(s) where expr.variable.value == "fmt":
@@ -304,7 +315,7 @@ class Executor {
         case ".":
             return extractComponent(lhs: lhsValue, rhs: rhsValue)
         case "@":
-            return changeTimezone(lhs: lhsValue, rhs: rhsValue)
+             return changeTimezone(lhs: lhsValue, rhs: rhsValue)
         case "+":
             return add(lhs: lhsValue, rhs: rhsValue)
         case "-":
@@ -323,8 +334,8 @@ class Executor {
         guard case let .Right(v) = lhsValue else {
             return lhsValue
         }
-        guard case let .IdentifierValue(ident) = rhs else {
-            return .Left("RHS of extract component is not an identifier. It is \(String(describing: rhs))")
+        guard case let .StringValue(ident) = rhs else {
+            return .Left("RHS of extract component is not a string identifying a date or duration component. It is \(String(describing: rhs))")
         }
         switch v {
         case let .DateValue(date, zone):
@@ -376,11 +387,15 @@ class Executor {
         guard case let .DateValue(date, _) = v else {
             return .Left("LHS of change timezone is not a date. It is \(String(describing: v))")
         }
-        guard case let .StringValue(ident) = rhs else {
-            return .Left("RHS of change timezone is not an identifier. It is \(String(describing: rhs))")
-        }
-        guard let zone = TimeZone(abbreviation: ident) ?? TimeZone(identifier: ident) ?? nil else {
-            return .Left("RHS of change timezone is not a valid timezone. It is \(String(describing: rhs))")
+        var zone: TimeZone
+        switch (rhs) {
+        case .StringValue(let value), .UnresolvedIdentifierValue(let value):
+            guard let maybeZone = TimeZone(identifier: value) ?? TimeZone(abbreviation: value) ?? nil else {
+                return .Left("RHS of change timezone is not a valid timezone. \(value) is not recoginzed as a TimeZone identifier or abbreviation.")
+            }
+            zone = maybeZone
+        default:
+            return .Left("RHS of change timezone does not identify a timezone. It is \(String(describing: rhs))")
         }
         return ResultValue.Right(.DateValue(value: date, timezone: zone))
     }

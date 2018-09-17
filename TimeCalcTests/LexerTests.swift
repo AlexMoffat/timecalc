@@ -52,12 +52,21 @@ class LexerTests: XCTestCase {
         cmp([Token.Identifier("i1")], "i1")
         cmp([Token.OpenParen, Token.Unknown("0a"), Token.CloseParen], "( 0a )")
         cmp([Token.Int(3), Token.Operator("+"), Token.Int(5)], "3 + 5")
+        cmp([Token.Int(2), Token.Operator("+")], "2 + ")
+        cmp([Token.Int(2), Token.Operator("+")], "2 +")
         cmp([Token.Int(3), Token.Operator("-"), Token.Int(-5)], "3 - -5")
         cmp([Token.Int(3), Token.Operator("-"), Token.Identifier("Z")], "3 -Z")
         cmp([Token.Int(5), Token.Operator("-"), Token.Identifier("Z")], "5 - Z")
         
+        // Lexer - Timezones
+        cmp([Token.Operator("@"), Token.Identifier("UTC")], "@ UTC")
+        cmp([Token.Operator("@"), Token.String("UTC")], "@ \"UTC\"")
+        cmp([Token.Operator("@"), Token.String("UTC")], "@ 'UTC'")
+        cmp([Token.Operator("@"), Token.String("America/Los_Angeles")], "@   America/Los_Angeles")
+        cmp([Token.Operator("@"), Token.String("America/Kentucky/Monticello"), Token.Int(15)], "@ America/Kentucky/Monticello 15")
+        
         // Lexer - Duration
-        cmp([Token.MillisDuration(3*60*60*1000), Token.MillisDuration(4*1000), Token.MillisDuration(342)], "3h 4s 342ms")
+        cmp([Token.MillisDuration(3*60*60*1000), Token.MillisDuration(4*1000), Token.MillisDuration(342), Token.Identifier("aa")], "3h 4s 342ms aa")
         cmp([Token.MillisDuration(25*60*1000), Token.MillisDuration(-5*1000)], "25m -5s")
         
         // Lexer - Standard iso format with milliseconds.

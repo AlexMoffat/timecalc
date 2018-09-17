@@ -45,6 +45,10 @@ class ExecutorTests: XCTestCase {
         checkSuccess(toParse: "2017-06-17T19:00:03Z", expected: "2017-06-17 14:00:03 -05:00")
         checkSuccess(toParse: "let tz = 'UTC'\n2017-06-17T19:00:03", expecteds: ["UTC", "2017-06-17 14:00:03 -05:00"])
         checkSuccess(toParse: "2017-06-17T19:00:03Z - 1d 1h @ 'UTC'", expected: "2017-06-16 18:00:03 Z")
+        checkSuccess(toParse: "2017-06-17T19:00:03Z - 1d 1h @ UTC", expected: "2017-06-16 18:00:03 Z")
+        checkSuccess(toParse: "2017-06-17T19:00:03Z @ America/Chicago", expected: "2017-06-17 14:00:03 -05:00")
+        checkFailure(toParse: "2017-06-17T19:00:03Z @ XXX", expected: "RHS of change timezone is not a valid timezone. XXX is not recoginzed as a TimeZone identifier or abbreviation.")
+        checkSuccess(toParse: "let x = 'America/Chicago'\n2017-06-17T19:00:03Z @ x", expecteds: ["America/Chicago", "2017-06-17 14:00:03 -05:00"])
         checkSuccess(toParse: "2017-06-17T19:00:03Z - 2017-06-16T18:00:03Z", expected: "1d 1h")
         checkSuccess(toParse: "2d + 1497718803", expected: "2017-06-19 12:00:03 -05:00")
         checkSuccess(toParse: "(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) . m", expected: "2851m 29s")
@@ -56,7 +60,7 @@ class ExecutorTests: XCTestCase {
         checkSuccess(toParse: "84689000ms", expected: "23h 31m 29s");
         checkSuccess(toParse: "1889000ms", expected: "31m 29s");
         checkSuccess(toParse: "29000ms", expected: "29s");
-        checkFailure(toParse: "2 +", expected: "Parser Expected a newline.")
+        checkFailure(toParse: "2 +", expected: "Parser Expected to find a token.")
     }
 
     func checkSuccess(toParse: String, expected: String) {

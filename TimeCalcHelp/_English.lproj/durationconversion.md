@@ -4,7 +4,13 @@ description: Converting durations into different units, for example hours.
 order: 70
 ---
 You can display a duration broken down into days, hours, minutes, seconds or milliseconds. If the duration can't be completely
-expressed in the chosen unit then the remaining milliseconds are also formatted.
+expressed in the chosen unit then the remaining milliseconds are also formatted. The valid units are
+ 
+ - `d` days
+ - `h` hours
+ - `m` minutes
+ - `s` seconds
+ - `ms` milliseconds
 
 ````
 # How many seconds in 14 hours.

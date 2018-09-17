@@ -58,11 +58,16 @@ class ParserTests: XCTestCase {
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(BinaryOpNode(op: @, lhs: BinaryOpNode(op: -, lhs: DateTimeNode(2017-06-17 19:00:03 +0000, true), rhs: DurationNode(90000000)), rhs: StringNode(UTC))), error: nil)]",
                         toParse: "2017-06-17T19:00:03Z - 1d 1h @ 'UTC'")
         
+        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(BinaryOpNode(op: @, lhs: BinaryOpNode(op: -, lhs: DateTimeNode(2017-06-17 19:00:03 +0000, true), rhs: DurationNode(90000000)), rhs: IdentifierNode(UTC))), error: nil)]",
+                        toParse: "2017-06-17T19:00:03Z - 1d 1h @ UTC")
+        
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(BinaryOpNode(op: *, lhs: DurationNode(10800000), rhs: BinaryOpNode(op: +, lhs: NumberNode(2), rhs: NumberNode(1)))), error: nil)]", toParse: "3h * (2 + 1)")
         
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(DurationNode(1495000)), error: nil)]", toParse: "25m -5s")
         
-        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: nil, error: Optional(Parser Expected a newline.))]", toParse: "2 +")
+        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: nil, error: Optional(Parser Expected to find a token.))]", toParse: "2 +")
+        
+        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: nil, error: Optional(Parser Expected to find a token.))]", toParse: "2 + ")
         
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(DateTimeNode(2017-06-17 17:00:03 +0000, false)), error: nil), LineNode(lineNumber: 2, value: Optional(AssignmentNode(variable: IdentifierNode(x), value: NumberNode(10))), error: nil)]", toParse: "2017-06-17T12:00:03,340\nlet x = 10")
     }

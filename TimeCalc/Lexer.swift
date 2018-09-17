@@ -62,7 +62,13 @@ class Lexer {
         Recognizers.Constant("\\(",       {.OpenParen}),
         Recognizers.Constant("\\)",       {.CloseParen}),
         
+        // A @ followed by a timezone identifier or abbreviation
+        Recognizers.ChooseTimezone(),
+        
         // Operators like + - @ and .
+        // This comes after ChooseTimezone so that we can pick up a @ followed by something that isn't
+        // recognized as a timezone identifier and hopefully provide a better error message later in
+        // the processing.
         Recognizers.Operator(),
         
         // Durations. For example 2d 4h 10s is 2 days, 4 hours and 10 seconds. Each space separated item is a separate duration.
@@ -147,8 +153,10 @@ class Lexer {
             
             for recognizer in recongizers {
                 if let result = recognizer.tryToRecognize(remaining) {
-                    if result.token != .Whitespace {
-                        tokens.append(result.token)
+                    for token in result.tokens {
+                        if token != .Whitespace {
+                            tokens.append(token)
+                        }
                     }
                     remaining = result.remainder
                     matched = true

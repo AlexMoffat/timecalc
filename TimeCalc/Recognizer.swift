@@ -31,7 +31,7 @@
 import Foundation
 
 // The remaining string to continue to try and recognize tokens in and the token that was recognized.
-typealias RecognizerResult = (remainder: String, token: Token)?
+typealias RecognizerResult = (remainder: String, tokens: [Token])?
 
 protocol Recognizer {
     // See if this recognizer can recognize a token at the start of the string.
@@ -68,7 +68,7 @@ class Recognizers {
             for regex in regexes {
                 if let match = regex.firstMatch(in: s, options: [NSRegularExpression.MatchingOptions.anchored], range: NSMakeRange(0, s.count)) {
                     if let token = createToken(regex, match, s) {
-                        return (remainder: calculateRemainder(match, s), token: token)
+                        return (remainder: calculateRemainder(match, s), tokens: [token])
                     }
                 }
             }
@@ -101,7 +101,7 @@ class Recognizers {
     class Operator: Regex {
         
         init() {
-            super.init(["([+*/@.-])[^0-9]"])
+            super.init(["([+*/.@-])([^0-9]|$)"])
         }
         
         override func createToken(_ regex: NSRegularExpression, _ match: NSTextCheckingResult, _ s: String) -> Token? {
@@ -110,6 +110,24 @@ class Recognizers {
         
         override func calculateRemainder(_ match: NSTextCheckingResult, _ s: String) -> String {
             return String(s[s.index(after: s.startIndex)...])
+        }
+    }
+    
+    class ChooseTimezone: Regex {
+        
+        init() {
+            // Identify only TimeZone identifiers that include a /. Others are lexed as Identifiers. Both String and Identifier values following
+            // an @ are correctly handled by the Executor.
+            super.init(["(@\\s+)([A-Za-z]+(?:/[A-Za-z_]+){1,2})"])
+        }
+        
+        override func tryToRecognize(_ s: String) -> RecognizerResult {
+            for regex in regexes {
+                if let match = regex.firstMatch(in: s, options: [NSRegularExpression.MatchingOptions.anchored], range: NSMakeRange(0, s.count)) {
+                    return (remainder: calculateRemainder(match, s), tokens: [Token.Operator("@"), Token.String(String(s[s.index(s.startIndex, offsetBy: match.range(at: 1).length) ..< s.index(s.startIndex, offsetBy: match.range.length)]))])
+                }
+            }
+            return nil
         }
     }
     
