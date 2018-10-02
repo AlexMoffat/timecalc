@@ -15,7 +15,7 @@ Or, what's two minutes and 13 seconds after a time in seconds since epoc?
 `1499212382 + 2m 13s` it's `2017-07-04 18:55:15 -05:00`
 
 Expressions are entered in the left pane and their values are displayed in the right pane. One
-expression per line. A line that starts with # is a comment. Datetimes, durations and arithmetic
+expression per line. A line that starts with `#` is a comment. Datetimes, durations and arithmetic
 operations on them are supported. Whenever the text on the left is modified the results on the right are
 recalculated.
 

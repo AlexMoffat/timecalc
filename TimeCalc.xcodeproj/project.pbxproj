@@ -37,17 +37,8 @@
 			isEditable = 1;
 			outputFiles = (
 			);
-			script = true;
-		};
-		AF9B3DA71F73436B0059E792 /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.md";
-			fileType = pattern.proxy;
-			isEditable = 1;
-			outputFiles = (
-			);
-			script = true;
+			script = "true
+";
 		};
 /* End PBXBuildRule section */
 
@@ -234,7 +225,6 @@
 				AF361D291F0DB72800FAAA1C /* Resources */,
 			);
 			buildRules = (
-				AF9B3DA71F73436B0059E792 /* PBXBuildRule */,
 			);
 			dependencies = (
 				AF361D311F0DB72800FAAA1C /* PBXTargetDependency */,
@@ -386,7 +376,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/bin/make -C \"$(dirname \"$PRODUCT_SETTINGS_PATH\")\"";
+			shellScript = "/usr/bin/make -C \"$(dirname \"$PRODUCT_SETTINGS_PATH\")\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
