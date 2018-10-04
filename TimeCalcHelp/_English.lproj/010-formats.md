@@ -1,5 +1,5 @@
 ---
-title: Parsed Date Formats
+title: Supported Date Formats
 description: Supported date, time, and datetime formats.
 order: 10
 ---

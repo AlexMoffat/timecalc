@@ -1,15 +1,11 @@
 # TimeCalc
 
-A scratch pad for time and date calculations. Type expressions on the left, see the results on the right.
-For example how far apart are the date from a Kibana log message and the timesamp of a Cassandra column?
-
-    September 6th 2017, 19:04:55.000 - 1504742693764001
-
-Or, what's two minutes and 13 seconds after a time in seconds since epoc?
-
-    1499212382 + 2m 13s
+TimeCalc is an OS X scratch pad for time and date calculations. You can enter dates, times and durations in different formats,
+convert between them and perform calculations. You enter expressions in the left pane and see results on the right.
 
 ![](TimeCalcOverview.png)
+
+TimeCalc provides an OS X service you can bind to a keystroke for quick entry of selected text.
 
 ## Features / Functionality / Help
 
