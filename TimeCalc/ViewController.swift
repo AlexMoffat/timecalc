@@ -43,7 +43,8 @@ class ViewController: NSViewController {
     let calculator = ResultsCalculator()
     
     let typingAttributes = [
-        NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular)
+        NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular),
+        NSAttributedStringKey.foregroundColor: NSColor.textColor
     ]
     
     var textHasChanged = false

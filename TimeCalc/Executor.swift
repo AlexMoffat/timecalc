@@ -215,8 +215,7 @@ class Executor {
             return .Right(.StringValue(value: Recognizers.formatterForTimeZone(shortFormat, ts).string(from: d)))
         } else {
             let micros: Int = Int(((Double(ns) / 1000).rounded()))
-            let millis: Int = Int(((Double(ns) / (1000 * 1000)).rounded()))
-            let microsRemainder = micros - (millis * 1000)
+            let microsRemainder = Int(Double(micros).truncatingRemainder(dividingBy: 1000))
             if microsRemainder == 0 {
                 return .Right(.StringValue(value: Recognizers.formatterForTimeZone(mediumFormat, ts).string(from: d)))
             } else {

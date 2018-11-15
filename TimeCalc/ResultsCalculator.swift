@@ -36,16 +36,17 @@ class ResultsCalculator {
     
     let resultStyle = [
         NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular),
-        NSAttributedStringKey.foregroundColor: NSColor.black
+        NSAttributedStringKey.foregroundColor: NSColor.textColor
     ]
     let commentStyle = [
         NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular),
         NSAttributedStringKey.obliqueness: NSNumber(value: 0.20),
-        NSAttributedStringKey.foregroundColor: NSColor.gray
+        NSAttributedStringKey.foregroundColor: NSColor.systemGray
     ]
     let errorStyle = [
         NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular),
-        NSAttributedStringKey.foregroundColor: NSColor(red: (251/255), green: (128/255), blue: (114/255), alpha: 1.0)
+        NSAttributedStringKey.foregroundColor: NSColor.systemPink
+       // NSAttributedStringKey.foregroundColor: NSColor(red: (251/255), green: (128/255), blue: (114/255), alpha: 1.0)
     ]
     let newLineRegex = try! NSRegularExpression(pattern: "\r?\n", options: [])
     
