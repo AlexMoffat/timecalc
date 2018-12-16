@@ -7,9 +7,11 @@ convert between them and perform calculations. You enter expressions in the left
 
 TimeCalc provides an OS X service you can bind to a keystroke for quick entry of selected text.
 
+Download the latest version to try it out.
+
 ## Features / Functionality / Help
 
-All of the features and functions are describe in the help files in markdown format in the [_English.lproj](TimeCalcHelp/_English.lproj) directory.
+All of the features and functions are describe in the help files in markdown format in the [_English.lproj](TimeCalcHelp/_English.lproj) directory or visible from the `Help` menu in the app.
 
 ## Building
 
