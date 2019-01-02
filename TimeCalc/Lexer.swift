@@ -30,7 +30,7 @@
 
 import Foundation
 
-public enum Token: Equatable {
+public enum Token: Equatable, CustomStringConvertible {
     case Whitespace
     case Comment(String)
     case Newline
@@ -40,12 +40,86 @@ public enum Token: Equatable {
     case CloseParen
     case Operator(String)
     case MillisDuration(Int)
-    // True if timezone specified in format used to parse date
+    // True if a timezone is specified in format used to parse date
     case DateTime(Date, Bool)
     case Identifier(String)
     case Int(Int)
     case String(String)
     case Unknown(String)
+    
+    // Implemented so that the format of the date in a DateTime token shows nanoseconds when appropriate.
+    public var description: String {
+        switch self {
+        case .Whitespace:
+            return "Whitespace"
+        case let .Comment(comment):
+            return "Comment(" + comment + ")"
+        case .Newline:
+            return "Newline"
+        case .Let:
+            return "Let"
+        case .Assign:
+            return "Assign"
+        case .OpenParen:
+            return "OpenParen"
+        case .CloseParen:
+            return "CloseParen"
+        case let .Operator(op):
+            return "Operator(" + op + ")"
+        case let .MillisDuration(duration):
+            return "MillisDuration(" + duration.description + ")"
+        case let .DateTime(date, boolvalue):
+            return "DateTime(" + Common.toValue(date) + ", " + boolvalue.description + ")"
+        case let .Identifier(ident):
+            return "Identifier(" + ident + ")"
+        case let .Int(i):
+            return "Int(" + i.description + ")"
+        case let .String(s):
+            return "String(" + s + ")"
+        case let .Unknown(u):
+            return "Unknown(" + u + ")"
+        }
+    }
+    
+    // Implemented == so that we can say DateTimes are equal if they are equal to nanosecond precision.
+    // Without this rounding calculations when parsing cause tests to fail.
+    public static func ==(lhs: Token, rhs: Token) -> Bool {
+        switch (lhs, rhs) {
+        case (.Whitespace, .Whitespace):
+            return true
+        case let (.Comment(l), .Comment(r)):
+            return l == r
+        case (.Newline, .Newline):
+            return true
+        case (.Let, .Let):
+            return true
+        case (.Assign, .Assign):
+            return true
+        case (.OpenParen, .OpenParen):
+            return true;
+        case (.CloseParen, .CloseParen):
+            return true
+        case let (.Operator(l), .Operator(r)):
+            return l == r
+        case let (.MillisDuration(l), .MillisDuration(r)):
+            return l == r
+        case let (.DateTime(ld, lt), .DateTime(rd, rt)):
+            // Check for nanosecond equality
+            let lrounded = (ld.timeIntervalSinceReferenceDate * 1000000).rounded() / 1000000
+            let rrounded = (rd.timeIntervalSinceReferenceDate * 1000000).rounded() / 1000000
+            return lrounded == rrounded && lt == rt
+        case let (.Identifier(l), .Identifier(r)):
+            return l == r
+        case let (.Int(l), .Int(r)):
+            return l == r
+        case let (.String(l), .String(r)):
+            return l == r
+        case let (.Unknown(l), .Unknown(r)):
+            return l == r
+        default:
+            return false
+        }
+    }
 }
 
 @available(OSX 10.13, *)

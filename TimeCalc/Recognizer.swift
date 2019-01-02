@@ -42,17 +42,7 @@ class Recognizers {
     
     private static let matchingString = {(match: NSTextCheckingResult, s: String) -> String in String(s[s.startIndex ..< s.index(s.startIndex, offsetBy: match.range.length)])}
     
-    private static let POSIX_LOCALE = Locale(identifier: "en_US_POSIX")
-    
     private static let MONTH_PREFIX_PATTERN = "[JFMASOND][aepueco][nbrylgptvc]";
-    
-    static let formatterForTimeZone = {(format: String, zone: TimeZone?) -> DateFormatter in
-        let fmt = DateFormatter()
-        fmt.locale = POSIX_LOCALE
-        fmt.dateFormat = format
-        fmt.timeZone = zone
-        return fmt
-    }
     
     // Try to match the start of a String against one or more regular expressions. Call createToken for the first
     // one that matches. If a token is created then strip the match from the start of the string.
@@ -280,7 +270,7 @@ class Recognizers {
         let formatters: [FormatterDefinition]
         
         init(regularExpressions patterns: [String], dateFormats: [FormatterSpec]) {
-            formatters = dateFormats.map {f in (formatterForTimeZone(f.0, TimeZone.current), includesTimeZone: f.includesTimeZone)}
+            formatters = dateFormats.map {f in (Common.formatterForTimeZone(f.0, TimeZone.current), includesTimeZone: f.includesTimeZone)}
             super.init(patterns)
         }
         
@@ -316,7 +306,16 @@ class Recognizers {
             let reformattedDate = regex.stringByReplacingMatches(in: m, options: [], range: NSMakeRange(0, m.count), withTemplate: template)
             for formatter in formatters {
                 if let date = formatter.0.date(from: reformattedDate) {
-                    return .DateTime(date, formatter.includesTimeZone)
+                    let nanos = match.range(withName: "nanos")
+                    if nanos.location == NSNotFound {
+                        return .DateTime(date, formatter.includesTimeZone)
+                    } else {
+                        if let nanosValue = Range(nanos, in: m).map({r in m[r]}).flatMap({s in Int(String(s))}) {
+                            return .DateTime(date.addingTimeInterval(TimeInterval(nanosValue) / 1000000), formatter.includesTimeZone)
+                        } else {
+                            return .DateTime(date, formatter.includesTimeZone)
+                        }
+                    }
                 }
             }
             return nil
@@ -325,7 +324,7 @@ class Recognizers {
     
     class SentryDates: Regex {
         
-        let dateFormat = formatterForTimeZone("MMM dd yyyy hh:mm:ss a xxx", TimeZone.current)
+        let dateFormat = Common.formatterForTimeZone("MMM dd yyyy hh:mm:ss a xxx", TimeZone.current)
         
         // Sentry date format         "Sep 29, 2017 2:00:23 PM UTC"
         // Another sentry date format "Feb. 5, 2018, 7:19:18 p.m. UTC"
@@ -348,7 +347,7 @@ class Recognizers {
     class KibanaDates: Regex {
         
         let removeOrdinalsLeadingMonth = try! NSRegularExpression(pattern: "([yhletr]\\s+[0-9]{1,2})((st)|(nd)|(rd)|(th))(\\s+\\d)", options: [])
-        let dateFormat = formatterForTimeZone("MMM dd yyyy',' HH:mm:ss.SSS", TimeZone.current)
+        let dateFormat = Common.formatterForTimeZone("MMM dd yyyy',' HH:mm:ss.SSS", TimeZone.current)
         
         // June 17th 2017, 12:00:03.000
         // TODO - Check assumption that timezone is current.
@@ -375,9 +374,9 @@ class Recognizers {
         // 13 Feb 2018, 5:14:39 PM
         init() {
             super.init(regularExpressions: ["\\d{1,2}-\(MONTH_PREFIX_PATTERN)[a-z]?-\\d{4} \\d{1,2}:\\d{2}:\\d{2}( (Z|([+-]\\d{2}:\\d{2})))?", "\\d{1,2} [JFMASOND][aepuco][nbrynlgptvc] \\d{4}, \\d{1,2}:\\d{2}:\\d{2} [AP]M"],
-                       formatters: [(formatterForTimeZone("d-MMM-yyyy HH:mm:ss XXX", TimeZone.current), includesTimeZone: true),
-                                    (formatterForTimeZone("d-MMM-yyyy HH:mm:ss", TimeZone.init(identifier: "UTC")), includesTimeZone: true),
-                                    (formatterForTimeZone("dd MMM yyyy, hh:mm:ss a", TimeZone.current), includesTimeZone: false)])
+                       formatters: [(Common.formatterForTimeZone("d-MMM-yyyy HH:mm:ss XXX", TimeZone.current), includesTimeZone: true),
+                                    (Common.formatterForTimeZone("d-MMM-yyyy HH:mm:ss", TimeZone.init(identifier: "UTC")), includesTimeZone: true),
+                                    (Common.formatterForTimeZone("dd MMM yyyy, hh:mm:ss a", TimeZone.current), includesTimeZone: false)])
         }
     }
     
@@ -436,10 +435,20 @@ class Recognizers {
         // 2017-06-17T19:00:03Z
         // 2017-08-15 17:28:34 +0000
         // 2017-08-15 17:28:34 Z
+        // Regexp groups 1 (year), 2 (separator), 3 (month) and 4 (day) with separator of either - or /
+        let yearMonthDay = "(\\d{4})([-/])(\\d{2})\\2(\\d{2})"
+        // T or a space
+        let dateTimeSeparator = "(?:T|\\s+)"
+        // Regexp group 5 (hours mintes and seconds)
+        let hoursMinutesSeconds = "(\\d{2}:\\d{2}:\\d{2})"
         init() {
-            super.init(regularExpressions: ["(\\d{4}-\\d{2}-\\d{2})(?:T|\\s+)(\\d{2}:\\d{2}:\\d{2})\\s*([+-](\\d{4}|(\\d{2}:\\d{2})))", "(\\d{4}-\\d{2}-\\d{2})(?:T|\\s+)(\\d{2}:\\d{2}:\\d{2})(?:\\s*(Z))?"],
-                       dateFormats: [("yyyy-MM-dd'T'HH:mm:ss XXXXX", includesTimeZone: true), ("yyyy-MM-dd'T'HH:mm:ss", includesTimeZone: false)],
-                       template: "$1T$2 $3")
+            super.init(regularExpressions: [
+                yearMonthDay + dateTimeSeparator + hoursMinutesSeconds + "\\s*([+-](\\d{4}|(\\d{2}:\\d{2})))",
+                yearMonthDay + dateTimeSeparator + hoursMinutesSeconds + "(?:\\s*(Z))?"],
+                       dateFormats: [
+                        ("yyyy-MM-dd'T'HH:mm:ss XXXXX", includesTimeZone: true),
+                        ("yyyy-MM-dd'T'HH:mm:ss", includesTimeZone: false)],
+                       template: "$1-$3-$4T$5 $6")
         }
     }
     
@@ -449,10 +458,22 @@ class Recognizers {
         // 2017-09-06T20:05:54.000Z git timestamp from version string.
         // 2017-08-15 17:28:34.456 +0000
         // 2018-02-07 20:05:36,501
+        // Regexp groups 1 (year), 2 (separator), 3 (month) and 4 (day) with separator of either - or /
+        let yearMonthDay = "(\\d{4})([-/])(\\d{2})\\2(\\d{2})"
+        // T or a space
+        let dateTimeSeparator = "(?:T|\\s+)"
+        // Regexp group 5 (hours minutes and seconds)
+        let hoursMinutesSeconds = "(\\d{2}:\\d{2}:\\d{2})"
+        // Regexp group 6 (milliseconds) and nanos/7 (optional nanoseconds)
+        let millis = "(?:\\.|,)(\\d{3})(?<nanos>\\d{3})?"
         init() {
-            super.init(regularExpressions: ["(\\d{4}-\\d{2}-\\d{2})(?:T|\\s+)(\\d{2}:\\d{2}:\\d{2})(?:\\.|,)(\\d{3})\\s*([+-](\\d{4}|(?:\\d{2}:\\d{2})))", "(\\d{4}-\\d{2}-\\d{2})(?:T|\\s+)(\\d{2}:\\d{2}:\\d{2})(?:\\.|,)(\\d{3})(?:\\s*(Z))?"],
-                       dateFormats: [("yyyy-MM-dd'T'HH:mm:ss.SSS XXXXX", includesTimeZone: true), ("yyyy-MM-dd'T'HH:mm:ss.SSS", includesTimeZone: false)],
-                       template: "$1T$2.$3 $4")
+            super.init(regularExpressions: [
+                yearMonthDay + dateTimeSeparator + hoursMinutesSeconds + millis + "\\s*([+-](\\d{4}|(?:\\d{2}:\\d{2})))",
+                yearMonthDay + dateTimeSeparator + hoursMinutesSeconds + millis + "(?:\\s*(Z))?"],
+                       dateFormats: [
+                        ("yyyy-MM-dd'T'HH:mm:ss.SSS XXXXX", includesTimeZone: true),
+                        ("yyyy-MM-dd'T'HH:mm:ss.SSS", includesTimeZone: false)],
+                       template: "$1-$3-$4T$5.$6 $8")
         }
     }
     

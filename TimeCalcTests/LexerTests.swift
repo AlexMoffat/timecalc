@@ -75,6 +75,9 @@ class LexerTests: XCTestCase {
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1504746354.045), true)],"2017-09-06T20:05:54.045-05:00")
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395), true)],"2017-08-15T12:28:34.395-05:00")
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395), true)],"2017-08-15T12:28:34,395-05:00")
+        cmp([Token.DateTime(Date(timeIntervalSince1970: 1543437120.271408), true)], "2018-11-28T20:32:00.271408Z")
+        cmp([Token.DateTime(Date(timeIntervalSince1970: 1543472658), false)], "2018/11/29 00:24:18")
+        
         // Lexer - ISO format with milliseconds but with spaces between date, time and timezone
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1502818114.395), true)], "2017-08-15 12:28:34.395 -0500")
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1497726003.340), true)], "2017-06-17 12:00:03.340 -07:00")
@@ -144,6 +147,7 @@ class LexerTests: XCTestCase {
     }
     
     private func cmp(_ tokens: [Token], _ s: String) {
-        XCTAssertEqual(tokens, lexer.tokenize(s), s)
+        let parsedTokens = lexer.tokenize(s)
+        XCTAssertEqual(tokens, parsedTokens, s)
     }
 }

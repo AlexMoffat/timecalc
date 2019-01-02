@@ -38,11 +38,15 @@ class RecognizerTests: XCTestCase {
         
         cmp(recognizer, "2017-08-15 12:28:34.395 -0500", 1502818114.395, includesTimeZone: true)
         
-        cmp(recognizer, "2017-06-17 12:00:03.340 -07:00", 1497726003.340, includesTimeZone: true)
+        cmp(recognizer, "2017-06-17 12:00:03.345 -07:00", 1497726003.345, includesTimeZone: true)
         
-        cmp(recognizer, "2017-06-17T12:00:03,340 -07:00", 1497726003.340, includesTimeZone: true)
+        cmp(recognizer, "2017-06-17T12:00:03,360 -07:00", 1497726003.360, includesTimeZone: true)
         
-        cmp(recognizer, "2017-06-17T12:00:03,340", 1497718803.340, includesTimeZone: false)
+        cmp(recognizer, "2017-06-17T12:00:03,360238 -07:00", 1497726003.360238, includesTimeZone: true)
+        
+        cmp(recognizer, "2017-06-17T12:00:03,373", 1497718803.373, includesTimeZone: false)
+        
+        cmp(recognizer, "2017-06-17T12:00:03,373567", 1497718803.373567, includesTimeZone: false)
     }
     
     func testSentryDates() {

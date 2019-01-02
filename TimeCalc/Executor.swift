@@ -212,17 +212,17 @@ class Executor {
     func toValue(_ d: Date, _ ts: TimeZone) -> ResultValue {
         let ns = NSCalendar.current.component(.nanosecond, from: d)
         if ns == 0 {
-            return .Right(.StringValue(value: Recognizers.formatterForTimeZone(shortFormat, ts).string(from: d)))
+            return .Right(.StringValue(value: Common.formatterForTimeZone(shortFormat, ts).string(from: d)))
         } else {
             let micros: Int = Int(((Double(ns) / 1000).rounded()))
             let microsRemainder = Int(Double(micros).truncatingRemainder(dividingBy: 1000))
             if microsRemainder == 0 {
-                return .Right(.StringValue(value: Recognizers.formatterForTimeZone(mediumFormat, ts).string(from: d)))
+                return .Right(.StringValue(value: Common.formatterForTimeZone(mediumFormat, ts).string(from: d)))
             } else {
                 if usingDefaultFormats {
-                    return .Right(.StringValue(value: Recognizers.formatterForTimeZone(longFormat, ts).string(from: d).replacingOccurrences(of: "MS", with: String(format: "%03d", microsRemainder))))
+                    return .Right(.StringValue(value: Common.formatterForTimeZone(longFormat, ts).string(from: d).replacingOccurrences(of: "MS", with: String(format: "%03d", microsRemainder))))
                 } else {
-                    return .Right(.StringValue(value: Recognizers.formatterForTimeZone(longFormat, ts).string(from: d)))
+                    return .Right(.StringValue(value: Common.formatterForTimeZone(longFormat, ts).string(from: d)))
                 }
             }
         }
@@ -349,7 +349,7 @@ class Executor {
     func extractComponent(date: Date, zone: TimeZone, ident: String) -> ResultValue {
         switch ident {
         case "day":
-            return .Right(.StringValue(value: Recognizers.formatterForTimeZone("EEEE", zone).string(from: date)))
+            return .Right(.StringValue(value: Common.formatterForTimeZone("EEEE", zone).string(from: date)))
         case "ms":
             return .Right(.StringValue(value: String(Int((date.timeIntervalSince1970 * 1000)))))
         case "s":

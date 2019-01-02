@@ -14,6 +14,7 @@
 		AF3D76252034F5510023ECA7 /* MillisFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D76242034F5510023ECA7 /* MillisFormatter.swift */; };
 		AF3D76292034FC900023ECA7 /* MillisFormatterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D76282034FC900023ECA7 /* MillisFormatterTest.swift */; };
 		AF473F241F1EF1B300F6F856 /* ExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF473F231F1EF1B300F6F856 /* ExecutorTests.swift */; };
+		AF584C9721BCA0A7000C235B /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF584C9621BCA0A7000C235B /* Common.swift */; };
 		AF6852B71EF8A56700F9DACF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6852B61EF8A56700F9DACF /* AppDelegate.swift */; };
 		AF6852B91EF8A56700F9DACF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6852B81EF8A56700F9DACF /* ViewController.swift */; };
 		AF6852BB1EF8A56700F9DACF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF6852BA1EF8A56700F9DACF /* Assets.xcassets */; };
@@ -72,6 +73,7 @@
 		AF3D76282034FC900023ECA7 /* MillisFormatterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MillisFormatterTest.swift; sourceTree = "<group>"; };
 		AF42475D1F8AEF9900408CA0 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		AF473F231F1EF1B300F6F856 /* ExecutorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutorTests.swift; sourceTree = "<group>"; };
+		AF584C9621BCA0A7000C235B /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		AF6852B31EF8A56700F9DACF /* TimeCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TimeCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF6852B61EF8A56700F9DACF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AF6852B81EF8A56700F9DACF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				AFDD49B51F2D0BC000A9DB4B /* SynchroScrollView.swift */,
 				AF3D7620203348900023ECA7 /* Recognizer.swift */,
 				AF3D76242034F5510023ECA7 /* MillisFormatter.swift */,
+				AF584C9621BCA0A7000C235B /* Common.swift */,
 			);
 			path = TimeCalc;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				AFA0C5401F09B54E00C1B923 /* ResultsCalculator.swift in Sources */,
 				AFDD49B61F2D0BC000A9DB4B /* SynchroScrollView.swift in Sources */,
 				AF3AEC1D1F16E485008D7311 /* Parser.swift in Sources */,
+				AF584C9721BCA0A7000C235B /* Common.swift in Sources */,
 				AF6852B91EF8A56700F9DACF /* ViewController.swift in Sources */,
 				AF6852B71EF8A56700F9DACF /* AppDelegate.swift in Sources */,
 				AF3D76252034F5510023ECA7 /* MillisFormatter.swift in Sources */,
