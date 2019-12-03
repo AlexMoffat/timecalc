@@ -9,7 +9,8 @@ are supported for parsing. All durations are output in the TimeCalc format.
 ## TimeCalc
 
 A sequence of separate pieces separated by spaces. Each piece of a duration must have a unit. The suffixes for 
-units are `d` (days),` h` (hours), `m` (minutes), `s` (seconds) and `ms` (milliseconds). This is the format for duration output.
+units are `d` (days),` h` (hours), `m` (minutes), `s` (seconds) and `ms` (milliseconds). This is the format used when
+TimeCalc outputs a duration.
 
 ```
 # Two days.
@@ -42,6 +43,6 @@ P1DT3M
 # 30 minutes and 10 seconds. T is required even if there are no days.
 PT30M10S
 
-# All possible units.
+# All possible units. So 2 days, 1 hour, 15 minutes, 23 seconds and 245 milliseconds
 p2d1h15m23.245s
 ```

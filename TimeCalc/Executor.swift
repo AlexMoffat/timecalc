@@ -278,7 +278,9 @@ class Executor {
                     mediumFormat = Executor.MEDIUM_FORMAT
                     longFormat = Executor.LONG_FORMAT
                 } else {
-                    // TODO - Check that the format is valid.
+                    if !isValidDateFormat(s) {
+                        return .Left("\(String(describing: s)) is not a valid date format.")
+                    }
                     usingDefaultFormats = false
                     shortFormat = s
                     mediumFormat = s
@@ -311,8 +313,8 @@ class Executor {
         }
         
         switch expr.op {
-        case ".":
-            return extractComponent(lhs: lhsValue, rhs: rhsValue)
+        case "as":
+            return formatAs(lhs: lhsValue, rhs: rhsValue)
         case "@":
              return changeTimezone(lhs: lhsValue, rhs: rhsValue)
         case "+":
@@ -325,56 +327,6 @@ class Executor {
             return divide(lhs: lhsValue, rhs: rhsValue)
         default:
             return .Left("Unknown operator \(expr.op)")
-        }
-    }
-    
-    func extractComponent(lhs: Value, rhs: Value) -> ResultValue {
-        let lhsValue = environment.valueFromEnvironment(lhs)
-        guard case let .Right(v) = lhsValue else {
-            return lhsValue
-        }
-        guard case let .StringValue(ident) = rhs else {
-            return .Left("RHS of extract component is not a string identifying a date or duration component. It is \(String(describing: rhs))")
-        }
-        switch v {
-        case let .DateValue(date, zone):
-            return extractComponent(date: date, zone: zone, ident: ident)
-        case let .DurationValue(ms):
-            return extractComponent(ms: ms, ident: ident)
-        default:
-            return .Left("LHS of extract component is not a date. It is \(String(describing: v))")
-        }
-    }
-    
-    func extractComponent(date: Date, zone: TimeZone, ident: String) -> ResultValue {
-        switch ident {
-        case "day":
-            return .Right(.StringValue(value: Common.formatterForTimeZone("EEEE", zone).string(from: date)))
-        case "ms":
-            return .Right(.StringValue(value: String(Int((date.timeIntervalSince1970 * 1000)))))
-        case "s":
-            return .Right(.StringValue(value: String(Int(date.timeIntervalSince1970))))
-        default:
-            return .Left("Can not extract component \(ident) from a date.")
-        }
-    }
-    
-    func extractComponent(ms: Int, ident: String) -> ResultValue {
-        switch ident {
-        case "ms", "s", "m", "h", "d":
-            return .Right(.StringValue(value: intervalFormatter.format(ms: ms, withLargestUnit: ident)))
-        default:
-            return .Left("Can not extract component \(ident) from a duration.")
-        }
-    }
-    
-    func formatDuration(ms: Int, divisor: Int, unit: String) -> String {
-        let units = ms / divisor
-        let remainder = Int(ms % divisor)
-        if (remainder == 0) {
-            return String(format: "%d%@", units, unit)
-        } else {
-            return String(format: "%d%@ %dms", units, unit, remainder)
         }
     }
     
@@ -397,6 +349,68 @@ class Executor {
             return .Left("RHS of change timezone does not identify a timezone. It is \(String(describing: rhs))")
         }
         return ResultValue.Right(.DateValue(value: date, timezone: zone))
+    }
+    
+    func formatAs(lhs: Value, rhs: Value) -> ResultValue {
+        let lhsValue = environment.valueFromEnvironment(lhs)
+        switch lhsValue {
+        case let .Right(.DateValue(date, ts)):
+            return formatAs(date: date, ts: ts, rhs: rhs)
+        case let .Right(.DurationValue(ms)):
+            return formatAs(ms: ms, rhs: rhs)
+        default:
+            return .Left("LHS of as expression is not a date or duration. It is \(String(describing: lhs))")
+        }
+    }
+    
+    func formatAs(date: Date, ts: TimeZone, rhs: Value) -> ResultValue {
+        let rhsValue = environment.valueFromEnvironment(rhs)
+        switch rhsValue {
+            case let .Right(.StringValue(ident)), let .Right(.UnresolvedIdentifierValue(ident)):
+                switch ident {
+                case "day":
+                    return .Right(.StringValue(value: Common.formatterForTimeZone("EEEE", ts).string(from: date)))
+                case "ms":
+                    return .Right(.StringValue(value: String(Int((date.timeIntervalSince1970 * 1000)))))
+                case "s":
+                    return .Right(.StringValue(value: String(Int(date.timeIntervalSince1970))))
+                case let format where isValidDateFormat(format):
+                    return .Right(.StringValue(value: Common.formatterForTimeZone(ident, ts).string(from: date)))
+                default:
+                    return .Left("Can not use \(ident) as a format for a date.")
+            }
+        default:
+            return .Left("Can not use \(rhsValue) as a format for a date.")
+        }
+    }
+    
+    func formatAs(ms: Int, rhs: Value) -> ResultValue {
+        let rhsValue = environment.valueFromEnvironment(rhs)
+        switch rhsValue {
+        case let .Right(.StringValue(ident)), let .Right(.UnresolvedIdentifierValue(ident)):
+            switch ident {
+            case "ms", "s", "m", "h", "d":
+                return .Right(.StringValue(value: intervalFormatter.format(ms: ms, withLargestUnit: ident)))
+            default:
+                return .Left("Can not use \(ident) as a format for a duration.")
+            }
+        default:
+            return .Left("Can not use \(rhsValue) as a format for a duration.")
+        }
+    }
+    
+    func formatDuration(ms: Int, divisor: Int, unit: String) -> String {
+        let units = ms / divisor
+        let remainder = Int(ms % divisor)
+        if (remainder == 0) {
+            return String(format: "%d%@", units, unit)
+        } else {
+            return String(format: "%d%@ %dms", units, unit, remainder)
+        }
+    }
+    
+    func isValidDateFormat(_ s: String) -> Bool {
+        !Common.formatterForTimeZone(s, TimeZone.current).string(from: Date()).isEmpty
     }
     
     func add(lhs: Value, rhs:Value) -> ResultValue {

@@ -1,1 +1,4 @@
-xcuserdata
+xcuserdata/
+.DS_Store
+TimeCalcHelp/.jekyll-cache/
+TimeCalcHelp/_site/

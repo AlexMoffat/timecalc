@@ -43,8 +43,8 @@ class ViewController: NSViewController {
     let calculator = ResultsCalculator()
     
     let typingAttributes = [
-        NSAttributedStringKey.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular),
-        NSAttributedStringKey.foregroundColor: NSColor.textColor
+        NSAttributedString.Key.font: NSFont.monospacedDigitSystemFont(ofSize: ViewController.FONT_SIZE, weight: NSFont.Weight.regular),
+        NSAttributedString.Key.foregroundColor: NSColor.textColor
     ]
     
     var textHasChanged = false
@@ -56,6 +56,8 @@ class ViewController: NSViewController {
         super.viewDidLoad()
 
         text.delegate = self
+        text.isAutomaticQuoteSubstitutionEnabled = false
+        text.isAutomaticDashSubstitutionEnabled = false
         textChangeTimer = Timer.scheduledTimer(timeInterval: 0.5,
                                                target: self,
                                                selector: #selector(timerAction),

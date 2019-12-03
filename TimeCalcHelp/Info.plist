@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.zanthan.$(PROJECT_NAME:rfc1034identifier).help</string>
+	<string>com.zanthan.$(PROJECT_NAME:rfc1034identifier)Help</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

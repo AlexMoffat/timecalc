@@ -10,7 +10,7 @@ Variables can be defined. The right hand side after the = can be any expression.
 let x = 2017-09-03
     
 # And use it.
-x . day
+x as day
 ```
 
 There are seven reserved variables whose values you can't change `now`, `day`, `d`, `h`, `m`, `s`, and `ms`.

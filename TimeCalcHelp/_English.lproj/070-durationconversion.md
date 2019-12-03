@@ -13,12 +13,12 @@ expressed in the chosen unit then the remaining milliseconds are also formatted.
  - `ms` milliseconds
 
 ````
-# How many seconds in 14 hours.
-14h . s
+# How many seconds in 14 hours?
+14h as s
 
-# How many minutes between two dates.
-(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) . m
+# How many minutes between two dates?
+(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) as m
 
 # As days?
-(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) . d
+(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) as d
 ````    

@@ -1,11 +1,11 @@
 ---
-title: Supported Date Formats
+title: Date Formats Supported for Parsing
 description: Supported date, time, and datetime formats.
 order: 10
 ---
-Supported date formats are listed below with examples.  You can copy and paste the examples into the expression window 
-to see the results. See the [TimeZone](timezone.html) section for information on how the timezone is chosen if none is provided 
-in the input format. In most cases current timezone is used. Exceptions noted below.
+The supported date formats that TimeCalc is able to recognize and parse are listed below with examples.  You can copy and paste 
+the examples into the expression window to see the results. See the [TimeZone](timezone.html) section for information on how the 
+timezone is chosen if none is provided in the input format. In most cases current timezone is used. Exceptions noted below.
 
 ```
 # ISO format. TimeZone is optional.
@@ -49,7 +49,7 @@ Feb. 5, 2018, 7:19:18 p.m. UTC
 # Twitter API format
 Tue Sep 19 15:04:28 +0000 2017
 
-# Cookie expiry date as it appeared in some logging messages
+# Cookie expiry date as it appears in some logging messages
 Fri, 14 Feb 2020 14:39:13 UTC
 # Similar but with dashes
 Thu, 31-Jan-2019 23:57:29 GMT
@@ -57,7 +57,7 @@ Thu, 31-Jan-2019 23:57:29 GMT
 # Milliseconds since epoch. 13 digits
 1499212382123
 
-# And seconds since epoch. 10 digit
+# And seconds since epoch. 10 digits
 1499212382
 
 # Very similar format for json serialized java 
@@ -69,6 +69,6 @@ Thu, 31-Jan-2019 23:57:29 GMT
 # This is the format of a Cassandra column timestamp.
 1504742693764001
 
-# Just a date is treated as midnight current timezone 
+# Just a date is treated as midnight in current timezone 
 2017-09-03
 ```

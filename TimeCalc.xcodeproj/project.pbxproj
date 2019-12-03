@@ -287,13 +287,13 @@
 				TargetAttributes = {
 					AF361D2A1F0DB72800FAAA1C = {
 						CreatedOnToolsVersion = 8.3.3;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 						TestTargetID = AF6852B21EF8A56700F9DACF;
 					};
 					AF6852B21EF8A56700F9DACF = {
 						CreatedOnToolsVersion = 8.3.3;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
@@ -309,7 +309,7 @@
 			};
 			buildConfigurationList = AF6852AE1EF8A56700F9DACF /* Build configuration list for PBXProject "TimeCalc" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -460,7 +460,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalcTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TimeCalc.app/Contents/MacOS/TimeCalc";
 			};
 			name = Debug;
@@ -476,7 +476,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalcTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TimeCalc.app/Contents/MacOS/TimeCalc";
 			};
 			name = Release;
@@ -604,7 +604,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -620,7 +620,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zanthan.TimeCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

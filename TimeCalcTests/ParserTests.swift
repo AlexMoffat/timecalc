@@ -52,8 +52,8 @@ class ParserTests: XCTestCase {
             "LineNode(lineNumber: 2, value: Optional(DurationNode(266400000)), error: nil)]",
                         toParse: "10 + 4\n3d 2h\n")
         
-        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(BinaryOpNode(op: ., lhs: BinaryOpNode(op: @, lhs: BinaryOpNode(op: +, lhs: DateTimeNode(2017-06-17 11:00:03 +0000, true), rhs: DurationNode(7200000)), rhs: IdentifierNode(UTC)), rhs: IdentifierNode(day))), error: nil)]",
-                        toParse: "2017-06-17T17:00:03+06:00 + 2h @ UTC . day")
+        parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(BinaryOpNode(op: as, lhs: BinaryOpNode(op: @, lhs: BinaryOpNode(op: +, lhs: DateTimeNode(2017-06-17 11:00:03 +0000, true), rhs: DurationNode(7200000)), rhs: IdentifierNode(UTC)), rhs: IdentifierNode(day))), error: nil)]",
+                        toParse: "2017-06-17T17:00:03+06:00 + 2h @ UTC as day")
         
         parseAndCompare(expected: "[LineNode(lineNumber: 1, value: Optional(BinaryOpNode(op: @, lhs: BinaryOpNode(op: -, lhs: DateTimeNode(2017-06-17 19:00:03 +0000, true), rhs: DurationNode(90000000)), rhs: StringNode(UTC))), error: nil)]",
                         toParse: "2017-06-17T19:00:03Z - 1d 1h @ 'UTC'")

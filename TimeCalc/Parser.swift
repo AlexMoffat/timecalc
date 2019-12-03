@@ -107,7 +107,7 @@ enum ParseError: Error, CustomStringConvertible {
     case ExpectedComment
     case ExpectedDateTime
     case ExpectedDuration
-    case ExpectedExpression
+    case ExpectedExpression(Token)
     case ExpectedIdentifier
     case ExpectedNewline
     case ExpectedNumber
@@ -127,8 +127,8 @@ enum ParseError: Error, CustomStringConvertible {
             return "Parser Expected a date time value."
         case .ExpectedDuration:
             return "Parser Expected a duration value."
-        case .ExpectedExpression:
-            return "Parser Expected an expression."
+        case let .ExpectedExpression(t):
+            return "Parser Expected an expression but found \(t)."
         case .ExpectedIdentifier:
             return "Parser Expected an identifier."
         case .ExpectedNewline:
@@ -149,13 +149,15 @@ enum ParseError: Error, CustomStringConvertible {
     }
 }
 
+// The higher the precedence the more tightly the operator binds. So 'now @ UTC as yyyy' is
+// interpreted as '(now @ UTC) as yyyy'.
 let opPrecedence: [String: Int] = [
-    ".": 10,
-    "@": 20,
-    "+": 30,
-    "-": 30,
-    "*": 40,
-    "/": 40
+    "as": 10,
+    "@":  20,
+    "+":  30,
+    "-":  30,
+    "*":  40,
+    "/":  40
 ]
 
 class Parser {
@@ -266,7 +268,7 @@ class Parser {
         case .OpenParen:
             return try parseParens()
         default:
-            throw ParseError.ExpectedExpression
+            throw ParseError.ExpectedExpression(try peekCurrentToken())
         }
     }
     

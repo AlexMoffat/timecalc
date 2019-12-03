@@ -91,7 +91,7 @@ class Recognizers {
     class Operator: Regex {
         
         init() {
-            super.init(["([+*/.@-])([^0-9]|$)"])
+            super.init(["([+*/@-])([^0-9]|$)"])
         }
         
         override func createToken(_ regex: NSRegularExpression, _ match: NSTextCheckingResult, _ s: String) -> Token? {

@@ -135,6 +135,7 @@ class Lexer {
         Recognizers.Constant("=",         {.Assign}),
         Recognizers.Constant("\\(",       {.OpenParen}),
         Recognizers.Constant("\\)",       {.CloseParen}),
+        Recognizers.Constant("as",        {.Operator("as")}),
         
         // A @ followed by a timezone identifier or abbreviation
         Recognizers.ChooseTimezone(),
@@ -213,6 +214,7 @@ class Lexer {
         
         Recognizers.QuotedString("\"([^\"\r\n]*)\""),
         Recognizers.QuotedString("'([^'\r\n]*)'"),
+        Recognizers.QuotedString("“([^'\r\n]*)“"), // unicode curly quote, just in case it's used, perhaps via paste
         Recognizers.Identifier(),
         Recognizers.Integer(),
         Recognizers.Unknown()

@@ -33,8 +33,14 @@ import XCTest
 
 @available(OSX 10.13, *)
 class ExecutorTests: XCTestCase {
-
-    func testExecutor() {
+    
+    
+    func testOne() {
+        checkSuccess(toParse: #"1569784566412 as 'MM-dd'"#, expected: "09-29")
+        checkSuccess(toParse: #"1569784566412 as "MM-dd""#, expected: "09-29")
+    }
+    
+    func xtestExecutor() {
         checkSuccess(toParse: "2 + 3", expected: "5")
         checkSuccess(toParse: "2 + -3", expected: "-1")
         checkSuccess(toParse: "70 - 43", expected: "27")
@@ -51,16 +57,23 @@ class ExecutorTests: XCTestCase {
         checkSuccess(toParse: "let x = 'America/Chicago'\n2017-06-17T19:00:03Z @ x", expecteds: ["America/Chicago", "2017-06-17 14:00:03 -05:00"])
         checkSuccess(toParse: "2017-06-17T19:00:03Z - 2017-06-16T18:00:03Z", expected: "1d 1h")
         checkSuccess(toParse: "2d + 1497718803", expected: "2017-06-19 12:00:03 -05:00")
-        checkSuccess(toParse: "(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) . m", expected: "2851m 29s")
+        checkSuccess(toParse: "(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) as m", expected: "2851m 29s")
         checkSuccess(toParse: "2851m 29000ms", expected: "1d 23h 31m 29s");
-        checkSuccess(toParse: "(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) . h", expected: "47h 31m 29s")
+        checkSuccess(toParse: "(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) as h", expected: "47h 31m 29s")
         checkSuccess(toParse: "47h 1889000ms", expected: "1d 23h 31m 29s");
-        checkSuccess(toParse: "(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) . d", expected: "1d 23h 31m 29s")
+        checkSuccess(toParse: "(2017-08-17T17:00:03+00:00 - 2017-08-15 17:28:34 +0000) as d", expected: "1d 23h 31m 29s")
         checkSuccess(toParse: "1d 84689000ms", expected: "1d 23h 31m 29s");
         checkSuccess(toParse: "84689000ms", expected: "23h 31m 29s");
         checkSuccess(toParse: "1889000ms", expected: "31m 29s");
         checkSuccess(toParse: "29000ms", expected: "29s");
         checkFailure(toParse: "2 +", expected: "Parser Expected to find a token.")
+        checkSuccess(toParse: "2019-10-24 as \"yyyy\"", expected: "2019")
+        checkSuccess(toParse: "2019-10-24 as yyyy", expected: "2019")
+        checkSuccess(toParse: #"1569784566412 as 'MM-dd'"#, expected: "09-29")
+        checkSuccess(toParse: #"1569784566412 as "MM-dd""#, expected: "09-29")
+        checkSuccess(toParse: #"1569784566412 as “MM-dd”"#, expected: "09-29") // unicode curly quote
+        checkSuccess(toParse: #"(2019-10-24T21:12:04Z @ UTC) as "'v'_yyyyMMdd_HHmm""#, expected: "v_20191024_2112")
+        checkSuccess(toParse: #"2019-10-24T21:12:04Z @ UTC as "'v'_yyyyMMdd_HHmm""#, expected: "v_20191024_2112")
     }
 
     func checkSuccess(toParse: String, expected: String) {
