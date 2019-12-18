@@ -3,6 +3,8 @@
 TimeCalc is an OS X scratch pad for time and date calculations. You can enter dates, times and durations in different formats,
 convert between them and perform calculations. You enter expressions in the left pane and see results on the right.
 
+Download from the [releases](https://github.com/AlexMoffat/timecalc/releases) page.
+
 ![](TimeCalcOverview.png)
 
 TimeCalc provides an OS X service you can bind to a keystroke for quick entry of selected text.
