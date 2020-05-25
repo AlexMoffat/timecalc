@@ -189,8 +189,8 @@ class Executor {
         switch value {
         case let .Right(v):
             switch v {
-            case let .DateValue(d):
-                return toValue(d.value, d.timezone)
+            case let .DateValue(value, timezone):
+                return toValue(value, timezone)
             case let .DurationValue(ms):
                 return .Right(.StringValue(value: intervalFormatter.format(ms: ms)))
             case let .IntValue(i):
@@ -416,10 +416,10 @@ class Executor {
     func add(lhs: Value, rhs:Value) -> ResultValue {
         return withResolvedIdentifiers(lhs: lhs, rhs: rhs) {(left, right) in
             switch (left, right) {
-            case let (.DateValue(lv), .DurationValue(rv)):
-                return .Right(.DateValue(value: lv.value.addingTimeInterval(Double(rv) / 1000), timezone: lv.timezone))
-            case let (.DurationValue(lv), .DateValue(rv)):
-                return .Right(.DateValue(value: rv.value.addingTimeInterval(Double(lv) / 1000), timezone: rv.timezone))
+            case let (.DateValue(dateValue, dateTimezone), .DurationValue(durationValue)):
+                return .Right(.DateValue(value: dateValue.addingTimeInterval(Double(durationValue) / 1000), timezone: dateTimezone))
+            case let (.DurationValue(durationValue), .DateValue(dateValue, dateTimezone)):
+                return .Right(.DateValue(value: dateValue.addingTimeInterval(Double(durationValue) / 1000), timezone: dateTimezone))
             case let (.DurationValue(lv), .DurationValue(rv)):
                 return .Right(.DurationValue(value: (lv + rv)))
             case let (.IntValue(lv), .IntValue(rv)):
@@ -433,10 +433,10 @@ class Executor {
     func subtract(lhs: Value, rhs:Value) -> ResultValue {
         return withResolvedIdentifiers(lhs: lhs, rhs: rhs) {(left, right) in
             switch (left, right) {
-            case let (.DateValue(lv), .DurationValue(rv)):
-                return .Right(.DateValue(value: lv.value.addingTimeInterval(Double(rv) / -1000), timezone: lv.timezone))
-            case let (.DateValue(lv), .DateValue(rv)):
-                return .Right(.DurationValue(value: Int((lv.value.timeIntervalSince1970 * 1000) - (rv.value.timeIntervalSince1970 * 1000))))
+            case let (.DateValue(dateValue, dateTimezone), .DurationValue(durationValue)):
+                return .Right(.DateValue(value: dateValue.addingTimeInterval(Double(durationValue) / -1000), timezone: dateTimezone))
+            case let (.DateValue(leftDateValue, _), .DateValue(rightDateValue, _)):
+                return .Right(.DurationValue(value: Int((leftDateValue.timeIntervalSince1970 * 1000) - (rightDateValue.timeIntervalSince1970 * 1000))))
             case let (.DurationValue(lv), .DurationValue(rv)):
                 return .Right(.DurationValue(value: (lv - rv)))
             case let (.IntValue(lv), .IntValue(rv)):

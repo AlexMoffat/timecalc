@@ -403,7 +403,7 @@ class Recognizers {
         // Just a date with no timezone
         // 2017-08-15
         init() {
-            super.init(regularExpressions: ["\\d{4}-\\d{2}-\\d{2}"],
+            super.init(regularExpressions: ["\\d{4}-[0-1][0-9]-[0-3][0-9]"],
                        dateFormats: [("yyyy-MM-dd", includesTimeZone: false)])
         }
     }
@@ -423,7 +423,7 @@ class Recognizers {
         // "Tue Sep 19 15:04:28 +0000 2017"
         // "EEE MMM dd HH:mm:ss ZZZ yyyy"
         init() {
-            super.init(regularExpressions: ["[MTWFS]\\S{2} \(MONTH_PREFIX_PATTERN) \\d{1,2} \\d{2}:\\d{2}:\\d{2} [+-]\\d{4} \\d{4}"],
+            super.init(regularExpressions: ["[MTWFS]\\S{2} \(MONTH_PREFIX_PATTERN) \\d{1,2} [0-2][0-9]:[0-5][0-9]:[0-5][0-9] [+-]\\d{4} \\d{4}"],
                        dateFormats: [("EEE MMM dd HH:mm:ss XXX yyyy", includesTimeZone: true)])
         }
     }
@@ -436,11 +436,11 @@ class Recognizers {
         // 2017-08-15 17:28:34 +0000
         // 2017-08-15 17:28:34 Z
         // Regexp groups 1 (year), 2 (separator), 3 (month) and 4 (day) with separator of either - or /
-        let yearMonthDay = "(\\d{4})([-/])(\\d{2})\\2(\\d{2})"
+        let yearMonthDay = "(\\d{4})([-/])([0-1][0-9])\\2([0-3][0-9])"
         // T or a space
         let dateTimeSeparator = "(?:T|\\s+)"
-        // Regexp group 5 (hours mintes and seconds)
-        let hoursMinutesSeconds = "(\\d{2}:\\d{2}:\\d{2})"
+        // Regexp group 5 (hours minutes and seconds)
+        let hoursMinutesSeconds = "([0-2][0-9]:[0-5][0-9]:[0-5][0-9])"
         init() {
             super.init(regularExpressions: [
                 yearMonthDay + dateTimeSeparator + hoursMinutesSeconds + "\\s*([+-](\\d{4}|(\\d{2}:\\d{2})))",
@@ -452,6 +452,17 @@ class Recognizers {
         }
     }
     
+    class ISODatesNoSeparators: DatesWithReformat {
+        // 20191012T045515
+        // Groups 1 - year 2 - month 3 - day 4 - hour 5 - minute 6 - second
+        let pattern = "(\\d{4})([0-1][0-9])([0-3][0-9])T([0-2][0-9])([0-5][0-9])([0-5][0-9])"
+        init() {
+            super.init(regularExpressions: [pattern],
+                       dateFormats: [("yyyy-MM-dd'T'HH:mm:ss", includesTimeZone: false)],
+                       template: "$1-$2-$3T$4:$5:$6")
+        }
+    }
+    
     class ISODatesWithMillis: DatesWithReformat {
         // Standard ISO format with milliseconds. May have timezone.
         // 2017-08-15T12:28:34.395-05:00
@@ -459,11 +470,11 @@ class Recognizers {
         // 2017-08-15 17:28:34.456 +0000
         // 2018-02-07 20:05:36,501
         // Regexp groups 1 (year), 2 (separator), 3 (month) and 4 (day) with separator of either - or /
-        let yearMonthDay = "(\\d{4})([-/])(\\d{2})\\2(\\d{2})"
+        let yearMonthDay = "(\\d{4})([-/])([0-1][0-9])\\2([0-3][0-9])"
         // T or a space
         let dateTimeSeparator = "(?:T|\\s+)"
         // Regexp group 5 (hours minutes and seconds)
-        let hoursMinutesSeconds = "(\\d{2}:\\d{2}:\\d{2})"
+        let hoursMinutesSeconds = "([0-2][0-9]:[0-5][0-9]:[0-5][0-9])"
         // Regexp group 6 (milliseconds) and nanos/7 (optional nanoseconds)
         let millis = "(?:\\.|,)(\\d{3})(?<nanos>\\d{3})?"
         init() {

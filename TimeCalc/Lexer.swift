@@ -165,6 +165,11 @@ class Lexer {
         // 2017-08-15 17:28:34 Z
         Recognizers.ISODates(),
         
+        // ISO order but no separators
+        // yyyyMMddTHHmmss
+        // 20191012T045515
+        Recognizers.ISODatesNoSeparators(),
+        
         // Finatra access logging filter
         // 14/Feb/2018:14:39:14 +0000
         Recognizers.FinatraAccessLogDates(),

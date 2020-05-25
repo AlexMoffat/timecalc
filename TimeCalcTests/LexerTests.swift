@@ -93,6 +93,8 @@ class LexerTests: XCTestCase {
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1502818114), true)], "2017-08-15 17:28:34 +0000")
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1502818114), true)], "2017-08-15 17:28:34 Z")
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1505686719), false)], "2017-09-17 17:18:39")
+        // Lexer - ISO format no separator
+        cmp([Token.DateTime(Date(timeIntervalSince1970: 1505686719), false)], "20170917T171839")
         
         // Lexer - Just a date
         cmp([Token.DateTime(Date(timeIntervalSince1970: 1504414800), false)], "2017-09-03")
